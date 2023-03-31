@@ -11,6 +11,7 @@ services:
     volumes:
       - ./sock_service:/app
     environment:
+      SIGNING_KEY: ${SIGNING_KEY}
       DATABASE_URL: postgresql://sock:password@postgres/sock
       WAIT_HOSTS: postgres:5432
 
