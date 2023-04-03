@@ -56,3 +56,11 @@ async def create_account(
     form = UserForm(username=info.username, password=info.password)
     token = await authenticator.login(response, request, form, users)
     return UserToken(account=user, **token.dict())
+
+
+@router.delete("/api/users/{user_id}", response_model=bool)
+def delete_user(
+    user_id: int,
+    users: UserQueries = Depends(),
+) -> bool:
+    return users.delete(user_id)
