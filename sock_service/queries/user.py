@@ -120,3 +120,20 @@ class UserQueries():
                 old_data["type"] = "user"
                 old_data["hashed_password"] = hashed_password
                 return UserOutWithPassword(id=id, **old_data)
+
+    def delete(self, user_id: int) -> bool:
+        try:
+
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        DELETE FROM users
+                        WHERE id = %s
+                        """,
+                        [user_id]
+                    )
+                    return True
+        except Exception as e:
+            print(e)
+            return False
