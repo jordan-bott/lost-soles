@@ -1,0 +1,58 @@
+from fastapi import (
+    Depends,
+    HTTPException,
+    status,
+    Response,
+    APIRouter,
+    Request,
+)
+from jwtdown_fastapi.authentication import Token
+from authenticator import authenticator
+
+from pydantic import BaseModel
+
+from queries.user import (
+    UserIn,
+    UserOut,
+    UserOutWithPassword,
+    UserQueries,
+    DuplicateUserError,
+)
+
+class UserForm(BaseModel):
+    username: str
+    password: str
+
+class UserToken(Token):
+    account: UserOut
+
+class HttpError(BaseModel):
+    detail: str
+
+router = APIRouter()
+
+
+@router.post("/api/users", response_model=UserToken | HttpError)
+async def create_account(
+    info: UserIn,
+    request: Request,
+    response: Response,
+    users: UserQueries = Depends(),
+):
+    if info.password == info.password_confirmation:
+        hashed_password = authenticator.hash_password(info.password)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Passwords do not match."
+        )
+    try:
+        user = users.create(info, hashed_password)
+    except DuplicateUserError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot create a user with those credentials",
+        )
+    form = UserForm(username=info.username, password=info.password)
+    token = await authenticator.login(response, request, form, users)
+    return UserToken(account=user, **token.dict())
