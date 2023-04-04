@@ -122,6 +122,52 @@ class UserQueries():
                 old_data["hashed_password"] = hashed_password
                 return UserOutWithPassword(id=id, **old_data)
 
+    def create_admin(self, info: UserIn, hashed_password: str) -> UserOutWithPassword:
+        with pool.connection() as conn:
+            with conn.cursor() as db:
+                result = db.execute(
+                    """
+                    INSERT INTO users
+                        (
+                            first_name,
+                            last_name,
+                            username,
+                            hashed_password,
+                            email,
+                            address,
+                            sockstar_points,
+                            total_pairings,
+                            profile_pic,
+                            verified,
+                            type
+                        )
+                    VALUES
+                        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    RETURNING id;
+                    """,
+                    [
+                        info.first_name,
+                        info.last_name,
+                        info.username,
+                        hashed_password,
+                        info.email,
+                        info.address,
+                        0,
+                        0,
+                        info.profile_pic,
+                        False,
+                        "admin"
+                    ]
+                )
+                id = result.fetchone()[0]
+                old_data = info.dict()
+                old_data["sockstar_points"] = 0
+                old_data["total_pairings"] = 0
+                old_data["verified"] = False
+                old_data["type"] = "admin"
+                old_data["hashed_password"] = hashed_password
+                return UserOutWithPassword(id=id, **old_data)
+
     def delete(self, user_id: int) -> bool:
         try:
 
