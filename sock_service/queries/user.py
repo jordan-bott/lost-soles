@@ -14,6 +14,7 @@ class UserIn(BaseModel):
     address: str
     profile_pic: str
 
+
 class UserOut(BaseModel):
     id: int
     first_name: str
@@ -137,3 +138,51 @@ class UserQueries():
         except Exception as e:
             print(e)
             return False
+
+    def update(self, user_id: int, user: UserIn, hashed_password: str) -> UserOutWithPassword:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        UPDATE users
+                        SET first_name = %s,
+                            last_name = %s,
+                            username = %s,
+                            hashed_password = %s,
+                            email = %s,
+                            address = %s,
+                            profile_pic = %s
+                        WHERE id = %s
+                        RETURNING *
+                        """,
+                        [
+                            user.first_name,
+                            user.last_name,
+                            user.username,
+                            hashed_password,
+                            user.email,
+                            user.address,
+                            user.profile_pic,
+                            user_id
+                        ]
+                    )
+                    update_fetch = db.fetchone()
+
+                    return UserOutWithPassword(
+                        id=update_fetch[0],
+                        first_name=update_fetch[1],
+                        last_name=update_fetch[2],
+                        username=update_fetch[3],
+                        hashed_password=update_fetch[4],
+                        email=update_fetch[5],
+                        address=update_fetch[6],
+                        sockstar_points=update_fetch[7],
+                        total_pairings=update_fetch[8],
+                        profile_pic=update_fetch[9],
+                        verified=update_fetch[10],
+                        type=update_fetch[11]
+                    )
+        except Exception as e:
+            print(e)
+            return {"message": "Could not update that user"}

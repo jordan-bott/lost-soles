@@ -39,6 +39,7 @@ async def create_account(
     response: Response,
     users: UserQueries = Depends(),
 ):
+
     if info.password == info.password_confirmation:
         hashed_password = authenticator.hash_password(info.password)
     else:
@@ -64,3 +65,32 @@ def delete_user(
     users: UserQueries = Depends(),
 ) -> bool:
     return users.delete(user_id)
+
+@router.put("/api/users/{user_id}", response_model=UserOut | HttpError)
+def update_user(
+    user_id: int,
+    user: UserIn,
+    users: UserQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data),
+) -> UserOut:
+    print(UserIn)
+    if account_data["id"] != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot update other users."
+        )
+    if user.password == user.password_confirmation:
+        hashed_password = authenticator.hash_password(user.password)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Passwords do not match."
+        )
+    try:
+        updated_user = users.update(user_id, user, hashed_password)
+    except DuplicateUserError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot create a user with those credentials",
+        )
+    return updated_user
