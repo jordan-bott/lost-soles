@@ -58,6 +58,31 @@ async def create_account(
     token = await authenticator.login(response, request, form, users)
     return UserToken(account=user, **token.dict())
 
+@router.post("/api/users/admin", response_model=UserToken | HttpError)
+async def create_admin(
+    info: UserIn,
+    request: Request,
+    response: Response,
+    users: UserQueries = Depends(),
+):
+
+    if info.password == info.password_confirmation:
+        hashed_password = authenticator.hash_password(info.password)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Passwords do not match."
+        )
+    try:
+        admin = users.create_admin(info, hashed_password)
+    except DuplicateUserError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot create a admin with those credentials",
+        )
+    form = UserForm(username=info.username, password=info.password)
+    token = await authenticator.login(response, request, form, users)
+    return UserToken(account=admin, **token.dict())
 
 @router.delete("/api/users/{user_id}", response_model=bool)
 def delete_user(
