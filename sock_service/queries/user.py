@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from queries.pool import pool
+from typing import Optional
 
 class DuplicateUserError(ValueError):
     pass
@@ -31,8 +32,96 @@ class UserOut(BaseModel):
 class UserOutWithPassword(UserOut):
     hashed_password: str
 
+class UserAuthorizedViewOut(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    username: str
+    email: str
+    address: str
+    profile_pic: str
+    sockstar_points: int
+    total_pairings: int
+    verified: bool
+
+
+class UserViewOut(BaseModel):
+    id: int
+    username: str
+    profile_pic: str
+    sockstar_points: int
+    total_pairings: int
+
 
 class UserQueries():
+    def get_one_authorized(self, user_id: int) -> Optional[UserAuthorizedViewOut]:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    result = db.execute(
+                        """
+                        SELECT id,
+                            first_name,
+                            last_name,
+                            username,
+                            email,
+                            address,
+                            profile_pic,
+                            sockstar_points,
+                            total_pairings,
+                            verified
+                        FROM users
+                        WHERE id = %s
+                        """,
+                        [user_id]
+                    )
+                    user = result.fetchone()
+                    print(user)
+                    return UserAuthorizedViewOut(
+                        id = user[0],
+                        first_name = user[1],
+                        last_name = user[2],
+                        username = user[3],
+                        email = user[4],
+                        address = user[5],
+                        profile_pic = user[6],
+                        sockstar_points = user[7],
+                        total_pairings = user[8],
+                        verified = user[9]
+                    )
+        except Exception as e:
+            print(e)
+            return {"message": "Could not get that user"}
+
+    def get_one(self, user_id: int) -> Optional[UserViewOut]:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    result = db.execute(
+                        """
+                        SELECT id,
+                            username,
+                            sockstar_points,
+                            total_pairings,
+                            profile_pic
+                        FROM users
+                        WHERE id = %s
+                        """,
+                        [user_id]
+                    )
+                    user = result.fetchone()
+                    print(user)
+                    return UserViewOut(
+                        id = user[0],
+                        username = user[1],
+                        sockstar_points = user[2],
+                        total_pairings = user[3],
+                        profile_pic = user[4]
+                    )
+        except Exception as e:
+            print(e)
+            return {"message": "Could not get that user"}
+
 
     def get(self, username: str) -> UserOutWithPassword:
         try:
