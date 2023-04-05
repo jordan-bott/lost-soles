@@ -11,8 +11,10 @@ from authenticator import authenticator
 from typing import Optional
 
 from pydantic import BaseModel
+from typing import Union, List
 
 from queries.user import (
+    Error,
     UserIn,
     UserOut,
     UserOutWithPassword,
@@ -101,7 +103,6 @@ def update_user(
     users: UserQueries = Depends(),
     account_data: dict = Depends(authenticator.get_current_account_data),
 ) -> UserOut:
-    print(UserIn)
     if account_data["id"] != user_id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -141,3 +142,14 @@ def get_one_user(
             status_code = status.HTTP_404_NOT_FOUND,
             detail= "User does not exist",
         )
+
+
+@router.get("/api/users", response_model=Union[List[UserOut], Error])
+def get_users_by_query(
+    users: UserQueries=Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data)
+):
+    if account_data["type"] == "admin":
+        return users.get_all_users()
+    else:
+        return {"Error": "Only admins can view users"}
