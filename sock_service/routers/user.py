@@ -8,6 +8,7 @@ from fastapi import (
 )
 from jwtdown_fastapi.authentication import Token
 from authenticator import authenticator
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -15,6 +16,8 @@ from queries.user import (
     UserIn,
     UserOut,
     UserOutWithPassword,
+    UserAuthorizedViewOut,
+    UserViewOut,
     UserQueries,
     DuplicateUserError,
 )
@@ -119,3 +122,22 @@ def update_user(
             detail="Cannot create a user with those credentials",
         )
     return updated_user
+
+@router.get("/api/users/{user_id}", response_model= UserAuthorizedViewOut | UserViewOut | HttpError)
+def get_one_user(
+    user_id: int,
+    response: Response,
+    users: UserQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data),
+) -> UserAuthorizedViewOut | UserViewOut:
+    if account_data["id"] == user_id:
+        user = users.get_one_authorized(user_id)
+        return user
+    elif account_data["id"] != user_id:
+        user = users.get_one(user_id)
+        return user
+    else:
+        raise HTTPException(
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail= "User does not exist",
+        )
