@@ -1,9 +1,13 @@
 from pydantic import BaseModel
 from queries.pool import pool
-from typing import Optional
+
+from typing import List, Union, Optional
 
 class DuplicateUserError(ValueError):
     pass
+
+class Error(BaseModel):
+    message: str
 
 class UserIn(BaseModel):
     first_name: str
@@ -259,7 +263,6 @@ class UserQueries():
 
     def delete(self, user_id: int) -> bool:
         try:
-
             with pool.connection() as conn:
                 with conn.cursor() as db:
                     db.execute(
@@ -321,3 +324,35 @@ class UserQueries():
         except Exception as e:
             print(e)
             return {"message": "Could not update that user"}
+
+
+    def get_all_users(self) -> Union[List[UserOut], Error]:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    users = db.execute(
+                        """
+                        SELECT *
+                        FROM users
+                        """,
+                    )
+                    users = []
+                    for u in db:
+                        user=UserOut(
+                            id=u[0],
+                            first_name=u[1],
+                            last_name=u[2],
+                            username=u[3],
+                            email=u[5],
+                            address=u[6],
+                            sockstar_points=u[7],
+                            total_pairings=u[8],
+                            profile_pic=u[9],
+                            verified=u[10],
+                            type=u[11]
+                        )
+                        users.append(user)
+                    return users
+        except Exception as e:
+            print("get all users error", e)
+            return {"Error": "could not get all users"}
