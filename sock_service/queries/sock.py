@@ -1,5 +1,10 @@
 from pydantic import BaseModel
 from queries.pool import pool
+from typing import List
+
+class Error(BaseModel):
+    message: str
+
 
 class SockIn(BaseModel):
     photo: str
@@ -26,12 +31,12 @@ class SockOut(BaseModel):
     style: str
     brand: str
     gift: bool
+    match_status: str
+
+
 
 
 class SockQueries():
-
-    def get(self, id: int) -> SockOut:
-        pass
 
     def create(self, info: SockIn, user_id: int) -> SockOut:
         with pool.connection() as conn:
@@ -50,10 +55,11 @@ class SockQueries():
                             fabric,
                             style,
                             brand,
-                            gift
+                            gift,
+                            match_status
                         )
                     VALUES
-                        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     RETURNING id;
                     """,
                     [
@@ -67,10 +73,12 @@ class SockQueries():
                         info.fabric,
                         info.style,
                         info.brand,
-                        info.gift
+                        info.gift,
+                        "available"
                     ]
                 )
                 id = result.fetchone()[0]
                 old_data = info.dict()
                 old_data["user_id"] = user_id
+                old_data["match_status"] = "available"
                 return SockOut(id=id, **old_data)
