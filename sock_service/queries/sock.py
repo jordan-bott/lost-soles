@@ -99,6 +99,42 @@ class SockQueries():
             print(e)
             return False
 
+    def get_by_user(self, user_id: int):
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    socks = db.execute(
+                        """
+                        SELECT *
+                        FROM socks
+                        WHERE user_id = %s
+                        """,
+                        [user_id]
+                    )
+                    socks = []
+                    for s in db:
+                        sock = SockOut(
+                        id= s[0],
+                        user_id= s[1],
+                        photo= s[2],
+                        condition= s[3],
+                        color= s[4],
+                        pattern= s[5],
+                        size= s[6],
+                        type= s[7],
+                        fabric= s[8],
+                        style= s[9],
+                        brand= s[10],
+                        gift= s[11],
+                        match_status=s[12]
+                        )
+                        print(sock)
+                        socks.append(sock)
+                    return socks
+        except Exception as e:
+            print("get all socks by user error", e)
+            return {"Error": "could not get all socks for this user"}
+
 
     def update(self, id: int, info: SockIn, user_id: int) -> SockOut:
         try:
