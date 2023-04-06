@@ -9,7 +9,7 @@ from fastapi import (
 
 from typing import Union, List
 
-from queries.sock import SockIn, SockOut, SockQueries, Error
+from queries.sock import SockIn, SockOut, SockQueries, Error, SockWithUserOut
 from authenticator import authenticator
 
 from pydantic import BaseModel, ValidationError
@@ -41,6 +41,17 @@ def delete_sock(
     elif account_data["id"] != user_id:
         response.status_code = 400
         return {"Error" : "Unable to delete other user's socks"}
+
+@router.get("/api/socks", response_model=List[SockWithUserOut] | Error)
+def get_feed(
+    response: Response,
+    socks: SockQueries = Depends()
+):
+    sock_feed = socks.get_feed()
+    if len(sock_feed) == 0:
+        response.status_code = 400
+        return {"Error": "No unmatched socks in the feed!"}
+    return sock_feed
 
 @router.get("/api/socks/{user_id}", response_model=List[SockOut] | dict | Error)
 def get_socks_by_user(

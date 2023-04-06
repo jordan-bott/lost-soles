@@ -2,10 +2,8 @@ from pydantic import BaseModel
 from queries.pool import pool
 from typing import List
 
-
 class Error(BaseModel):
     message: str
-
 
 class SockIn(BaseModel):
     photo: str
@@ -34,9 +32,56 @@ class SockOut(BaseModel):
     gift: bool
     match_status: str
 
-
+class SockWithUserOut(SockOut):
+    username: str
+    profile_pic: str
+    sockstar_points: int
+    total_pairings: int
 
 class SockQueries():
+
+    def get_feed(self) -> List[SockWithUserOut] | Error:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        SELECT socks.*,
+                        users.username,
+                        users.profile_pic,
+                        users.sockstar_points,
+                        users.total_pairings
+                        FROM socks
+                        LEFT OUTER JOIN users
+                        ON socks.user_id = users.id;
+                        """,
+                    )
+                    posts = []
+                    for post in db:
+                        sock_post=SockWithUserOut(
+                            id=post[0],
+                            user_id=post[1],
+                            photo=post[2],
+                            condition=post[3],
+                            color=post[4],
+                            pattern=post[5],
+                            size=post[6],
+                            type=post[7],
+                            fabric=post[8],
+                            style=post[9],
+                            brand=post[10],
+                            gift=post[11],
+                            match_status=post[12],
+                            username=post[13],
+                            profile_pic=post[14],
+                            sockstar_points=post[15],
+                            total_pairings=post[16]
+                        )
+                        if post[12] == "available" or post[12] == "pending":
+                            posts.append(sock_post)
+                    return posts
+        except Exception as e:
+            return {"error": e}
 
     def create(self, info: SockIn, user_id: int) -> SockOut:
         with pool.connection() as conn:
