@@ -34,7 +34,8 @@ steps = [
     fabric VARCHAR(1000) NOT NULL,
     style VARCHAR(1000) NOT NULL,
     brand VARCHAR(1000) NOT NULL,
-    gift BOOLEAN
+    gift BOOLEAN,
+    match_status VARCHAR(100) NOT NULL
     );
     """,
     """

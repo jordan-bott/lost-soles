@@ -7,7 +7,9 @@ from fastapi import (
     Request,
 )
 
-from queries.sock import SockIn, SockOut, SockQueries
+from typing import Union
+
+from queries.sock import SockIn, SockOut, SockQueries, Error
 from authenticator import authenticator
 
 from pydantic import BaseModel
@@ -17,7 +19,7 @@ class HttpError(BaseModel):
 
 router = APIRouter()
 
-@router.post("/api/socks", response_model=SockOut | HttpError)
+@router.post("/api/socks", response_model=SockOut | HttpError | Error)
 async def create_sock(
     info: SockIn,
     socks: SockQueries = Depends(),
