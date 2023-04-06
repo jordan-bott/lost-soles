@@ -6,6 +6,10 @@ class Error(BaseModel):
     message: str
 
 
+class Error(BaseModel):
+    message: str
+
+
 class SockIn(BaseModel):
     photo: str
     condition: int
@@ -82,3 +86,19 @@ class SockQueries():
                 old_data["user_id"] = user_id
                 old_data["match_status"] = "available"
                 return SockOut(id=id, **old_data)
+
+    def delete(self, sock_id: int, user_id: int) -> bool:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        DELETE FROM socks
+                        WHERE id = %s
+                        """,
+                        [sock_id]
+                    )
+                    return True
+        except Exception as e:
+            print(e)
+            return False
