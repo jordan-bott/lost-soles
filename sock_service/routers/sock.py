@@ -7,6 +7,7 @@ from fastapi import (
     Request,
 )
 
+from typing import Union, List
 
 from queries.sock import SockIn, SockOut, SockQueries, Error
 from authenticator import authenticator
@@ -27,7 +28,7 @@ async def create_sock(
     user_id = account_data["id"]
     return socks.create(info, user_id)
 
-@router.delete("/api/socks/{sock_id}", response_model=bool | dict | HttpError | Error)
+@router.delete("/api/socks/{sock_id}", response_model=bool | dict | Error)
 def delete_sock(
     sock_id: int,
     response: Response,
@@ -40,6 +41,23 @@ def delete_sock(
     elif account_data["id"] != user_id:
         response.status_code = 400
         return {"Error" : "Unable to delete other user's socks"}
+
+@router.get("/api/socks/{user_id}", response_model=List[SockOut] | dict | Error)
+def get_socks_by_user(
+    user_id: int,
+    response: Response,
+    socks: SockQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data)
+):
+    if account_data["id"] == user_id:
+        sock_list = socks.get_by_user(user_id)
+    elif account_data["id"] != user_id:
+        response.status_code = 400
+        return {"Error" : "Unable to view other user's socks"}
+    if len(sock_list) == 0:
+        response.status_code = 404
+        return {"Error" : "This user doesn't have any socks"}
+    return sock_list
 
 
 @router.put("/api/socks/{id}", response_model=SockOut | HttpError | Error | dict)
