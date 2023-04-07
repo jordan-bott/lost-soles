@@ -38,6 +38,7 @@ class SockWithUserOut(SockOut):
     sockstar_points: int
     total_pairings: int
 
+
 class SockQueries():
 
     def get_feed(self) -> List[SockWithUserOut] | Error:
@@ -179,6 +180,50 @@ class SockQueries():
         except Exception as e:
             print("get all socks by user error", e)
             return {"Error": "could not get all socks for this user"}
+
+
+    def get_one_sock(self, sock_id: int):
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        SELECT socks.*,
+                        users.username,
+                        users.profile_pic,
+                        users.sockstar_points,
+                        users.total_pairings
+                        FROM socks
+                        LEFT OUTER JOIN users
+                        ON socks.user_id = users.id
+                        WHERE socks.id = %s;
+                        """,
+                        [sock_id]
+                    )
+                    sock = db.fetchone()
+                    print(sock)
+                    return SockWithUserOut(
+                        id=sock[0],
+                        user_id=sock[1],
+                        photo=sock[2],
+                        condition=sock[3],
+                        color=sock[4],
+                        pattern=sock[5],
+                        size=sock[6],
+                        type=sock[7],
+                        fabric=sock[8],
+                        style=sock[9],
+                        brand=sock[10],
+                        gift=sock[11],
+                        match_status=sock[12],
+                        username=sock[13],
+                        profile_pic=sock[14],
+                        sockstar_points=sock[15],
+                        total_pairings=sock[16]
+                    )
+        except Exception as e:
+            print("get one sock error", e)
+            return {"Error": "Could not get sock"}
 
 
     def update(self, id: int, info: SockIn, user_id: int) -> SockOut:
