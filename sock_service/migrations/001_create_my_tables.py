@@ -46,6 +46,8 @@ steps = [
     """
     CREATE TABLE matches (
     id SERIAL PRIMARY KEY NOT NULL,
+    requesting_user INT REFERENCES users(id) NOT NULL,
+    approving_user INT REFERENCES users(id) NOT NULL,
     gift_sock INT REFERENCES socks(id) NOT NULL,
     receive_sock INT REFERENCES socks(id) NOT NULL,
     match_status BOOLEAN
