@@ -53,7 +53,8 @@ def get_feed(
         return {"Error": "No unmatched socks in the feed!"}
     return sock_feed
 
-@router.get("/api/socks/{user_id}", response_model=List[SockOut] | dict | Error)
+
+@router.get("/api/socks/users/{user_id}", response_model=List[SockOut] | dict | Error)
 def get_socks_by_user(
     user_id: int,
     response: Response,
@@ -89,3 +90,16 @@ async def update_sock(
     except ValidationError as e:
         print("Error", e)
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/api/socks/{id}", response_model=SockWithUserOut | Error)
+def get_one_sock(
+    id: int,
+    response: Response,
+    sock:SockQueries = Depends()
+):
+    sock = sock.get_one_sock(id)
+    if sock is None:
+        response.status_code = 404
+        return {"Error": "Sock not found"}
+    return sock
