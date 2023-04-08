@@ -50,3 +50,20 @@ class MatchQueries():
                 old_data["receive_sock"] = receive_sock
                 old_data["match_status"] = False
                 return MatchOut(id=id, **old_data)
+
+
+    def delete(self, match_id: int) -> bool:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        DELETE FROM matches
+                        WHERE id = %s
+                        """,
+                        [match_id]
+                    )
+                    return True
+        except Exception as e:
+            print(e)
+            return False

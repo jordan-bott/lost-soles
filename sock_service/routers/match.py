@@ -30,3 +30,17 @@ async def create_match(
 ):
     requesting_id = account_data["id"]
     return matches.create(approving_id, requesting_id, receive_sock, gift_sock)
+
+
+@router.delete("/api/matches/{match_id}", response_model=bool | dict | Error)
+def delete_match(
+    match_id: int,
+    response: Response,
+    matches: MatchQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data),
+) -> bool:
+        try:
+            return matches.delete(match_id)
+        except:
+            response.status_code = 400
+            return {"Error" : "Unable to delete match"}
