@@ -73,13 +73,39 @@ class VerificationQueries:
 
 
     def approve_verification(self, id: int) -> VerificationOut:
+                try:
+                    with pool.connection() as conn:
+                        with conn.cursor() as db:
+                            vrfy=db.execute(
+                                """
+                                UPDATE verifications
+                                SET verification_status = 'approved'
+                                WHERE id = %s
+                                RETURNING *;
+                                """,
+                                [id]
+                            )
+                            vrfy=vrfy.fetchone()
+                            verify=VerificationOut(
+                                id=vrfy[0],
+                                user_id=vrfy[1],
+                                license=vrfy[2],
+                                verification_status=vrfy[3]
+                            )
+                            return verify
+                except Exception as e:
+                    print("Approve verification error", e)
+                    return {"Error": "could not approve verification"}
+
+
+    def reject_verification(self, id: int) -> VerificationOut:
             try:
                 with pool.connection() as conn:
                     with conn.cursor() as db:
                         vrfy=db.execute(
                             """
                             UPDATE verifications
-                            SET verification_status = 'approved'
+                            SET verification_status = 'rejected'
                             WHERE id = %s
                             RETURNING *;
                             """,
@@ -94,31 +120,22 @@ class VerificationQueries:
                         )
                         return verify
             except Exception as e:
-                print("Approve verification error", e)
-                return {"Error": "could not approve verification"}
+                print("Reject verification error", e)
+                return {"Error": "could not reject verification"}
 
 
-    def reject_verification(self, id: int) -> VerificationOut:
-        try:
-            with pool.connection() as conn:
-                with conn.cursor() as db:
-                    vrfy=db.execute(
-                        """
-                        UPDATE verifications
-                        SET verification_status = 'rejected'
-                        WHERE id = %s
-                        RETURNING *;
-                        """,
-                        [id]
-                    )
-                    vrfy=vrfy.fetchone()
-                    verify=VerificationOut(
-                        id=vrfy[0],
-                        user_id=vrfy[1],
-                        license=vrfy[2],
-                        verification_status=vrfy[3]
-                    )
-                    return verify
-        except Exception as e:
-            print("Reject verification error", e)
-            return {"Error": "could not reject verification"}
+    def delete_verification(self, id: int) -> bool:
+            try:
+                with pool.connection() as conn:
+                    with conn.cursor() as db:
+                        db.execute(
+                            """
+                            DELETE FROM verifications
+                            WHERE id=%s
+                            """,
+                            [id]
+                        )
+                        return True
+            except Exception as e:
+                print("Delete verification error", e)
+                return False

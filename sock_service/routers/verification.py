@@ -14,8 +14,7 @@ from typing import Union, List
 from queries.verification import (
     VerificationOut,
     VerificationIn,
-    VerificationQueries,
-    Error
+    VerificationQueries
 )
 
 
@@ -48,7 +47,6 @@ async def get_all_verifications(
         response.status_code=400
         return  {"Error": "must be admin"}
 
-
 @router.put("/api/approve_verification/{id}", response_model=Union[VerificationOut, dict])
 async def approve_verification(
     id: int,
@@ -75,3 +73,17 @@ async def reject_verification(
     elif account_data["type"]=="user":
         response.status_code=400
         return  {"Error": "must be admin"}
+
+
+@router.delete("/api/delete_verifications/{id}", response_model=bool | dict)
+def delete_user_verification(
+    id: int,
+    response: Response,
+    verification: VerificationQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data)
+) -> bool:
+    if account_data["type"]=="admin":
+        return verification.delete_verification(id)
+    elif account_data["type"]=="user":
+        response.status_code=418
+        return  {"Error": "you're trying to make coffee with a teapot"}
