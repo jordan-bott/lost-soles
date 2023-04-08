@@ -70,3 +70,55 @@ class VerificationQueries:
         except Exception as e:
             print("Get All verifications error", e)
             return {"Error": "could not get list of verifications"}
+
+
+    def approve_verification(self, id: int) -> VerificationOut:
+            try:
+                with pool.connection() as conn:
+                    with conn.cursor() as db:
+                        vrfy=db.execute(
+                            """
+                            UPDATE verifications
+                            SET verification_status = 'approved'
+                            WHERE id = %s
+                            RETURNING *;
+                            """,
+                            [id]
+                        )
+                        vrfy=vrfy.fetchone()
+                        verify=VerificationOut(
+                            id=vrfy[0],
+                            user_id=vrfy[1],
+                            license=vrfy[2],
+                            verification_status=vrfy[3]
+                        )
+                        return verify
+            except Exception as e:
+                print("Approve verification error", e)
+                return {"Error": "could not approve verification"}
+
+
+    def reject_verification(self, id: int) -> VerificationOut:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    vrfy=db.execute(
+                        """
+                        UPDATE verifications
+                        SET verification_status = 'rejected'
+                        WHERE id = %s
+                        RETURNING *;
+                        """,
+                        [id]
+                    )
+                    vrfy=vrfy.fetchone()
+                    verify=VerificationOut(
+                        id=vrfy[0],
+                        user_id=vrfy[1],
+                        license=vrfy[2],
+                        verification_status=vrfy[3]
+                    )
+                    return verify
+        except Exception as e:
+            print("Reject verification error", e)
+            return {"Error": "could not reject verification"}

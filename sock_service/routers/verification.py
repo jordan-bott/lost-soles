@@ -47,3 +47,31 @@ async def get_all_verifications(
     elif account_data["type"]=="user":
         response.status_code=400
         return  {"Error": "must be admin"}
+
+
+@router.put("/api/approve_verification/{id}", response_model=Union[VerificationOut, dict])
+async def approve_verification(
+    id: int,
+    response: Response,
+    verification: VerificationQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data)
+):
+    if account_data["type"]=="admin":
+        return verification.approve_verification(id)
+    elif account_data["type"]=="user":
+        response.status_code=400
+        return  {"Error": "must be admin"}
+
+
+@router.put("/api/reject_verification/{id}", response_model=Union[VerificationOut, dict])
+async def reject_verification(
+    id: int,
+    response: Response,
+    verification: VerificationQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data)
+):
+    if account_data["type"]=="admin":
+        return verification.reject_verification(id)
+    elif account_data["type"]=="user":
+        response.status_code=400
+        return  {"Error": "must be admin"}
