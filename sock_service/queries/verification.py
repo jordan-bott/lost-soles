@@ -2,6 +2,9 @@ from pydantic import BaseModel, Field
 from queries.pool import pool
 from typing import List, Union, Optional
 
+class Error(BaseModel):
+    message: str
+
 class VerificationIn(BaseModel):
     user_id: int
     license: str
@@ -42,3 +45,28 @@ class VerificationQueries:
                 data["user_id"]=user_id
                 data["verification_status"]="pending"
                 return VerificationOut(id=id,**data)
+
+    def get_all_verifications(self) -> Union[List[VerificationOut], Error]:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    vrfy=db.execute(
+                        """
+                        SELECT *
+                        FROM verifications
+                        ORDER BY verification_status
+                        """,
+                    )
+                    vrfy=[]
+                    for v in db:
+                        verify=VerificationOut(
+                            id=v[0],
+                            user_id=v[1],
+                            license=v[2],
+                            verification_status=v[3]
+                        )
+                        vrfy.append(verify)
+                    return vrfy
+        except Exception as e:
+            print("Get All verifications error", e)
+            return {"Error": "could not get list of verifications"}
