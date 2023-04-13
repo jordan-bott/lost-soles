@@ -13,11 +13,11 @@ from typing import Optional
 from pydantic import BaseModel
 from typing import Union, List
 
+
 from queries.user import (
     Error,
     UserIn,
     UserOut,
-    UserOutWithPassword,
     UserAuthorizedViewOut,
     UserViewOut,
     UserQueries,

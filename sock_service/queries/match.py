@@ -21,21 +21,6 @@ class SockIn(BaseModel):
     gift: bool
     match_status: str
 
-class GiftSockIn(BaseModel):
-    id: int
-    user_id: int
-    photo: str
-    condition: int
-    color: str
-    pattern: str
-    size: str
-    type: str
-    fabric: str
-    style: str
-    brand: str
-    gift: bool
-    match_status: str
-
 class MatchOut(BaseModel):
     id: int
     requesting_user: int
@@ -43,14 +28,16 @@ class MatchOut(BaseModel):
     gift_sock: int
     receive_sock: int
     match_status: bool
+    created_on: str
 
 class UserMatchOut(BaseModel):
     id: int
     requesting_user: int
     approving_user: int
-    gift_sock: GiftSockIn
+    gift_sock: SockIn
     receive_sock: SockIn
     match_status: bool
+    created_on: str
 
 class MatchQueries():
 
@@ -69,7 +56,7 @@ class MatchQueries():
                     )
                     VALUES
                         (%s, %s, %s, %s, %s)
-                    RETURNING id;
+                    RETURNING *;
                     """,
                     [
                         requesting_id,
@@ -79,14 +66,16 @@ class MatchQueries():
                         False
                     ]
                 )
-                id = result.fetchone()[0]
-                old_data = {}
-                old_data["gift_sock"] = gift_sock
-                old_data["requesting_user"] = requesting_id
-                old_data["approving_user"] = approving_id
-                old_data["receive_sock"] = receive_sock
-                old_data["match_status"] = False
-                return MatchOut(id=id, **old_data)
+                m = result.fetchone()
+                return MatchOut(
+                    id = m[0],
+                    requesting_user = m[1],
+                    approving_user = m[2],
+                    gift_sock = m[3],
+                    receive_sock = m[4],
+                    match_status = m[5],
+                    created_on = str(m[6])
+                )
 
     def get_by_user(self, user_id: int):
             try:
@@ -108,19 +97,19 @@ class MatchQueries():
                             user_dict["requesting_user"] = m[1]
                             user_dict["approving_user"]= m[2]
                             user_dict["gift_sock"] = {
-                                'id': m[6],
-                                'user_id': m[7],
-                                'photo': m[8],
-                                'condition': m[9],
-                                'color': m[10],
-                                'pattern': m[11],
-                                'size': m[12],
-                                'type': m[13],
-                                'fabric': m[14],
-                                'style': m[15],
-                                'brand': m[16],
-                                'gift': m[17],
-                                'match_status': m[18]
+                                'id': m[7],
+                                'user_id': m[8],
+                                'photo': m[9],
+                                'condition': m[10],
+                                'color': m[11],
+                                'pattern': m[12],
+                                'size': m[13],
+                                'type': m[14],
+                                'fabric': m[15],
+                                'style': m[16],
+                                'brand': m[17],
+                                'gift': m[18],
+                                'match_status': m[19]
                             }
                             db.execute(
                                 """
@@ -147,7 +136,7 @@ class MatchQueries():
                                 'match_status': s[12]
                             }
                             user_dict["match_status"]= m[5]
-                            # print(user_dict)
+                            user_dict["created_on"] = str(m[6])
                             if m[1] == user_id or m[2] == user_id:
                                 matches.append(UserMatchOut(id=m[0], **user_dict))
                         return matches

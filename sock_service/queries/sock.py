@@ -31,6 +31,7 @@ class SockOut(BaseModel):
     brand: str
     gift: bool
     match_status: str
+    created_on: str
 
 class SockWithUserOut(SockOut):
     username: str
@@ -73,10 +74,11 @@ class SockQueries():
                             brand=post[10],
                             gift=post[11],
                             match_status=post[12],
-                            username=post[13],
-                            profile_pic=post[14],
-                            sockstar_points=post[15],
-                            total_pairings=post[16]
+                            created_on=str(post[13]),
+                            username=post[14],
+                            profile_pic=post[15],
+                            sockstar_points=post[16],
+                            total_pairings=post[17]
                         )
                         if post[12] == "available" or post[12] == "pending":
                             posts.append(sock_post)
@@ -87,7 +89,7 @@ class SockQueries():
     def create(self, info: SockIn, user_id: int) -> SockOut:
         with pool.connection() as conn:
             with conn.cursor() as db:
-                result = db.execute(
+                db.execute(
                     """
                     INSERT INTO socks
                         (
@@ -106,7 +108,7 @@ class SockQueries():
                         )
                     VALUES
                         (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    RETURNING id;
+                    RETURNING *;
                     """,
                     [
                         user_id,
@@ -123,11 +125,24 @@ class SockQueries():
                         "available"
                     ]
                 )
-                id = result.fetchone()[0]
-                old_data = info.dict()
-                old_data["user_id"] = user_id
-                old_data["match_status"] = "available"
-                return SockOut(id=id, **old_data)
+                sock = db.fetchone()
+                print(sock)
+                return SockOut(
+                            id=sock[0],
+                            user_id=sock[1],
+                            photo=sock[2],
+                            condition=sock[3],
+                            color=sock[4],
+                            pattern=sock[5],
+                            size=sock[6],
+                            type=sock[7],
+                            fabric=sock[8],
+                            style=sock[9],
+                            brand=sock[10],
+                            gift=sock[11],
+                            match_status=sock[12],
+                            created_on=str(sock[13]),
+                        )
 
     def delete(self, sock_id: int, user_id: int) -> bool:
         try:
@@ -172,7 +187,8 @@ class SockQueries():
                         style= s[9],
                         brand= s[10],
                         gift= s[11],
-                        match_status=s[12]
+                        match_status=s[12],
+                        created_on=str(s[13])
                         )
                         socks.append(sock)
                     print(socks)
@@ -216,10 +232,11 @@ class SockQueries():
                         brand=sock[10],
                         gift=sock[11],
                         match_status=sock[12],
-                        username=sock[13],
-                        profile_pic=sock[14],
-                        sockstar_points=sock[15],
-                        total_pairings=sock[16]
+                        created_on=str(sock[13]),
+                        username=sock[14],
+                        profile_pic=sock[15],
+                        sockstar_points=sock[16],
+                        total_pairings=sock[17]
                     )
         except Exception as e:
             print("get one sock error", e)
@@ -233,8 +250,7 @@ class SockQueries():
                     db.execute(
                         """
                         UPDATE socks
-                        SET user_id = %s,
-                            photo = %s,
+                        SET photo = %s,
                             condition = %s,
                             color = %s,
                             pattern = %s,
@@ -248,7 +264,6 @@ class SockQueries():
                         RETURNING *
                         """,
                         [
-                            user_id,
                             info.photo,
                             info.condition,
                             info.color,
@@ -276,7 +291,8 @@ class SockQueries():
                         style=update_fetch[9],
                         brand=update_fetch[10],
                         gift=update_fetch[11],
-                        match_status=update_fetch[12]
+                        match_status=update_fetch[12],
+                        created_on=str(update_fetch[13])
                     )
         except Exception as e:
             print("Update sock error: ", e)

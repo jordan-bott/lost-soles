@@ -16,6 +16,7 @@ class VerificationOut(BaseModel):
     user_id: int
     license: str
     verification_status: str
+    created_on: str
 
 
 class VerificationQueries:
@@ -32,7 +33,7 @@ class VerificationQueries:
                     )
                     VALUES
                         (%s, %s, %s)
-                    RETURNING id;
+                    RETURNING *;
                     """,
                     [
                         user_id,
@@ -40,11 +41,15 @@ class VerificationQueries:
                         "pending"
                     ]
                 )
-                id=result.fetchone()[0]
-                data=info.dict()
-                data["user_id"]=user_id
-                data["verification_status"]="pending"
-                return VerificationOut(id=id,**data)
+                v = result.fetchone()
+                return VerificationOut(
+                    id = v[0],
+                    user_id = v[1],
+                    license = v[2],
+                    verification_status = v[3],
+                    created_on = str(v[4])
+
+                )
 
     def get_all_verifications(self) -> Union[List[VerificationOut], Error]:
         try:
@@ -63,7 +68,8 @@ class VerificationQueries:
                             id=v[0],
                             user_id=v[1],
                             license=v[2],
-                            verification_status=v[3]
+                            verification_status=v[3],
+                            created_on = str(v[4])
                         )
                         vrfy.append(verify)
                     return vrfy
@@ -90,7 +96,8 @@ class VerificationQueries:
                                 id=vrfy[0],
                                 user_id=vrfy[1],
                                 license=vrfy[2],
-                                verification_status=vrfy[3]
+                                verification_status=vrfy[3],
+                                created_on = str(vrfy[4])
                             )
                             return verify
                 except Exception as e:
@@ -116,7 +123,8 @@ class VerificationQueries:
                             id=vrfy[0],
                             user_id=vrfy[1],
                             license=vrfy[2],
-                            verification_status=vrfy[3]
+                            verification_status=vrfy[3],
+                            created_on = str(vrfy[4])
                         )
                         return verify
             except Exception as e:
