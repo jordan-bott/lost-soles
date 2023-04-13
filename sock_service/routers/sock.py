@@ -68,7 +68,7 @@ def get_socks_by_user(
         return {"Error" : "Unable to view other user's socks"}
     if len(sock_list) == 0:
         response.status_code = 404
-        return {"Error" : "This user doesn't have any socks"}
+        return {"Error" : "No socks yet!"}
     return sock_list
 
 
