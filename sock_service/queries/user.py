@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from queries.pool import pool
+from datetime import datetime
 
 from typing import List, Union, Optional
 
@@ -32,6 +33,7 @@ class UserOut(BaseModel):
     total_pairings: int
     verified: bool
     type: str
+    created_on: str
 
 class UserOutWithPassword(UserOut):
     hashed_password: str
@@ -47,6 +49,7 @@ class UserAuthorizedViewOut(BaseModel):
     sockstar_points: int
     total_pairings: int
     verified: bool
+    created_on: str
 
 
 class UserViewOut(BaseModel):
@@ -55,6 +58,7 @@ class UserViewOut(BaseModel):
     profile_pic: str
     sockstar_points: int
     total_pairings: int
+    created_on: str
 
 
 class UserQueries():
@@ -73,14 +77,14 @@ class UserQueries():
                             profile_pic,
                             sockstar_points,
                             total_pairings,
-                            verified
+                            verified,
+                            created_on
                         FROM users
                         WHERE id = %s
                         """,
                         [user_id]
                     )
                     user = result.fetchone()
-                    print(user)
                     return UserAuthorizedViewOut(
                         id = user[0],
                         first_name = user[1],
@@ -91,7 +95,8 @@ class UserQueries():
                         profile_pic = user[6],
                         sockstar_points = user[7],
                         total_pairings = user[8],
-                        verified = user[9]
+                        verified = user[9],
+                        created_on = str(user[10])
                     )
         except Exception as e:
             print(e)
@@ -107,20 +112,21 @@ class UserQueries():
                             username,
                             sockstar_points,
                             total_pairings,
-                            profile_pic
+                            profile_pic,
+                            created_on
                         FROM users
                         WHERE id = %s
                         """,
                         [user_id]
                     )
                     user = result.fetchone()
-                    print(user)
                     return UserViewOut(
                         id = user[0],
                         username = user[1],
                         sockstar_points = user[2],
                         total_pairings = user[3],
-                        profile_pic = user[4]
+                        profile_pic = user[4],
+                        created_on = str(user[5])
                     )
         except Exception as e:
             print(e)
@@ -144,7 +150,8 @@ class UserQueries():
                             total_pairings,
                             profile_pic,
                             verified,
-                            type
+                            type,
+                            created_on
                         FROM users
                         WHERE username = %s
                         """,
@@ -163,7 +170,8 @@ class UserQueries():
                         total_pairings=user[8],
                         profile_pic=user[9],
                         verified=user[10],
-                        type=user[11]
+                        type=user[11],
+                        created_on=str(user[12])
                     )
         except Exception as e:
             print(e)
@@ -190,7 +198,7 @@ class UserQueries():
                         )
                     VALUES
                         (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    RETURNING id;
+                    RETURNING *;
                     """,
                     [
                         info.first_name,
@@ -206,14 +214,22 @@ class UserQueries():
                         "user"
                     ]
                 )
-                id = result.fetchone()[0]
-                old_data = info.dict()
-                old_data["sockstar_points"] = 0
-                old_data["total_pairings"] = 0
-                old_data["verified"] = False
-                old_data["type"] = "user"
-                old_data["hashed_password"] = hashed_password
-                return UserOutWithPassword(id=id, **old_data)
+                user = result.fetchone()
+                return UserOutWithPassword(
+                    id=user[0],
+                    first_name=user[1],
+                    last_name=user[2],
+                    username=user[3],
+                    hashed_password=user[4],
+                    email=user[5],
+                    address=user[6],
+                    sockstar_points=user[7],
+                    total_pairings=user[8],
+                    profile_pic=user[9],
+                    verified=user[10],
+                    type=user[11],
+                    created_on=str(user[12])
+                )
 
     def create_admin(self, info: UserIn, hashed_password: str) -> UserOutWithPassword:
         with pool.connection() as conn:
@@ -236,7 +252,7 @@ class UserQueries():
                         )
                     VALUES
                         (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    RETURNING id;
+                    RETURNING *;
                     """,
                     [
                         info.first_name,
@@ -252,14 +268,22 @@ class UserQueries():
                         "admin"
                     ]
                 )
-                id = result.fetchone()[0]
-                old_data = info.dict()
-                old_data["sockstar_points"] = 0
-                old_data["total_pairings"] = 0
-                old_data["verified"] = False
-                old_data["type"] = "admin"
-                old_data["hashed_password"] = hashed_password
-                return UserOutWithPassword(id=id, **old_data)
+                user = result.fetchone()
+                return UserOutWithPassword(
+                    id=user[0],
+                    first_name=user[1],
+                    last_name=user[2],
+                    username=user[3],
+                    hashed_password=user[4],
+                    email=user[5],
+                    address=user[6],
+                    sockstar_points=user[7],
+                    total_pairings=user[8],
+                    profile_pic=user[9],
+                    verified=user[10],
+                    type=user[11],
+                    created_on=str(user[12])
+                )
 
     def delete(self, user_id: int) -> bool:
         try:
@@ -319,7 +343,8 @@ class UserQueries():
                         total_pairings=update_fetch[8],
                         profile_pic=update_fetch[9],
                         verified=update_fetch[10],
-                        type=update_fetch[11]
+                        type=update_fetch[11],
+                        created_on=str(update_fetch[12])
                     )
         except Exception as e:
             print(e)
@@ -349,7 +374,8 @@ class UserQueries():
                             total_pairings=u[8],
                             profile_pic=u[9],
                             verified=u[10],
-                            type=u[11]
+                            type=u[11],
+                            created_on=str(u[12])
                         )
                         users.append(user)
                     return users

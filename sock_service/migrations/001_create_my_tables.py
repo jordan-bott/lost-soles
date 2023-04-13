@@ -13,7 +13,8 @@ steps = [
     total_pairings INT NOT NULL,
     profile_pic VARCHAR(1000) NOT NULL,
     verified BOOLEAN NOT NULL,
-    type VARCHAR(1000) NOT NULL
+    type VARCHAR(1000) NOT NULL,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     );
     """,
     """
@@ -35,7 +36,8 @@ steps = [
     style VARCHAR(1000) NOT NULL,
     brand VARCHAR(1000) NOT NULL,
     gift BOOLEAN,
-    match_status VARCHAR(100) NOT NULL
+    match_status VARCHAR(100) NOT NULL,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     );
     """,
     """
@@ -50,7 +52,8 @@ steps = [
     approving_user INT REFERENCES users(id) NOT NULL,
     gift_sock INT REFERENCES socks(id) NOT NULL,
     receive_sock INT REFERENCES socks(id) NOT NULL,
-    match_status BOOLEAN
+    match_status BOOLEAN,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     );
     """,
     """
@@ -63,7 +66,8 @@ steps = [
     id SERIAL PRIMARY KEY NOT NULL,
     user_id INT REFERENCES users(id) NOT NULL,
     license VARCHAR(1000) NOT NULL,
-    verification_status VARCHAR(1000) NOT NULL
+    verification_status VARCHAR(1000) NOT NULL,
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
     );
     """,
     """
