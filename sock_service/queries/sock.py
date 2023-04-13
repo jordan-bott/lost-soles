@@ -174,12 +174,12 @@ class SockQueries():
                         gift= s[11],
                         match_status=s[12]
                         )
-                        print(sock)
                         socks.append(sock)
+                    print(socks)
                     return socks
         except Exception as e:
             print("get all socks by user error", e)
-            return {"Error": "could not get all socks for this user"}
+            return {"Error": "Could not get all socks for this user"}
 
 
     def get_one_sock(self, sock_id: int):
