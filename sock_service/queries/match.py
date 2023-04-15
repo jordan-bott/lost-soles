@@ -144,7 +144,7 @@ class MatchQueries():
                 print("get all matches by user error", e)
                 return {"Error": "Could not get all matches for this user"}
 
-    def delete(self, match_id: int) -> bool:
+    def delete(self, match_id: int, requesting_user: int, approving_user: int) -> bool:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
