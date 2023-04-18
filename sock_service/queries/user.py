@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from queries.pool import pool
-from datetime import datetime
 
 from typing import List, Union, Optional
 
@@ -382,3 +381,70 @@ class UserQueries():
         except Exception as e:
             print("get all users error", e)
             return {"Error": "could not get all users"}
+
+    def update_positive_verification_status(self, id: int) -> UserOut:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    vrfy=db.execute(
+                        """
+                        UPDATE users
+                        SET verified = 'true'
+                        WHERE id = %s
+                        RETURNING *;
+                        """,
+                        [id]
+                    )
+                    vrfy=vrfy.fetchone()
+                    user_update = UserOut(
+                        id=vrfy[0],
+                        first_name=vrfy[1],
+                        last_name=vrfy[2],
+                        username=vrfy[3],
+                        email=vrfy[5],
+                        address=vrfy[6],
+                        sockstar_points=vrfy[7],
+                        total_pairings=vrfy[8],
+                        profile_pic=vrfy[9],
+                        verified=vrfy[10],
+                        type=vrfy[11],
+                        created_on=str(vrfy[12])
+                    )
+                    return user_update
+        except Exception as e:
+                print("Update verification error", e)
+                return {"Error": "could not update verification"}
+
+
+    def update_to_reverification_status(self, id: int) -> UserOut:
+            try:
+                with pool.connection() as conn:
+                    with conn.cursor() as db:
+                        vrfy=db.execute(
+                            """
+                            UPDATE users
+                            SET verified = 'false'
+                            WHERE id = %s
+                            RETURNING *;
+                            """,
+                            [id]
+                        )
+                        vrfy=vrfy.fetchone()
+                        user_update = UserOut(
+                            id=vrfy[0],
+                            first_name=vrfy[1],
+                            last_name=vrfy[2],
+                            username=vrfy[3],
+                            email=vrfy[5],
+                            address=vrfy[6],
+                            sockstar_points=vrfy[7],
+                            total_pairings=vrfy[8],
+                            profile_pic=vrfy[9],
+                            verified=vrfy[10],
+                            type=vrfy[11],
+                            created_on=str(vrfy[12])
+                        )
+                        return user_update
+            except Exception as e:
+                    print("Update verification error", e)
+                    return {"Error": "could not update verification"}
