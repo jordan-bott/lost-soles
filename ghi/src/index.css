@@ -1,15 +1,40 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-background: #fff5db;
+  --secondary-background: #fff8e6;
+  --primary-orange: #ffc09f;
+  --primary-yellow: #ffee93;
+  --primary-blue: #79aadd;
+  --primary-green: #c1eead;
+  --primary-red: #f7c5c7;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply font-[Comfortaa];
+  }
+
+  li {
+    @apply p-4 text-sm;
+  }
+
+  h2 {
+    @apply text-xl font-bold;
+  }
+}
+
+body {
+  background: var(--secondary-background);
+  color: var(--primary-blue);
 }
 
 form.form-example {
