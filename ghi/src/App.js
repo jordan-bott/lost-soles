@@ -1,12 +1,13 @@
 // import { useEffect, useState } from "react";
 // import Construct from "./Construct.js";
 // import ErrorNotification from "./ErrorNotification";
-import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SockFeed from "./components/feed.js";
 import Login from "./components/auth/login.js";
 import Logout from "./components/auth/logout.js";
 import Signup from "./components/user/signup.js";
+import "./index.css";
+import Nav from "./nav.js";
 
 function App() {
   //   const [launch_info, setLaunchInfo] = useState([]);
@@ -36,6 +37,7 @@ function App() {
 
   return (
     <BrowserRouter basename={basename}>
+      <Nav />
       <Routes>
         <Route path="" element={<SockFeed />} />
         <Route path="login" element={<Login />} />
