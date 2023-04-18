@@ -1,7 +1,7 @@
 import { useGetSocksQuery } from "../store/socksApi";
 
 function SockFeed() {
-  const { data, error, isLoading } = useGetSocksQuery();
+  const { data, isLoading } = useGetSocksQuery();
 
   if (isLoading) {
     return <p>Hello</p>;
