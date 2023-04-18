@@ -1,13 +1,15 @@
 from pydantic import BaseModel
 from queries.pool import pool
-
 from typing import List, Union, Optional
+
 
 class DuplicateUserError(ValueError):
     pass
 
+
 class Error(BaseModel):
     message: str
+
 
 class UserIn(BaseModel):
     first_name: str
@@ -34,8 +36,10 @@ class UserOut(BaseModel):
     type: str
     created_on: str
 
+
 class UserOutWithPassword(UserOut):
     hashed_password: str
+
 
 class UserAuthorizedViewOut(BaseModel):
     id: int
@@ -61,7 +65,8 @@ class UserViewOut(BaseModel):
 
 
 class UserQueries():
-    def get_one_authorized(self, user_id: int) -> Optional[UserAuthorizedViewOut]:
+    def get_one_authorized(self,
+                           user_id: int) -> Optional[UserAuthorizedViewOut]:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
@@ -85,17 +90,17 @@ class UserQueries():
                     )
                     user = result.fetchone()
                     return UserAuthorizedViewOut(
-                        id = user[0],
-                        first_name = user[1],
-                        last_name = user[2],
-                        username = user[3],
-                        email = user[4],
-                        address = user[5],
-                        profile_pic = user[6],
-                        sockstar_points = user[7],
-                        total_pairings = user[8],
-                        verified = user[9],
-                        created_on = str(user[10])
+                        id=user[0],
+                        first_name=user[1],
+                        last_name=user[2],
+                        username=user[3],
+                        email=user[4],
+                        address=user[5],
+                        profile_pic=user[6],
+                        sockstar_points=user[7],
+                        total_pairings=user[8],
+                        verified=user[9],
+                        created_on=str(user[10])
                     )
         except Exception as e:
             print(e)
@@ -120,17 +125,16 @@ class UserQueries():
                     )
                     user = result.fetchone()
                     return UserViewOut(
-                        id = user[0],
-                        username = user[1],
-                        sockstar_points = user[2],
-                        total_pairings = user[3],
-                        profile_pic = user[4],
-                        created_on = str(user[5])
+                        id=user[0],
+                        username=user[1],
+                        sockstar_points=user[2],
+                        total_pairings=user[3],
+                        profile_pic=user[4],
+                        created_on=str(user[5])
                     )
         except Exception as e:
             print(e)
             return {"message": "Could not get that user"}
-
 
     def get(self, username: str) -> UserOutWithPassword:
         try:
@@ -176,7 +180,9 @@ class UserQueries():
             print(e)
             return {"message": "Could not get that user"}
 
-    def create(self, info: UserIn, hashed_password: str) -> UserOutWithPassword:
+    def create(self,
+               info: UserIn,
+               hashed_password: str) -> UserOutWithPassword:
         with pool.connection() as conn:
             with conn.cursor() as db:
                 result = db.execute(
@@ -230,7 +236,9 @@ class UserQueries():
                     created_on=str(user[12])
                 )
 
-    def create_admin(self, info: UserIn, hashed_password: str) -> UserOutWithPassword:
+    def create_admin(self,
+                     info: UserIn,
+                     hashed_password: str) -> UserOutWithPassword:
         with pool.connection() as conn:
             with conn.cursor() as db:
                 result = db.execute(
@@ -300,7 +308,10 @@ class UserQueries():
             print(e)
             return False
 
-    def update(self, user_id: int, user: UserIn, hashed_password: str) -> UserOutWithPassword:
+    def update(self,
+               user_id: int,
+               user: UserIn,
+               hashed_password: str) -> UserOutWithPassword:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
@@ -349,7 +360,6 @@ class UserQueries():
             print(e)
             return {"message": "Could not update that user"}
 
-
     def get_all_users(self) -> Union[List[UserOut], Error]:
         try:
             with pool.connection() as conn:
@@ -362,7 +372,7 @@ class UserQueries():
                     )
                     users = []
                     for u in db:
-                        user=UserOut(
+                        user = UserOut(
                             id=u[0],
                             first_name=u[1],
                             last_name=u[2],
@@ -386,7 +396,7 @@ class UserQueries():
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
-                    vrfy=db.execute(
+                    vrfy = db.execute(
                         """
                         UPDATE users
                         SET verified = 'true'
@@ -395,7 +405,7 @@ class UserQueries():
                         """,
                         [id]
                     )
-                    vrfy=vrfy.fetchone()
+                    vrfy = vrfy.fetchone()
                     user_update = UserOut(
                         id=vrfy[0],
                         first_name=vrfy[1],
@@ -412,39 +422,36 @@ class UserQueries():
                     )
                     return user_update
         except Exception as e:
-                print("Update verification error", e)
-                return {"Error": "could not update verification"}
-
+            return {"Error": e}
 
     def update_to_reverification_status(self, id: int) -> UserOut:
-            try:
-                with pool.connection() as conn:
-                    with conn.cursor() as db:
-                        vrfy=db.execute(
-                            """
-                            UPDATE users
-                            SET verified = 'false'
-                            WHERE id = %s
-                            RETURNING *;
-                            """,
-                            [id]
-                        )
-                        vrfy=vrfy.fetchone()
-                        user_update = UserOut(
-                            id=vrfy[0],
-                            first_name=vrfy[1],
-                            last_name=vrfy[2],
-                            username=vrfy[3],
-                            email=vrfy[5],
-                            address=vrfy[6],
-                            sockstar_points=vrfy[7],
-                            total_pairings=vrfy[8],
-                            profile_pic=vrfy[9],
-                            verified=vrfy[10],
-                            type=vrfy[11],
-                            created_on=str(vrfy[12])
-                        )
-                        return user_update
-            except Exception as e:
-                    print("Update verification error", e)
-                    return {"Error": "could not update verification"}
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    vrfy = db.execute(
+                        """
+                        UPDATE users
+                        SET verified = 'false'
+                        WHERE id = %s
+                        RETURNING *;
+                        """,
+                        [id]
+                    )
+                    vrfy = vrfy.fetchone()
+                    user_update = UserOut(
+                        id=vrfy[0],
+                        first_name=vrfy[1],
+                        last_name=vrfy[2],
+                        username=vrfy[3],
+                        email=vrfy[5],
+                        address=vrfy[6],
+                        sockstar_points=vrfy[7],
+                        total_pairings=vrfy[8],
+                        profile_pic=vrfy[9],
+                        verified=vrfy[10],
+                        type=vrfy[11],
+                        created_on=str(vrfy[12])
+                    )
+                    return user_update
+        except Exception as e:
+            return {"Error": e}

@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from authenticator import authenticator
-from fastapi import APIRouter
 from routers import user, sock, match, verification
 import os
 

@@ -2,8 +2,10 @@ from pydantic import BaseModel
 from queries.pool import pool
 from typing import List
 
+
 class Error(BaseModel):
     message: str
+
 
 class SockIn(BaseModel):
     photo: str
@@ -16,6 +18,7 @@ class SockIn(BaseModel):
     style: str
     brand: str
     gift: bool
+
 
 class SockOut(BaseModel):
     id: int
@@ -32,6 +35,7 @@ class SockOut(BaseModel):
     gift: bool
     match_status: str
     created_on: str
+
 
 class SockWithUserOut(SockOut):
     username: str
@@ -60,7 +64,7 @@ class SockQueries():
                     )
                     posts = []
                     for post in db:
-                        sock_post=SockWithUserOut(
+                        sock_post = SockWithUserOut(
                             id=post[0],
                             user_id=post[1],
                             photo=post[2],
@@ -175,20 +179,20 @@ class SockQueries():
                     socks = []
                     for s in db:
                         sock = SockOut(
-                        id= s[0],
-                        user_id= s[1],
-                        photo= s[2],
-                        condition= s[3],
-                        color= s[4],
-                        pattern= s[5],
-                        size= s[6],
-                        type= s[7],
-                        fabric= s[8],
-                        style= s[9],
-                        brand= s[10],
-                        gift= s[11],
-                        match_status=s[12],
-                        created_on=str(s[13])
+                            id=s[0],
+                            user_id=s[1],
+                            photo=s[2],
+                            condition=s[3],
+                            color=s[4],
+                            pattern=s[5],
+                            size=s[6],
+                            type=s[7],
+                            fabric=s[8],
+                            style=s[9],
+                            brand=s[10],
+                            gift=s[11],
+                            match_status=s[12],
+                            created_on=str(s[13])
                         )
                         socks.append(sock)
                     print(socks)
@@ -196,7 +200,6 @@ class SockQueries():
         except Exception as e:
             print("get all socks by user error", e)
             return {"Error": "Could not get all socks for this user"}
-
 
     def get_one_sock(self, sock_id: int):
         try:
@@ -241,7 +244,6 @@ class SockQueries():
         except Exception as e:
             print("get one sock error", e)
             return {"Error": "Could not get sock"}
-
 
     def update(self, id: int, info: SockIn, user_id: int) -> SockOut:
         try:
