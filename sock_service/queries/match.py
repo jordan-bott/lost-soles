@@ -159,3 +159,74 @@ class MatchQueries():
         except Exception as e:
             print(e)
             return False
+
+    def get_one(self, match_id: int, user_id: int):
+            try:
+                with pool.connection() as conn:
+                    with conn.cursor() as db:
+                        db.execute(
+                                """
+                                SELECT matches.*,
+                                socks.*
+                                FROM matches
+                                LEFT OUTER JOIN socks
+                                ON matches.gift_sock = socks.id
+                                WHERE matches.id = %s
+                                """,
+                                [match_id]
+                            )
+                        match = []
+                        user_dict = {}
+                        data = db.fetchall()
+                        for m in data:
+                            user_dict["requesting_user"] = m[1]
+                            user_dict["approving_user"]= m[2]
+                            user_dict["gift_sock"] = {
+                                'id': m[7],
+                                'user_id': m[8],
+                                'photo': m[9],
+                                'condition': m[10],
+                                'color': m[11],
+                                'pattern': m[12],
+                                'size': m[13],
+                                'type': m[14],
+                                'fabric': m[15],
+                                'style': m[16],
+                                'brand': m[17],
+                                'gift': m[18],
+                                'match_status': m[19]
+                            }
+                            db.execute(
+                                """
+                                SELECT *
+                                FROM socks
+                                WHERE id = %s
+                                """,
+                                [m[4]]
+                            )
+                            s = db.fetchone()
+                            user_dict["receive_sock"] = {
+                                "id": s[0],
+                                'user_id': s[1],
+                                'photo': s[2],
+                                'condition': s[3],
+                                'color': s[4],
+                                'pattern': s[5],
+                                'size': s[6],
+                                'type': s[7],
+                                'fabric': s[8],
+                                'style': s[9],
+                                'brand': s[10],
+                                'gift': s[11],
+                                'match_status': s[12]
+                            }
+                            user_dict["match_status"]= m[5]
+                            user_dict["created_on"] = str(m[6])
+                            if m[1] == user_id or m[2] == user_id:
+                                match.append(UserMatchOut(id=m[0], **user_dict))
+
+
+                        return match
+            except Exception as e:
+                print("get matches error", e)
+                return {"Error": "Could not get this match"}
