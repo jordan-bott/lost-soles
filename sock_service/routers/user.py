@@ -28,11 +28,14 @@ class UserForm(BaseModel):
     username: str
     password: str
 
+
 class UserToken(Token):
     account: UserOut
 
+
 class HttpError(BaseModel):
     detail: str
+
 
 router = APIRouter()
 
@@ -44,7 +47,6 @@ async def create_account(
     response: Response,
     users: UserQueries = Depends(),
 ):
-
     if info.password == info.password_confirmation:
         hashed_password = authenticator.hash_password(info.password)
     else:
@@ -63,6 +65,7 @@ async def create_account(
     token = await authenticator.login(response, request, form, users)
     return UserToken(account=user, **token.dict())
 
+
 @router.post("/api/users/admin", response_model=UserToken | HttpError)
 async def create_admin(
     info: UserIn,
@@ -70,7 +73,6 @@ async def create_admin(
     response: Response,
     users: UserQueries = Depends(),
 ):
-
     if info.password == info.password_confirmation:
         hashed_password = authenticator.hash_password(info.password)
     else:
@@ -89,6 +91,7 @@ async def create_admin(
     token = await authenticator.login(response, request, form, users)
     return UserToken(account=admin, **token.dict())
 
+
 @router.delete("/api/users/{user_id}", response_model=bool)
 def delete_user(
     user_id: int,
@@ -96,29 +99,32 @@ def delete_user(
 ) -> bool:
     return users.delete(user_id)
 
-@router.put("/api/update_user_verification/{user_id}", response_model=Union[UserOut, dict])
+
+@router.put("/api/update_user_verification/{user_id}",
+            response_model=Union[UserOut, dict])
 async def update_verification(
     user_id: int,
     response: Response,
     users: UserQueries = Depends(),
     account_data: dict = Depends(authenticator.get_current_account_data),
 ) -> UserOut:
-    if account_data["type"]!="admin":
-        response.status_code=400
+    if account_data["type"] != "admin":
+        response.status_code = 400
         return {"Error: ": "Must be admin"}
     else:
         return users.update_positive_verification_status(user_id)
 
 
-@router.put("/api/update_reverification/{user_id}", response_model=Union[UserOut, dict])
+@router.put("/api/update_reverification/{user_id}",
+            response_model=Union[UserOut, dict])
 async def update_reverification(
     user_id: int,
     response: Response,
     users: UserQueries = Depends(),
     account_data: dict = Depends(authenticator.get_current_account_data),
 ) -> UserOut:
-    if account_data["type"]!="admin":
-        response.status_code=400
+    if account_data["type"] != "admin":
+        response.status_code = 400
         return {"Error: ": "Must be admin"}
     else:
         return users.update_to_reverification_status(user_id)
@@ -152,10 +158,11 @@ def update_user(
         )
     return updated_user
 
-@router.get("/api/users/{user_id}", response_model= UserAuthorizedViewOut | UserViewOut | HttpError)
+
+@router.get("/api/users/{user_id}",
+            response_model=UserAuthorizedViewOut | UserViewOut | HttpError)
 def get_one_user(
     user_id: int,
-    response: Response,
     users: UserQueries = Depends(),
     account_data: dict = Depends(authenticator.get_current_account_data),
 ) -> UserAuthorizedViewOut | UserViewOut:
@@ -167,14 +174,14 @@ def get_one_user(
         return user
     else:
         raise HTTPException(
-            status_code = status.HTTP_404_NOT_FOUND,
-            detail= "User does not exist",
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User does not exist",
         )
 
 
 @router.get("/api/users", response_model=Union[List[UserOut], Error])
 def get_users_by_query(
-    users: UserQueries=Depends(),
+    users: UserQueries = Depends(),
     account_data: dict = Depends(authenticator.get_current_account_data)
 ):
     if account_data["type"] == "admin":

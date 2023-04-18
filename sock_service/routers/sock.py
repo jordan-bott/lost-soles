@@ -1,23 +1,24 @@
 from fastapi import (
     Depends,
     HTTPException,
-    status,
     Response,
     APIRouter,
-    Request,
 )
 
-from typing import Union, List
+from typing import List
 
 from queries.sock import SockIn, SockOut, SockQueries, Error, SockWithUserOut
 from authenticator import authenticator
 
 from pydantic import BaseModel, ValidationError
 
+
 class HttpError(BaseModel):
     detail: str
 
+
 router = APIRouter()
+
 
 @router.post("/api/socks", response_model=SockOut | HttpError | Error)
 async def create_sock(
@@ -27,6 +28,7 @@ async def create_sock(
 ):
     user_id = account_data["id"]
     return socks.create(info, user_id)
+
 
 @router.delete("/api/socks/{sock_id}", response_model=bool | dict | Error)
 def delete_sock(
@@ -40,7 +42,8 @@ def delete_sock(
         return socks.delete(sock_id, user_id)
     elif account_data["id"] != user_id:
         response.status_code = 400
-        return {"Error" : "Unable to delete other user's socks"}
+        return {"Error": "Unable to delete other user's socks"}
+
 
 @router.get("/api/socks", response_model=List[SockWithUserOut] | Error)
 def get_feed(
@@ -54,7 +57,8 @@ def get_feed(
     return sock_feed
 
 
-@router.get("/api/socks/users/{user_id}", response_model=List[SockOut] | dict | Error)
+@router.get("/api/socks/users/{user_id}",
+            response_model=List[SockOut] | dict | Error)
 def get_socks_by_user(
     user_id: int,
     response: Response,
@@ -65,14 +69,15 @@ def get_socks_by_user(
         sock_list = socks.get_by_user(user_id)
     elif account_data["id"] != user_id:
         response.status_code = 400
-        return {"Error" : "Unable to view other user's socks"}
+        return {"Error": "Unable to view other user's socks"}
     if len(sock_list) == 0:
         response.status_code = 404
-        return {"Error" : "No socks yet!"}
+        return {"Error": "No socks yet!"}
     return sock_list
 
 
-@router.put("/api/socks/{id}", response_model=SockOut | HttpError | Error | dict)
+@router.put("/api/socks/{id}",
+            response_model=SockOut | HttpError | Error | dict)
 async def update_sock(
     id: int,
     user_id: int,
@@ -82,11 +87,11 @@ async def update_sock(
     account_data: dict = Depends(authenticator.get_current_account_data)
 ) -> SockOut:
     try:
-        if account_data['id']==user_id:
+        if account_data['id'] == user_id:
             return socks.update(id, info, user_id)
         else:
-            response.status_code=400
-            return  {"Error": "sock update id does not match"}
+            response.status_code = 400
+            return {"Error": "sock update id does not match"}
     except ValidationError as e:
         print("Error", e)
         raise HTTPException(status_code=400, detail=str(e))
@@ -96,7 +101,7 @@ async def update_sock(
 def get_one_sock(
     id: int,
     response: Response,
-    sock:SockQueries = Depends()
+    sock: SockQueries = Depends()
 ):
     sock = sock.get_one_sock(id)
     if sock is None:
