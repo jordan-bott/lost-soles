@@ -160,6 +160,35 @@ class MatchQueries():
             print(e)
             return False
 
+
+    def approve(self, match_id: int, approving_user: int) -> MatchOut:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        UPDATE matches
+                        SET match_status = %s
+                        WHERE id = %s
+                        AND approving_user = %s
+                        RETURNING *;
+                        """,
+                        [True, match_id, approving_user]
+                    )
+                    m = db.fetchone()
+                    return MatchOut(
+                        id = m[0],
+                        requesting_user = m[1],
+                        approving_user = m[2],
+                        gift_sock = m[3],
+                        receive_sock = m[4],
+                        match_status = m[5],
+                        created_on = str(m[6])
+                    )
+        except Exception as e:
+            print(e)
+            return False
+
     def get_one(self, match_id: int, user_id: int):
             try:
                 with pool.connection() as conn:
@@ -224,8 +253,6 @@ class MatchQueries():
                             user_dict["created_on"] = str(m[6])
                             if m[1] == user_id or m[2] == user_id:
                                 match.append(UserMatchOut(id=m[0], **user_dict))
-
-
                         return match
             except Exception as e:
                 print("get matches error", e)
