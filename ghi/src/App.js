@@ -31,8 +31,11 @@ function App() {
   //     getData();
   //   }, []);
 
+  const domain = /https:\/\/[^/]+/;
+  const basename = process.env.PUBLIC_URL.replace(domain, "");
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="" element={<SockFeed />} />
         <Route path="login" element={<Login />} />
