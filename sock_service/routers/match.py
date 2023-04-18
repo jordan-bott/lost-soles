@@ -61,6 +61,17 @@ def delete_match(
             response.status_code = 400
             return {"Error" : "Unable to delete match"}
 
+
+@router.put("/api/matches/{match_id}", response_model=MatchOut | dict | Error)
+def approve_match(
+    match_id: int,
+    response: Response,
+    matches: MatchQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data)
+):
+    approving_user = account_data["id"]
+    return matches.approve(match_id, approving_user)
+
 @router.get("/api/matches/{id}", response_model=List[UserMatchOut] | dict |  Error)
 def get_one_match(
     id: int,
