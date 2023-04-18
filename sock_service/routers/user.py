@@ -8,7 +8,6 @@ from fastapi import (
 )
 from jwtdown_fastapi.authentication import Token
 from authenticator import authenticator
-from typing import Optional
 
 from pydantic import BaseModel
 from typing import Union, List
@@ -23,6 +22,7 @@ from queries.user import (
     UserQueries,
     DuplicateUserError,
 )
+
 
 class UserForm(BaseModel):
     username: str
@@ -95,6 +95,34 @@ def delete_user(
     users: UserQueries = Depends(),
 ) -> bool:
     return users.delete(user_id)
+
+@router.put("/api/update_user_verification/{user_id}", response_model=Union[UserOut, dict])
+async def update_verification(
+    user_id: int,
+    response: Response,
+    users: UserQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data),
+) -> UserOut:
+    if account_data["type"]!="admin":
+        response.status_code=400
+        return {"Error: ": "Must be admin"}
+    else:
+        return users.update_positive_verification_status(user_id)
+
+
+@router.put("/api/update_reverification/{user_id}", response_model=Union[UserOut, dict])
+async def update_reverification(
+    user_id: int,
+    response: Response,
+    users: UserQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data),
+) -> UserOut:
+    if account_data["type"]!="admin":
+        response.status_code=400
+        return {"Error: ": "Must be admin"}
+    else:
+        return users.update_to_reverification_status(user_id)
+
 
 @router.put("/api/users/{user_id}", response_model=UserOut | HttpError)
 def update_user(
