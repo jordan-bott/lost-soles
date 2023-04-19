@@ -37,9 +37,7 @@ export const authApi = createApi({
           credentials: "include",
         };
       },
-      invalidatesTags: (result) => {
-        return (result && ["Account"]) || [];
-      },
+      invalidatesTags: ["Token"],
     }),
     getToken: builder.query({
       query: () => ({
@@ -55,6 +53,18 @@ export const authApi = createApi({
         method: "delete",
         credentials: "include",
       }),
+      invalidatesTags: ["Token"],
+    }),
+    createUser: builder.mutation({
+      query: (info) => {
+        return {
+          url: "api/users",
+          method: "post",
+          body: info,
+          credentials: "include",
+        };
+      },
+      invalidatesTags: ["Token"],
     }),
   }),
 });
@@ -72,5 +82,9 @@ export const authApi = createApi({
 //   },
 // });
 
-export const { useLoginMutation, useGetTokenQuery, useLogoutMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useGetTokenQuery,
+  useLogoutMutation,
+  useCreateUserMutation,
+} = authApi;

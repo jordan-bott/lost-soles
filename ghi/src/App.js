@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SockFeed from "./components/feed.js";
 import Login from "./components/auth/login.js";
 import Logout from "./components/auth/logout.js";
-import Signup from "./components/user/signup.js";
+import Signup from "./components/auth/signup.js";
 import "./index.css";
 import Nav from "./nav.js";
 

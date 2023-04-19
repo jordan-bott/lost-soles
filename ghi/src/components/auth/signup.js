@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCreateUserMutation } from "../../store/usersApi";
+import { useCreateUserMutation } from "../../store/authApi";
 import { BiShow } from "react-icons/bi";
 
 function Signup() {

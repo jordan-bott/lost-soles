@@ -40,6 +40,19 @@ class HttpError(BaseModel):
 router = APIRouter()
 
 
+@router.get("/token", response_model=UserToken | None)
+async def get_token(
+    request: Request,
+    account: UserOut = Depends(authenticator.try_get_current_account_data),
+) -> UserToken | None:
+    if account and authenticator.cookie_name in request.cookies:
+        return {
+            "access_token": request.cookies[authenticator.cookie_name],
+            "token_type": "Bearer",
+            "account": account,
+        }
+
+
 @router.post("/api/users", response_model=UserToken | HttpError)
 async def create_account(
     info: UserIn,
