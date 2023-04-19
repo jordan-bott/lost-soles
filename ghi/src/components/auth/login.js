@@ -25,8 +25,6 @@ function Login() {
     setPassword(value);
   };
 
-  console.log(result);
-
   if (result.isSuccess) {
     console.log("success!");
   } else {
