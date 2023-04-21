@@ -39,7 +39,6 @@ def get_matches_by_user(
 ):
     user_id = account_data["id"]
     match_list = matches.get_by_user(user_id)
-    print(match_list)
     if len(match_list) == 0:
         response.status_code = 404
         return {"Error": "No matches yet!"}

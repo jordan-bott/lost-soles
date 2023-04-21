@@ -8,6 +8,8 @@ import Logout from "./components/auth/logout.js";
 import Signup from "./components/auth/signup.js";
 import "./index.css";
 import Nav from "./nav.js";
+import ListUsers from "./components/listAllUsers.js";
+
 
 function App() {
   //   const [launch_info, setLaunchInfo] = useState([]);
@@ -44,7 +46,7 @@ function App() {
         <Route path="logout" element={<Logout />} />
         <Route path="signup" element={<Signup />} />
         <Route path="verification" />
-        <Route path="users">
+        <Route path="users" element={<ListUsers />}>
           <Route path="verify" />
         </Route>
         <Route path="socks">

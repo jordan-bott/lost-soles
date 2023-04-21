@@ -130,7 +130,6 @@ class SockQueries():
                     ]
                 )
                 sock = db.fetchone()
-                print(sock)
                 return SockOut(
                             id=sock[0],
                             user_id=sock[1],

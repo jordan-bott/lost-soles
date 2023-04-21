@@ -4,15 +4,48 @@ export const usersApi = createApi({
   reducerPath: "users",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_SAMPLE_SERVICE_API_HOST,
+    credentials: "include",
   }),
+  prepareHeaders: (headers, {getState}) => {
+        const token = getState().auth.token;
+        if (token) {
+          headers.set( 'authorization', `Bearer ${token}`);
+        }
+        return headers;
+    },
   endpoints: (builder) => ({
+    getUsers: builder.query({
+      query: () => ({
+        url: "/api/users",
+        credentials: "include",
+      }),
+      providesTags: ["User"],
+    }),
     getUser: builder.query({
       query: (id) => ({
         url: `/api/users/${id}`,
+        credentials: "include",
       }),
+
       providesTags: ["User"],
+    }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/api/users/${id}`,
+        method: "delete",
+        credentials: "include",
+      }),
+      invalidatesTags: ["User"],
     }),
   }),
 });
 
-export const { useGetUserQuery } = usersApi;
+
+
+
+export const {
+  useGetUserQuery,
+  useCreateUserMutation,
+  useGetUsersQuery,
+  useDeleteUserMutation,
+} = usersApi;
