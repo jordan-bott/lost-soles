@@ -59,7 +59,8 @@ class SockQueries():
                         users.total_pairings
                         FROM socks
                         LEFT OUTER JOIN users
-                        ON socks.user_id = users.id;
+                        ON socks.user_id = users.id
+                        ORDER BY created_on DESC;
                         """,
                     )
                     posts = []

@@ -54,3 +54,20 @@ input {
 label {
   padding-right: 10px;
 }
+
+.card {
+  background-color: #ffee93;
+  border-style: solid;
+  border-color: #ffc09f;
+  border: 3px solid #ffc09f;
+  border-bottom: 5px solid #ffc09f;
+  border-right: 5px solid #ffc09f;
+  filter: drop-shadow(15px 15px 4px #cccccf);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: repeat(1, auto);
+  place-items: center;
+}

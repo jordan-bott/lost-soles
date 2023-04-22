@@ -9,7 +9,9 @@ import { useLogoutMutation } from "./store/authApi";
 function Nav() {
   const [dropdown, setDropdown] = useState(false);
   const { data, isLoading } = useGetTokenQuery();
-  const [logoutUser, result] = useLogoutMutation();
+  const [logoutUser] = useLogoutMutation();
+
+  console.log(data);
 
   if (isLoading) {
     return <progress className="progress is-primary" max="100" />;
@@ -18,16 +20,6 @@ function Nav() {
   const handleDropdown = () => {
     setDropdown(!dropdown);
   };
-
-  async function handleLogout() {
-    logoutUser();
-  }
-
-  if (result.isSuccess) {
-    console.log("logged out!");
-  } else {
-    console.log("error");
-  }
 
   return (
     <>
@@ -56,7 +48,7 @@ function Nav() {
             />
           </button>
           {dropdown ? (
-            <div className="text-blue border-blue bg-background bg-w-32 border-2 rounded-md shadow-xl absolute right-4 divide-y divide-orange px-3">
+            <div className="z-40 text-blue border-blue bg-background bg-w-32 border-2 rounded-md shadow-xl absolute right-4 divide-y divide-orange px-3">
               {data === null ? null : (
                 <div className="block px-2 py-2 text-l">
                   <p>{data.account.username}</p>
@@ -115,9 +107,10 @@ function Nav() {
                   <div className="border-t-4">
                     <button
                       className="inline px-2 py-2 hover:text-orange"
-                      onClick={() => handleLogout()}
+                      type="submit"
+                      onClick={() => logoutUser()}
                     >
-                      Logout
+                      <NavLink to="/">Logout</NavLink>
                     </button>
                   </div>
                 </>
