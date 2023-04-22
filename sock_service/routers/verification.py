@@ -9,7 +9,8 @@ from typing import Union, List
 from queries.verification import (
     VerificationOut,
     VerificationIn,
-    VerificationQueries
+    VerificationQueries,
+    VerificationWithUserOut
 )
 
 
@@ -20,7 +21,7 @@ class HttpError(BaseModel):
 router = APIRouter()
 
 
-@router.post("/api/user_verification",
+@router.post("/api/verifications",
              response_model=VerificationOut | HttpError)
 async def create_verification(
     info: VerificationIn,
@@ -31,21 +32,21 @@ async def create_verification(
     return verification.create(info, user_id)
 
 
-@router.get("/api/all_verifications",
-            response_model=Union[List[VerificationOut], dict])
+@router.get("/api/verifications",
+            response_model=Union[List[VerificationWithUserOut], dict])
 async def get_all_verifications(
     response: Response,
     verification: VerificationQueries = Depends(),
     account_data: dict = Depends(authenticator.get_current_account_data)
 ):
     if account_data["type"] == "admin":
-        return verification.get_all_verifications()
+        return verification.get_verifications()
     elif account_data["type"] == "user":
         response.status_code = 400
         return {"Error": "must be admin"}
 
 
-@router.put("/api/approve_verification/{id}",
+@router.put("/api/verifications/{id}/approve",
             response_model=Union[VerificationOut, dict])
 async def approve_verification(
     id: int,
@@ -60,7 +61,7 @@ async def approve_verification(
         return {"Error": "must be admin"}
 
 
-@router.put("/api/reject_verification/{id}",
+@router.put("/api/verifications/{id}/reject",
             response_model=Union[VerificationOut, dict])
 async def reject_verification(
     id: int,
@@ -75,7 +76,7 @@ async def reject_verification(
         return {"Error": "must be admin"}
 
 
-@router.delete("/api/delete_verifications/{id}", response_model=bool | dict)
+@router.delete("/api/verifications/{id}", response_model=bool | dict)
 def delete_user_verification(
     id: int,
     response: Response,

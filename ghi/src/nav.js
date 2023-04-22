@@ -106,7 +106,7 @@ function Nav() {
                       </NavLink>
                       <NavLink
                         className="block px-2 py-2 hover:text-orange"
-                        to="/verification"
+                        to="/verifications"
                       >
                         Verification List
                       </NavLink>
