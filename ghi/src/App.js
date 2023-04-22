@@ -6,10 +6,10 @@ import SockFeed from "./components/feed.js";
 import Login from "./components/auth/login.js";
 import Logout from "./components/auth/logout.js";
 import Signup from "./components/auth/signup.js";
+import VerificationList from "./components/verificationList.js";
 import "./index.css";
 import Nav from "./nav.js";
 import ListUsers from "./components/listAllUsers.js";
-
 
 function App() {
   //   const [launch_info, setLaunchInfo] = useState([]);
@@ -45,7 +45,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="logout" element={<Logout />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="verification" />
+        <Route path="verifications" element={<VerificationList />} />
         <Route path="users" element={<ListUsers />}>
           <Route path="verify" />
         </Route>

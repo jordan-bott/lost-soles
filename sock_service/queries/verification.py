@@ -21,6 +21,10 @@ class VerificationOut(BaseModel):
     created_on: str
 
 
+class VerificationWithUserOut(VerificationOut):
+    username: str
+
+
 class VerificationQueries:
     def create(self, info: VerificationIn, user_id: int) -> VerificationOut:
         with pool.connection() as conn:
@@ -52,25 +56,28 @@ class VerificationQueries:
                     created_on=str(v[4])
                 )
 
-    def get_all_verifications(self) -> Union[List[VerificationOut], Error]:
+    def get_verifications(self) -> Union[List[VerificationWithUserOut], Error]:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
                     vrfy = db.execute(
                         """
-                        SELECT *
-                        FROM verifications
+                        SELECT v.*, u.username
+                        FROM verifications v
+                        INNER JOIN users u
+                        ON v.user_id = u.id
                         ORDER BY verification_status
                         """,
                     )
                     vrfy = []
                     for v in db:
-                        verify = VerificationOut(
+                        verify = VerificationWithUserOut(
                             id=v[0],
                             user_id=v[1],
                             license=v[2],
                             verification_status=v[3],
-                            created_on=str(v[4])
+                            created_on=str(v[4]),
+                            username=v[5]
                         )
                         vrfy.append(verify)
                     return vrfy
