@@ -2,12 +2,14 @@
 // import Construct from "./Construct.js";
 // import ErrorNotification from "./ErrorNotification";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import SockFeed from "./components/feed.js";
 import Login from "./components/auth/login.js";
 import Logout from "./components/auth/logout.js";
 import Signup from "./components/auth/signup.js";
 import VerificationList from "./components/verificationList.js";
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
 import Nav from "./nav.js";
 import ListUsers from "./components/listAllUsers.js";
 
@@ -58,6 +60,25 @@ function App() {
           <Route path="approve" />
         </Route>
       </Routes>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        toastStyle={{
+          backgroundColor: "#fff5db",
+          color: "#79aadd",
+          fontFamily: "Comfortaa",
+          border: "2px solid #79aadd ",
+          borderRadius: "5px",
+        }}
+      />
     </BrowserRouter>
   );
 }
