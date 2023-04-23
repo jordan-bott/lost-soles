@@ -30,7 +30,8 @@ async def create_sock(
     return socks.create(info, user_id)
 
 
-@router.delete("/api/socks/{sock_id}", response_model=bool | dict | Error)
+@router.delete("/api/users/{user_id}/socks/{sock_id}",
+               response_model=bool | dict | Error)
 def delete_sock(
     sock_id: int,
     response: Response,
@@ -76,7 +77,7 @@ def get_socks_by_user(
     return sock_list
 
 
-@router.put("/api/socks/{id}",
+@router.put("/api/users/{user_id}/socks/{id}",
             response_model=SockOut | HttpError | Error | dict)
 async def update_sock(
     id: int,

@@ -18,7 +18,35 @@ export const socksApi = createApi({
     getSocks: builder.query({
       query: () => "/api/socks",
     }),
+    getSocksByUser: builder.query({
+      query: (id) => ({
+        url: `/api/socks/users/${id}`,
+        credentials: "include",
+      }),
+      providesTags: ["Socks"],
+    }),
+    deleteSock: builder.mutation({
+      query: ({ user_id, sock_id }) => ({
+        url: `/api/users/${user_id}/socks/${sock_id}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Socks"],
+    }),
+    updateSock: builder.mutation({
+      query: ({ user_id, sock_id }) => ({
+        url: `/api/users/${user_id}/socks/${sock_id}`,
+        method: "PUT",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Socks"],
+    }),
   }),
 });
 
-export const { useGetSocksQuery } = socksApi;
+export const {
+  useGetSocksQuery,
+  useDeleteSockMutation,
+  useGetSocksByUserQuery,
+  useUpdateSockMutation,
+} = socksApi;
