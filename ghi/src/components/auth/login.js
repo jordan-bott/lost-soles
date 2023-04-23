@@ -8,7 +8,6 @@ function Login() {
   const [loginUser] = useLoginMutation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -48,7 +47,7 @@ function Login() {
         </div>
         <div className="pt-12 w-[350px] relative">
           <form onSubmit={handleSubmit} className="flex flex-col w-[100%]">
-            <p className="text-xl pb-1">Username</p>
+            <p className="text-xl pb-1 pl-1">Username</p>
             <input
               type="text"
               name="username"
@@ -56,7 +55,7 @@ function Login() {
               value={username}
               className="bg-yellow rounded-lg h-10 border-blue border-2 px-4 pt-[.75px]"
             />
-            <p className="text-xl pt-2 pb-1">Password</p>
+            <p className="text-xl pt-2 pb-1 pl-1">Password</p>
             <input
               type={showPassword ? "text" : "password"}
               name="password"

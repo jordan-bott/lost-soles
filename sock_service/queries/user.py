@@ -182,59 +182,62 @@ class UserQueries():
 
     def create(self,
                info: UserIn,
-               hashed_password: str) -> UserOutWithPassword:
-        with pool.connection() as conn:
-            with conn.cursor() as db:
-                result = db.execute(
-                    """
-                    INSERT INTO users
-                        (
-                            first_name,
-                            last_name,
-                            username,
+               hashed_password: str) -> UserOutWithPassword | Error:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    result = db.execute(
+                        """
+                        INSERT INTO users
+                            (
+                                first_name,
+                                last_name,
+                                username,
+                                hashed_password,
+                                email,
+                                address,
+                                sockstar_points,
+                                total_pairings,
+                                profile_pic,
+                                verified,
+                                type
+                            )
+                        VALUES
+                            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        RETURNING *;
+                        """,
+                        [
+                            info.first_name,
+                            info.last_name,
+                            info.username,
                             hashed_password,
-                            email,
-                            address,
-                            sockstar_points,
-                            total_pairings,
-                            profile_pic,
-                            verified,
-                            type
-                        )
-                    VALUES
-                        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    RETURNING *;
-                    """,
-                    [
-                        info.first_name,
-                        info.last_name,
-                        info.username,
-                        hashed_password,
-                        info.email,
-                        info.address,
-                        0,
-                        0,
-                        info.profile_pic,
-                        False,
-                        "user"
-                    ]
-                )
-                user = result.fetchone()
-                return UserOutWithPassword(
-                    id=user[0],
-                    first_name=user[1],
-                    last_name=user[2],
-                    username=user[3],
-                    hashed_password=user[4],
-                    email=user[5],
-                    address=user[6],
-                    sockstar_points=user[7],
-                    total_pairings=user[8],
-                    profile_pic=user[9],
-                    verified=user[10],
-                    type=user[11],
-                    created_on=str(user[12])
-                )
+                            info.email,
+                            info.address,
+                            0,
+                            0,
+                            info.profile_pic,
+                            False,
+                            "user"
+                        ]
+                    )
+                    user = result.fetchone()
+                    return UserOutWithPassword(
+                        id=user[0],
+                        first_name=user[1],
+                        last_name=user[2],
+                        username=user[3],
+                        hashed_password=user[4],
+                        email=user[5],
+                        address=user[6],
+                        sockstar_points=user[7],
+                        total_pairings=user[8],
+                        profile_pic=user[9],
+                        verified=user[10],
+                        type=user[11],
+                        created_on=str(user[12])
+                    )
+        except Exception as e:
+            return {"Error": e}
 
     def create_admin(self,
                      info: UserIn,

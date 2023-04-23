@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import SockFeed from "./components/feed.js";
 import Login from "./components/auth/login.js";
-import Logout from "./components/auth/logout.js";
 import Signup from "./components/auth/signup.js";
 import SockDrawer from "./components/sockdrawer.js";
 import VerificationList from "./components/verificationList.js";
@@ -46,7 +45,6 @@ function App() {
       <Routes>
         <Route path="" element={<SockFeed />} />
         <Route path="login" element={<Login />} />
-        <Route path="logout" element={<Logout />} />
         <Route path="signup" element={<Signup />} />
         <Route path="verifications" element={<VerificationList />} />
         <Route path="users" element={<ListUsers />}>
