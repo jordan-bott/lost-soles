@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useCreateUserMutation } from "../../store/authApi";
-import { BiShow } from "react-icons/bi";
+import logo from "../../images/title-logo.png";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
-  const [createUser, result] = useCreateUserMutation();
+  const [createUser] = useCreateUserMutation();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -15,6 +17,7 @@ function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
+  const navigate = useNavigate();
 
   const handleFirstNameChange = (event) => {
     const value = event.target.value;
@@ -56,9 +59,9 @@ function Signup() {
     setProfilePic(value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    createUser({
+    const result = await createUser({
       first_name: firstName,
       last_name: lastName,
       username: username,
@@ -68,110 +71,141 @@ function Signup() {
       address: address,
       profile_pic: profilePic,
     });
-    setFirstName("");
-    setLastName("");
-    setUsername("");
-    setPassword("");
-    setPasswordConfirmation("");
-    setEmail("");
-    setAddress("");
-    setProfilePic("");
+    if (!result.hasOwnProperty("error")) {
+      setFirstName("");
+      setLastName("");
+      setUsername("");
+      setPassword("");
+      setPasswordConfirmation("");
+      setEmail("");
+      setAddress("");
+      setProfilePic("");
+      toast(`Welcome to Lost Soles! Go find your sole mate 🧦`);
+      navigate("/");
+    } else if (result.error.hasOwnProperty("data")) {
+      toast(`${result.error.data.detail}`);
+    } else {
+      toast("Username or email already exists.");
+    }
   };
-
-  if (result.isSuccess) {
-    console.log("success!");
-  } else {
-    console.log("error T_T");
-  }
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label>
-          First Name:
-          <input
-            type="text"
-            name="first_name"
-            onChange={handleFirstNameChange}
-            value={firstName}
+      <div className="flex flex-col place-content-center items-center w-[100%] h-[100%]">
+        <div>
+          <img
+            src={logo}
+            alt="Lost Soles logo. The L in lost and soles are made of socks! Has small subtitle: find your sole mate!"
+            className="w-[750px] pt-32"
           />
-        </label>
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="last_name"
-            onChange={handleLastNameChange}
-            value={lastName}
-          />
-        </label>
-        <label>
-          Username:
-          <input
-            type="text"
-            name="username"
-            onChange={handleUsernameChange}
-            value={username}
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            type={showPassword ? "text" : "password"}
-            name="password"
-            onChange={handlePasswordChange}
-            value={password}
-          />
-          <button type="button" onClick={() => setShowPassword(!showPassword)}>
-            <BiShow />
-          </button>
-        </label>
-        <label>
-          Password Confirmation:
-          <input
-            type={showPasswordConfirmation ? "text" : "password"}
-            name="password_confirmation"
-            onChange={handlePasswordConfirmationChange}
-            value={passwordConfirmation}
-          />
-          <button
-            type="button"
-            onClick={() =>
-              setShowPasswordConfirmation(!showPasswordConfirmation)
-            }
+        </div>
+        <div className="flex place-content-center pt-12 w-[600px]">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col place-content-center w-100%"
           >
-            <BiShow />
-          </button>
-        </label>
-        <label>
-          Email:
-          <input
-            type="text"
-            name="email"
-            onChange={handleEmailChange}
-            value={email}
-          />
-        </label>
-        <label>
-          Address:
-          <input
-            type="text"
-            name="address"
-            onChange={handleAddressChange}
-            value={address}
-          />
-        </label>
-        <label>
-          Profile Pic:
-          <input
-            type="text"
-            name="profile_pic"
-            onChange={handleProfilePicChange}
-            value={profilePic}
-          />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+            <div className="flex gap-x-10 w-[100%]">
+              <div>
+                <p className="text-xl pt-2 pb-1 pl-1">First Name</p>
+                <input
+                  type="text"
+                  name="first_name"
+                  onChange={handleFirstNameChange}
+                  value={firstName}
+                  className="bg-yellow rounded-lg h-10 border-blue border-2 px-4 pt-[.75px] w-[250px]"
+                />
+                <p className="text-xl pt-2 pb-1 pl-1">Last Name</p>
+                <input
+                  type="text"
+                  name="last_name"
+                  onChange={handleLastNameChange}
+                  value={lastName}
+                  className="bg-yellow rounded-lg h-10 border-blue border-2 px-4 pt-[.75px] w-[250px]"
+                />
+                <p className="text-xl pt-2 pb-1 pl-1">Username</p>
+                <input
+                  type="text"
+                  name="username"
+                  onChange={handleUsernameChange}
+                  value={username}
+                  className="bg-yellow rounded-lg h-10 border-blue border-2 px-4 pt-[.75px] w-[250px]"
+                />
+                <p className="text-xl pt-2 pb-1 pl-1">Email</p>
+                <input
+                  type="email"
+                  name="email"
+                  onChange={handleEmailChange}
+                  value={email}
+                  className="bg-yellow rounded-lg h-10 border-blue border-2 px-4 pt-[.75px] w-[250px]"
+                />
+              </div>
+              <div className="relative">
+                <p className="text-xl pt-2 pb-1 pl-1">Password</p>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  onChange={handlePasswordChange}
+                  value={password}
+                  className="bg-yellow rounded-lg h-10 border-blue border-2 px-4 pt-[.75px] w-[250px]"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute left-[87.25%] top-[13.25%] hover:scale-105"
+                >
+                  <img
+                    src="https://img.icons8.com/material-outlined/24/79aadd/visible--v1.png"
+                    alt="cartoon eye"
+                  />
+                </button>
+                <p className="text-xl pt-2 pb-1 pl-1">Password Confirmation</p>
+                <input
+                  type={showPasswordConfirmation ? "text" : "password"}
+                  name="password_confirmation"
+                  onChange={handlePasswordConfirmationChange}
+                  value={passwordConfirmation}
+                  className="bg-yellow rounded-lg h-10 border-blue border-2 px-4 pt-[.75px] w-[250px]"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPasswordConfirmation(!showPasswordConfirmation)
+                  }
+                  className="absolute left-[87.25%] top-[38.5%] hover:scale-105"
+                >
+                  <img
+                    src="https://img.icons8.com/material-outlined/24/79aadd/visible--v1.png"
+                    alt="cartoon eye"
+                  />
+                </button>
+                <p className="text-xl pt-2 pb-1 pl-1">Address</p>
+                <input
+                  type="text"
+                  name="address"
+                  onChange={handleAddressChange}
+                  value={address}
+                  className="bg-yellow rounded-lg h-10 border-blue border-2 px-4 pt-[.75px] w-[250px]"
+                />
+                <p className="text-xl pt-2 pb-1 pl-1">Profile Picture URL</p>
+                <input
+                  type="text"
+                  name="profile_pic"
+                  onChange={handleProfilePicChange}
+                  value={profilePic}
+                  className="bg-yellow rounded-lg h-10 border-blue border-2 px-4 pt-[.75px] w-[250px]"
+                />
+              </div>
+            </div>
+            <div className="flex place-content-center pt-4 w-[100%]">
+              <input
+                type="submit"
+                value="Submit"
+                className="text-lg bg-lorange border-blue border-2 p-1 mr-2 mt-1 w-[35%] rounded-lg hover:scale-105"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
     </>
   );
 }

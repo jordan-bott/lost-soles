@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { useGetTokenQuery } from "../store/authApi";
 import { useDeleteSockMutation } from "../store/socksApi";
 import { useGetSocksByUserQuery } from "../store/socksApi";
