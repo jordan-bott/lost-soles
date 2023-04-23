@@ -42,6 +42,7 @@ class SockWithUserOut(SockOut):
     profile_pic: str
     sockstar_points: int
     total_pairings: int
+    verified: bool
 
 
 class SockQueries():
@@ -56,7 +57,8 @@ class SockQueries():
                         users.username,
                         users.profile_pic,
                         users.sockstar_points,
-                        users.total_pairings
+                        users.total_pairings,
+                        users.verified
                         FROM socks
                         LEFT OUTER JOIN users
                         ON socks.user_id = users.id
@@ -83,7 +85,8 @@ class SockQueries():
                             username=post[14],
                             profile_pic=post[15],
                             sockstar_points=post[16],
-                            total_pairings=post[17]
+                            total_pairings=post[17],
+                            verified=post[18]
                         )
                         if post[12] == "available" or post[12] == "pending":
                             posts.append(sock_post)
