@@ -5,13 +5,13 @@ import logo from "./images/logo.png";
 import titleLogo from "./images/title-logo.png";
 import { useGetTokenQuery } from "./store/authApi";
 import { useLogoutMutation } from "./store/authApi";
+import { useNavigate } from "react-router-dom";
 
 function Nav() {
   const [dropdown, setDropdown] = useState(false);
   const { data, isLoading } = useGetTokenQuery();
   const [logoutUser] = useLogoutMutation();
-
-  console.log(data);
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <progress className="progress is-primary" max="100" />;
@@ -19,6 +19,11 @@ function Nav() {
 
   const handleDropdown = () => {
     setDropdown(!dropdown);
+  };
+
+  const handleLogout = () => {
+    logoutUser();
+    navigate("/");
   };
 
   return (
@@ -108,9 +113,9 @@ function Nav() {
                     <button
                       className="inline px-2 py-2 hover:text-orange"
                       type="submit"
-                      onClick={() => logoutUser()}
+                      onClick={() => handleLogout()}
                     >
-                      <NavLink to="/">Logout</NavLink>
+                      Logout
                     </button>
                   </div>
                 </>

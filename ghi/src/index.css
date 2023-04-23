@@ -12,6 +12,18 @@
   --primary-blue: #79aadd;
   --primary-green: #c1eead;
   --primary-red: #f7c5c7;
+  --toastify-color-light: #ffc09f;
+  --toastify-text-color-light: #79aadd;
+  --toastify-font-family: Comfortaa;
+  --toastify-color-progress-light: linear-gradient(
+    to right,
+    #75cf84,
+    #6fc0e5,
+    #67affc,
+    #59aed3,
+    #7d7bce,
+    #df778a
+  );
 }
 
 @layer base {
