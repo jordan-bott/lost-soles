@@ -1,5 +1,6 @@
 import { useGetSocksQuery } from "../store/socksApi";
 import sockstar from "../images/sockstar.png";
+import checkmark from "../images/verification-check.png";
 import SideBar from "./sidebar";
 
 function SockFeed() {
@@ -24,11 +25,20 @@ function SockFeed() {
               >
                 <div className="flex justify-between items-center w-[95%]">
                   <div className="flex pt-1.5">
-                    <img
-                      src={sock.profile_pic}
-                      className="rounded-full w-[67px] h-[67px] object-cover border-blue border-2 mr-2"
-                      alt=""
-                    />
+                    <div className="relative">
+                      <img
+                        src={sock.profile_pic}
+                        className="rounded-full w-[67px] h-[67px] object-cover border-blue border-2 mr-2"
+                        alt=""
+                      />
+                      {sock.verified === true ? (
+                        <img
+                          src={checkmark}
+                          className="absolute w-[21px] left-[62%] top-[2%]"
+                          alt="orange curvy circle with a tan checkmark"
+                        />
+                      ) : null}
+                    </div>
                     <p className="font-black text-l text-left content-center self-center">
                       @{sock.username}
                     </p>
