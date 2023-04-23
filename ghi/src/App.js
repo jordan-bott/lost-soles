@@ -12,6 +12,7 @@ import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "./nav.js";
 import ListUsers from "./components/listAllUsers.js";
+import VerificationCreate from "./components/verificationCreate.js";
 
 function App() {
   //   const [launch_info, setLaunchInfo] = useState([]);
@@ -47,8 +48,9 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="verifications" element={<VerificationList />} />
-        <Route path="users" element={<ListUsers />}>
-          <Route path="verify" />
+        <Route path="users">
+          <Route path="" element={<ListUsers />} />
+          <Route path="verify" element={<VerificationCreate />} />
         </Route>
         <Route path="socks">
           <Route path="create" />
