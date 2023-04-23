@@ -15,5 +15,5 @@ module.exports = {
       lorange: "#FCD2AB",
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };

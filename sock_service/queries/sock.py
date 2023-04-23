@@ -151,7 +151,7 @@ class SockQueries():
                             created_on=str(sock[13]),
                         )
 
-    def delete(self, sock_id: int, user_id: int) -> bool:
+    def delete(self, sock_id: int, user_id: int,) -> bool:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:

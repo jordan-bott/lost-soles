@@ -7,6 +7,7 @@ import SockFeed from "./components/feed.js";
 import Login from "./components/auth/login.js";
 import Logout from "./components/auth/logout.js";
 import Signup from "./components/auth/signup.js";
+import SockDrawer from "./components/sockdrawer.js";
 import VerificationList from "./components/verificationList.js";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -53,7 +54,7 @@ function App() {
         </Route>
         <Route path="socks">
           <Route path="create" />
-          <Route path="sockdrawer" />
+          <Route path="sockdrawer" element={<SockDrawer />} />
         </Route>
         <Route path="matches">
           <Route path="request" />
