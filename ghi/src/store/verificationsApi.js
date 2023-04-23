@@ -65,6 +65,17 @@ export const verificationsApi = createApi({
       }),
       invalidatesTags: ["Verification"],
     }),
+    createVerification: builder.mutation({
+      query: (info) => {
+        return {
+          url: "/api/verifications",
+          method: "post",
+          body: info,
+          credentials: "include",
+        };
+      },
+      invalidatesTags: ["Verification"],
+    }),
   }),
 });
 
@@ -75,4 +86,5 @@ export const {
   useDeleteVerificationMutation,
   useVerifyUserMutation,
   useUnverifyUserMutation,
+  useCreateVerificationMutation,
 } = verificationsApi;
