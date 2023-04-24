@@ -458,3 +458,39 @@ class UserQueries():
                     return user_update
         except Exception as e:
             return {"Error": e}
+
+    def sockstar(self, user_id: int, points: int) -> UserOut:
+        print(3)
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        UPDATE users
+                        SET sockstar_points = %s
+                        WHERE id = %s
+                        RETURNING *;
+                        """,
+                        [points, user_id]
+                    )
+                    print(4)
+                    ss = db.fetchone()
+                    print(ss)
+                    user = UserOut(
+                            id=ss[0],
+                            first_name=ss[1],
+                            last_name=ss[2],
+                            username=ss[3],
+                            email=ss[5],
+                            address=ss[6],
+                            sockstar_points=ss[7],
+                            total_pairings=ss[8],
+                            profile_pic=ss[9],
+                            verified=ss[10],
+                            type=ss[11],
+                            created_on=str(ss[12])
+                        )
+                    print(user)
+                return user
+        except Exception as e:
+            return {"error": e}
