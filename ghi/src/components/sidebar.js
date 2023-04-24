@@ -1,8 +1,10 @@
 import { useGetSocksQuery } from "../store/socksApi";
 import lonelies from "../images/lonelies.png";
+import { useNavigate } from "react-router-dom";
 
 function SideBar() {
   const { data, isLoading } = useGetSocksQuery();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <p>Loading ...</p>;
@@ -36,16 +38,20 @@ function SideBar() {
               className=""
               alt="clothes line holding up two pictures of the oldest socks in the database"
             />
-            <img
-              src={lonelySock.photo}
-              className="absolute object-cover h-[88px] w-[88px] -rotate-[18.5deg] left-[52%] top-[22%] border-[1px] hover:scale-105"
-              alt=""
-            />
-            <img
-              src={lonely2.photo}
-              className="absolute object-cover h-[88px] w-[88px] rotate-[37deg] left-[23.75%] top-[58.75%] border-[1px] hover:scale-105"
-              alt=""
-            />
+            <button onClick={() => navigate(`socks/${lonelySock.id}`)}>
+              <img
+                src={lonelySock.photo}
+                className="absolute object-cover h-[88px] w-[88px] -rotate-[18.5deg] left-[52.25%] top-[21.25%] border-[1px] hover:scale-105"
+                alt=""
+              />
+            </button>
+            <button onClick={() => navigate(`socks/${lonely2.id}`)}>
+              <img
+                src={lonely2.photo}
+                className="absolute object-cover h-[88px] w-[88px] rotate-[37deg] left-[23.75%] top-[55.75%] border-[1px] hover:scale-105"
+                alt=""
+              />
+            </button>
           </div>
         </div>
       </div>

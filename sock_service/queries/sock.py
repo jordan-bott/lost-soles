@@ -39,6 +39,7 @@ class SockOut(BaseModel):
 
 class SockWithUserOut(SockOut):
     username: str
+    email: str
     profile_pic: str
     sockstar_points: int
     total_pairings: int
@@ -55,6 +56,7 @@ class SockQueries():
                         """
                         SELECT socks.*,
                         users.username,
+                        users.email,
                         users.profile_pic,
                         users.sockstar_points,
                         users.total_pairings,
@@ -83,10 +85,11 @@ class SockQueries():
                             match_status=post[12],
                             created_on=str(post[13]),
                             username=post[14],
-                            profile_pic=post[15],
-                            sockstar_points=post[16],
-                            total_pairings=post[17],
-                            verified=post[18]
+                            email=post[15],
+                            profile_pic=post[16],
+                            sockstar_points=post[17],
+                            total_pairings=post[18],
+                            verified=post[19]
                         )
                         if post[12] == "available" or post[12] == "pending":
                             posts.append(sock_post)
@@ -212,9 +215,11 @@ class SockQueries():
                         """
                         SELECT socks.*,
                         users.username,
+                        users.email,
                         users.profile_pic,
                         users.sockstar_points,
-                        users.total_pairings
+                        users.total_pairings,
+                        users.verified
                         FROM socks
                         LEFT OUTER JOIN users
                         ON socks.user_id = users.id
@@ -223,7 +228,6 @@ class SockQueries():
                         [sock_id]
                     )
                     sock = db.fetchone()
-                    print(sock)
                     return SockWithUserOut(
                         id=sock[0],
                         user_id=sock[1],
@@ -240,9 +244,11 @@ class SockQueries():
                         match_status=sock[12],
                         created_on=str(sock[13]),
                         username=sock[14],
-                        profile_pic=sock[15],
-                        sockstar_points=sock[16],
-                        total_pairings=sock[17]
+                        email=sock[15],
+                        profile_pic=sock[16],
+                        sockstar_points=sock[17],
+                        total_pairings=sock[18],
+                        verified=sock[19]
                     )
         except Exception as e:
             print("get one sock error", e)
