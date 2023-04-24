@@ -201,3 +201,18 @@ def get_users_by_query(
         return users.get_all_users()
     else:
         return {"Error": "Only admins can view users"}
+
+
+@router.put("/api/users/{user_id}/sockstar", response_model=UserOut | Error)
+def add_sockstar(
+    user_id: int,
+    points: int,
+    repo: UserQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data)
+) -> UserOut:
+    print(1)
+    try:
+        print(2)
+        return repo.sockstar(user_id, points)
+    except Error as e:
+        return {"error": e}
