@@ -12,6 +12,7 @@ import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "./nav.js";
 import ListUsers from "./components/listAllUsers.js";
+import SockDetail from "./components/sockdetail.js";
 import VerificationCreate from "./components/verificationCreate.js";
 
 function App() {
@@ -55,10 +56,10 @@ function App() {
         <Route path="socks">
           <Route path="create" />
           <Route path="sockdrawer" element={<SockDrawer />} />
+          <Route path=":id" element={<SockDetail />} />
         </Route>
         <Route path="matches">
-          <Route path="request" />
-          <Route path="approve" />
+          <Route path=":id" />
         </Route>
       </Routes>
       <ToastContainer

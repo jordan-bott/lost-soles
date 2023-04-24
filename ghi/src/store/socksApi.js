@@ -17,6 +17,14 @@ export const socksApi = createApi({
   endpoints: (builder) => ({
     getSocks: builder.query({
       query: () => "/api/socks",
+      providesTags: ["Socks"],
+    }),
+    getOneSock: builder.query({
+      query: (id) => ({
+        url: `/api/socks/${id}`,
+        credentials: "include",
+      }),
+      providesTags: ["Socks"],
     }),
     getSocksByUser: builder.query({
       query: (id) => ({
@@ -46,7 +54,8 @@ export const socksApi = createApi({
 
 export const {
   useGetSocksQuery,
-  useDeleteSockMutation,
+  useGetOneSockQuery,
   useGetSocksByUserQuery,
+  useDeleteSockMutation,
   useUpdateSockMutation,
 } = socksApi;
