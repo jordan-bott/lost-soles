@@ -14,6 +14,7 @@ import Nav from "./nav.js";
 import ListUsers from "./components/listAllUsers.js";
 import SockDetail from "./components/sockdetail.js";
 import VerificationCreate from "./components/verificationCreate.js";
+import MatchList from "./components/matchList.js";
 
 function App() {
   //   const [launch_info, setLaunchInfo] = useState([]);
@@ -59,6 +60,7 @@ function App() {
           <Route path=":id" element={<SockDetail />} />
         </Route>
         <Route path="matches">
+          <Route path="" element={<MatchList />} />
           <Route path=":id" />
         </Route>
       </Routes>
