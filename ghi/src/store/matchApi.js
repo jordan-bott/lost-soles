@@ -24,7 +24,14 @@ export const matchesApi = createApi({
         credentials: "include",
       }),
     }),
+    getMatchByUser: builder.query({
+      query: (requesting_user) => ({
+        url: `api/matches/users/${requesting_user}`,
+        method: "get",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
-export const { useCreateMatchMutation } = matchesApi;
+export const { useCreateMatchMutation, useGetMatchByUserQuery } = matchesApi;

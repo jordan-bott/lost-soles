@@ -93,6 +93,12 @@ function Nav() {
                   >
                     Sock Drawer
                   </NavLink>
+                  <NavLink
+                    className="block px-2 py-2 hover:text-orange"
+                    to="/matches"
+                  >
+                    My Matches
+                  </NavLink>
                   {data.account.type === "admin" ? (
                     <>
                       <NavLink
