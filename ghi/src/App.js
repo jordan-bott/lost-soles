@@ -15,6 +15,7 @@ import ListUsers from "./components/listAllUsers.js";
 import SockDetail from "./components/sockdetail.js";
 import VerificationCreate from "./components/verificationCreate.js";
 import MatchList from "./components/matchList.js";
+import Footer from "./footer.js";
 
 function App() {
   //   const [launch_info, setLaunchInfo] = useState([]);
@@ -83,6 +84,7 @@ function App() {
           borderRadius: "5px",
         }}
       />
+      <Footer />
     </BrowserRouter>
   );
 }
