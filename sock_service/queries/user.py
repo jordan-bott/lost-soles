@@ -58,6 +58,7 @@ class UserAuthorizedViewOut(BaseModel):
 class UserViewOut(BaseModel):
     id: int
     username: str
+    email: str
     profile_pic: str
     sockstar_points: int
     total_pairings: int
@@ -114,6 +115,7 @@ class UserQueries():
                         """
                         SELECT id,
                             username,
+                            email,
                             sockstar_points,
                             total_pairings,
                             profile_pic,
@@ -127,10 +129,11 @@ class UserQueries():
                     return UserViewOut(
                         id=user[0],
                         username=user[1],
-                        sockstar_points=user[2],
-                        total_pairings=user[3],
-                        profile_pic=user[4],
-                        created_on=str(user[5])
+                        email=user[2],
+                        sockstar_points=user[3],
+                        total_pairings=user[4],
+                        profile_pic=user[5],
+                        created_on=str(user[6])
                     )
         except Exception as e:
             print(e)

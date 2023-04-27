@@ -296,3 +296,139 @@ class SockQueries():
         except Exception as e:
             print("Update sock error: ", e)
             return {"Message": "Update sock error"}
+
+    def pending_match(self, id: int) -> SockOut:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        UPDATE socks
+                        SET match_status = %s
+                        WHERE id = %s
+                        RETURNING *
+                        """,
+                        ["pending", id]
+                    )
+                    sock = db.fetchone()
+                    return SockOut(
+                        id=sock[0],
+                        user_id=sock[1],
+                        photo=sock[2],
+                        color=sock[3],
+                        pattern=sock[4],
+                        size=sock[5],
+                        type=sock[6],
+                        fabric=sock[7],
+                        style=sock[8],
+                        brand=sock[9],
+                        gift=sock[10],
+                        match_status=sock[11],
+                        created_on=str(sock[12])
+                    )
+        except Exception as e:
+            print("Update sock error: ", e)
+            return {"Message": "Update sock error"}
+
+    def matched(self, id: int) -> SockOut:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        UPDATE socks
+                        SET match_status = %s
+                        WHERE id = %s
+                        RETURNING *
+                        """,
+                        ["matched", id]
+                    )
+                    sock = db.fetchone()
+                    return SockOut(
+                        id=sock[0],
+                        user_id=sock[1],
+                        photo=sock[2],
+                        color=sock[3],
+                        pattern=sock[4],
+                        size=sock[5],
+                        type=sock[6],
+                        fabric=sock[7],
+                        style=sock[8],
+                        brand=sock[9],
+                        gift=sock[10],
+                        match_status=sock[11],
+                        created_on=str(sock[12])
+                    )
+        except Exception as e:
+            print("Update sock error: ", e)
+            return {"Message": "Update sock error"}
+
+    def get_unmatched_by_user(self, user_id: int):
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    socks = db.execute(
+                        """
+                        SELECT *
+                        FROM socks
+                        WHERE user_id = %s
+                        """,
+                        [user_id]
+                    )
+                    socks = []
+                    for s in db:
+                        sock = SockOut(
+                            id=s[0],
+                            user_id=s[1],
+                            photo=s[2],
+                            color=s[3],
+                            pattern=s[4],
+                            size=s[5],
+                            type=s[6],
+                            fabric=s[7],
+                            style=s[8],
+                            brand=s[9],
+                            gift=s[10],
+                            match_status=s[11],
+                            created_on=str(s[12])
+                        )
+                        if s[11] != "matched":
+                            socks.append(sock)
+                    print(socks)
+                    return socks
+        except Exception as e:
+            print("get all socks by user error", e)
+            return {"Error": "Could not get all socks for this user"}
+
+    def rejected(self, id: int) -> SockOut:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        UPDATE socks
+                        SET match_status = %s
+                        WHERE id = %s
+                        RETURNING *
+                        """,
+                        ["available", id]
+                    )
+                    sock = db.fetchone()
+                    return SockOut(
+                        id=sock[0],
+                        user_id=sock[1],
+                        photo=sock[2],
+                        color=sock[3],
+                        pattern=sock[4],
+                        size=sock[5],
+                        type=sock[6],
+                        fabric=sock[7],
+                        style=sock[8],
+                        brand=sock[9],
+                        gift=sock[10],
+                        match_status=sock[11],
+                        created_on=str(sock[12])
+                    )
+        except Exception as e:
+            print("Update sock error: ", e)
+            return {"Message": "Update sock error"}

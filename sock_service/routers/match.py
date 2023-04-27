@@ -56,7 +56,7 @@ def delete_match(
 ) -> bool:
     id = account_data["id"]
     if (requesting_user == id or approving_user == id):
-        return matches.delete(match_id, requesting_user, approving_user)
+        return matches.delete(match_id)
     else:
         response.status_code = 400
         return {"Error": "Unable to delete match"}
@@ -73,7 +73,7 @@ def approve_match(
 
 
 @router.get("/api/matches/{id}",
-            response_model=List[UserMatchOut] | dict | Error)
+            response_model=UserMatchOut | dict | Error)
 def get_one_match(
     id: int,
     user_id: int,
@@ -83,7 +83,7 @@ def get_one_match(
 ):
     match = match.get_one(id, user_id)
     user_id = account_data["id"]
-    if len(match) == 0:
-        response.status_code = 404
-        return {"Error": "Match not found"}
+    # if len(match) == 0:
+    #     response.status_code = 404
+    #     return {"Error": "Match not found"}
     return match

@@ -51,13 +51,43 @@ export const socksApi = createApi({
       invalidatesTags: ["Socks"],
     }),
     createSock: builder.mutation({
-      query: ( newSock ) => ({
-        url: '/api/socks',
+      query: (newSock) => ({
+        url: "/api/socks",
         method: "POST",
         body: newSock,
         credentials: "include",
       }),
       invalidatesTags: ["Socks"],
+    }),
+    matchPending: builder.mutation({
+      query: (id) => ({
+        url: `/api/socks/${id}/matches/pending`,
+        method: "put",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Socks"],
+    }),
+    matched: builder.mutation({
+      query: (id) => ({
+        url: `/api/socks/${id}/matches/matched`,
+        method: "put",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Socks"],
+    }),
+    rejected: builder.mutation({
+      query: (id) => ({
+        url: `/api/socks/${id}/matches/rejected`,
+        method: "put",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Socks"],
+    }),
+    unmatchedByUser: builder.query({
+      query: (id) => ({
+        url: `/api/socks/users/${id}/unmatched`,
+        credentials: "include",
+      }),
     }),
   }),
 });
@@ -69,4 +99,8 @@ export const {
   useDeleteSockMutation,
   useUpdateSockMutation,
   useCreateSockMutation,
+  useMatchPendingMutation,
+  useMatchedMutation,
+  useRejectedMutation,
+  useUnmatchedByUserQuery,
 } = socksApi;
