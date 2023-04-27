@@ -1,7 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useGetOneSockQuery } from "../store/socksApi";
 import { useGetTokenQuery } from "../store/authApi";
-import { useGetSocksByUserQuery } from "../store/socksApi";
+import {
+  useUnmatchedByUserQuery,
+  useMatchPendingMutation,
+} from "../store/socksApi";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateMatchMutation } from "../store/matchApi";
@@ -17,12 +20,13 @@ function SockDetail() {
   const [createMatch] = useCreateMatchMutation();
   const accountId = user?.account?.id;
   const { data: userSocks, isLoading: userSocksLoading } =
-    useGetSocksByUserQuery(accountId);
+    useUnmatchedByUserQuery(accountId);
   const [dropdown, setDropdown] = useState(false);
   const navigate = useNavigate();
   const [matchSock, setMatchSock] = useState(null);
   const [sendRequest] = useSendRequestMutation();
   const [updateSock] = useUpdateSockMutation();
+  const [matchPending] = useMatchPendingMutation();
 
   const [color, setColor] = useState("");
   const [colorDropdown, setColorDropdown] = useState(false);
@@ -77,8 +81,20 @@ function SockDetail() {
         match_id: result?.data?.id,
       });
       if (!emailResult.hasOwnProperty("error")) {
-        toast("Match request sent!!");
-        navigate("/");
+        const matchResult1 = await matchPending(receive_sock);
+        if (!matchResult1.hasOwnProperty("error")) {
+          const matchResult2 = await matchPending(gift_sock);
+          if (!matchResult2.hasOwnProperty("error")) {
+            toast("Match request sent!!");
+            navigate("/");
+          } else {
+            toast("Uh oh, something bad happened. Please try again later");
+          }
+        } else {
+          toast("Uh oh, something bad happened. Please try again later");
+        }
+      } else {
+        toast("Uh oh, something bad happened. Please try again later");
       }
     } else {
       toast("Uh oh, something bad happened. Please try again later");

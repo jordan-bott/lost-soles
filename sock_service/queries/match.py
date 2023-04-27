@@ -207,7 +207,7 @@ class MatchQueries():
                             """,
                             [match_id]
                         )
-                    match = []
+                    match = {}
                     user_dict = {}
                     data = db.fetchall()
                     for m in data:
@@ -253,9 +253,7 @@ class MatchQueries():
                         user_dict["match_status"] = m[5]
                         user_dict["created_on"] = str(m[6])
                         if m[1] == user_id or m[2] == user_id:
-                            match.append(UserMatchOut
-                                         (id=m[0], **user_dict)
-                                         )
+                            match = (UserMatchOut(id=m[0], **user_dict))
                     return match
         except Exception as e:
             print("get matches error", e)

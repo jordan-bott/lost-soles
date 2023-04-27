@@ -78,14 +78,23 @@ function MatchList() {
                     </center>
                   </td>
                   <td className="p-2">
-                    <button
-                      onClick={() => navigate(`/matches/${match.id}`)}
-                      className="w-100 hover:text-orange hover:scale-105"
-                    >
+                    {match.approving_user === user.account.id &&
+                    match.match_status === false ? (
+                      <button
+                        onClick={() => navigate(`/matches/${match.id}`)}
+                        className="w-100 hover:text-orange hover:scale-105"
+                      >
+                        <center>
+                          {match.match_status === false
+                            ? "Pending"
+                            : "Approved"}
+                        </center>
+                      </button>
+                    ) : (
                       <center>
                         {match.match_status === false ? "Pending" : "Approved"}
                       </center>
-                    </button>
+                    )}
                   </td>
                 </tr>
               );

@@ -16,6 +16,7 @@ import SockDetail from "./components/sockdetail.js";
 import VerificationCreate from "./components/verificationCreate.js";
 import CreateSock from "./components/createSocks.js";
 import MatchList from "./components/matchList.js";
+import MatchApproval from "./components/matchApproval.js";
 import Footer from "./footer.js";
 import UpdateUser from "./components/updateUser.js";
 import ErrorPage from "./components/errorpage.js";
@@ -69,7 +70,7 @@ function App() {
               </Route>
               <Route path="matches">
                 <Route path="" element={<MatchList />} />
-                <Route path=":id" />
+                <Route path=":id" element={<MatchApproval />} />
               </Route>
               <Route path="*" element={<ErrorPage />} />
             </Routes>

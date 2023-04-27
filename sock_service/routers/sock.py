@@ -109,3 +109,61 @@ def get_one_sock(
         response.status_code = 404
         return {"Error": "Sock not found"}
     return sock
+
+
+@router.put("/api/socks/{id}/matches/pending", response_model=SockOut | Error)
+def pending_match(
+    id: int,
+    sock: SockQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data),
+) -> SockOut:
+    try:
+        return sock.pending_match(id)
+    except ValidationError as e:
+        print("Error", e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.put("/api/socks/{id}/matches/matched", response_model=SockOut | Error)
+def matched(
+    id: int,
+    sock: SockQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data),
+) -> SockOut:
+    try:
+        return sock.matched(id)
+    except ValidationError as e:
+        print("Error", e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.put("/api/socks/{id}/matches/rejected", response_model=SockOut | Error)
+def rejected(
+    id: int,
+    sock: SockQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data),
+) -> SockOut:
+    try:
+        return sock.rejected(id)
+    except ValidationError as e:
+        print("Error", e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/api/socks/users/{user_id}/unmatched",
+            response_model=List[SockOut] | dict | Error)
+def get_unmatched_socks_by_user(
+    user_id: int,
+    response: Response,
+    socks: SockQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data)
+):
+    if account_data["id"] == user_id:
+        sock_list = socks.get_unmatched_by_user(user_id)
+    elif account_data["id"] != user_id:
+        response.status_code = 400
+        return {"Error": "Unable to view other user's socks"}
+    # if len(sock_list) == 0:
+    #     response.status_code =
+    #     return {"Error": "No socks yet!"}
+    return sock_list

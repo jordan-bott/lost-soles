@@ -38,6 +38,14 @@ export const usersApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    addSockstar: builder.mutation({
+      query: ({ user_id, points }) => ({
+        url: `/api/users/${user_id}/sockstar?points=${points}`,
+        method: "put",
+        credentials: "include",
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -46,4 +54,5 @@ export const {
   useCreateUserMutation,
   useGetUsersQuery,
   useDeleteUserMutation,
+  useAddSockstarMutation,
 } = usersApi;

@@ -23,6 +23,7 @@ export const matchesApi = createApi({
         method: "post",
         credentials: "include",
       }),
+      invalidatesTags: ["Matches"],
     }),
     getMatchByUser: builder.query({
       query: (requesting_user) => ({
@@ -30,8 +31,38 @@ export const matchesApi = createApi({
         method: "get",
         credentials: "include",
       }),
+      providesTags: ["Matches"],
+    }),
+    getOneMatch: builder.query({
+      query: ({ id, user_id }) => ({
+        url: `/api/matches/${id}?user_id=${user_id}`,
+        credentials: "include",
+      }),
+      providesTags: ["Matches"],
+    }),
+    approveMatch: builder.mutation({
+      query: (match_id) => ({
+        url: `/api/matches/${match_id}`,
+        method: "put",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Matches"],
+    }),
+    rejectMatch: builder.mutation({
+      query: ({ match_id, requesting_user, approving_user }) => ({
+        url: `/api/matches/${match_id}?requesting_user=${requesting_user}&approving_user=${approving_user}`,
+        method: "delete",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Matches"],
     }),
   }),
 });
 
-export const { useCreateMatchMutation, useGetMatchByUserQuery } = matchesApi;
+export const {
+  useCreateMatchMutation,
+  useGetMatchByUserQuery,
+  useGetOneMatchQuery,
+  useApproveMatchMutation,
+  useRejectMatchMutation,
+} = matchesApi;
