@@ -108,6 +108,12 @@ label {
   filter: drop-shadow(1px 1px 1px #cccccf);
 }
 
+.update-account-button {
+  background-color: #ffee93;
+  border-color: #79aadd;
+  border: 3px solid #79aadd;
+  filter: drop-shadow(1px 1px 1px #cccccf);
+}
 .tag {
   text-align: center;
 }

@@ -2,25 +2,26 @@ from main import app
 from authenticator import authenticator
 from queries.sock import SockQueries
 from fastapi.testclient import TestClient
+from datetime import datetime
 
-
+now = datetime.now()
 client = TestClient(app)
 
 
 def fake_acc():
     return {
         "id": 1,
-        "first_name": "string",
-        "last_name": "string",
+        "first_name": "Juna",
+        "last_name": "Branca",
         "username": "junab",
-        "email": "string",
-        "address": "string",
-        "profile_pic": "string",
-        "sockstar_points": 0,
-        "total_pairings": 0,
+        "email": "juna",
+        "address": "12345 ",
+        "profile_pic": "https://bit.ly/3L9hers",
+        "sockstar_points": 100,
+        "total_pairings": 5,
         "verified": "false",
         "type": "user",
-        "created_on": "2023-04-18 22:47:33.447488"
+        "created_on": str(now)
         }
 
 
@@ -30,7 +31,7 @@ class CreateSockQuery:
             "id": 1,
             "user_id": user_id,
             "match_status": "available",
-            "created_on": "2023-04-18T19:09:04.973180",
+            "created_on": str(now),
         }
         result.update(sock)
         return result
@@ -41,32 +42,30 @@ def test_create_sock():
     app.dependency_overrides[SockQueries] = CreateSockQuery
     app.dependency_overrides[authenticator.get_current_account_data] = fake_acc
     json = {
-            "photo": "string",
-            "condition": 0,
-            "color": "string",
-            "pattern": "string",
-            "size": "string",
-            "type": "string",
-            "fabric": "string",
-            "style": "string",
-            "brand": "string",
+            "photo": "https://bit.ly/3AB0aW8",
+            "color": "grey",
+            "pattern": "plain",
+            "size": "L",
+            "type": "tube",
+            "fabric": "cotton",
+            "style": "casual",
+            "brand": "Hanes",
             "gift": True
             }
     expected = {
             "id": 1,
             "user_id": 1,
-            "photo": "string",
-            "condition": 0,
-            "color": "string",
-            "pattern": "string",
-            "size": "string",
-            "type": "string",
-            "fabric": "string",
-            "style": "string",
-            "brand": "string",
+            "photo": "https://bit.ly/3AB0aW8",
+            "color": "grey",
+            "pattern": "plain",
+            "size": "L",
+            "type": "tube",
+            "fabric": "cotton",
+            "style": "casual",
+            "brand": "Hanes",
             "gift": True,
             "match_status": "available",
-            "created_on": "2023-04-18T19:09:04.973180",
+            "created_on": str(now),
     }
 
     # Act

@@ -6,13 +6,13 @@ export const usersApi = createApi({
     baseUrl: process.env.REACT_APP_SAMPLE_SERVICE_API_HOST,
     credentials: "include",
   }),
-  prepareHeaders: (headers, {getState}) => {
-        const token = getState().auth.token;
-        if (token) {
-          headers.set( 'authorization', `Bearer ${token}`);
-        }
-        return headers;
-    },
+  prepareHeaders: (headers, { getState }) => {
+    const token = getState().auth.token;
+    if (token) {
+      headers.set("authorization", `Bearer ${token}`);
+    }
+    return headers;
+  },
   endpoints: (builder) => ({
     getUsers: builder.query({
       query: () => ({
@@ -39,9 +39,6 @@ export const usersApi = createApi({
     }),
   }),
 });
-
-
-
 
 export const {
   useGetUserQuery,

@@ -25,9 +25,8 @@ steps = [
         """
         CREATE TABLE socks (
         id SERIAL PRIMARY KEY NOT NULL,
-        user_id INT REFERENCES users(id) NOT NULL,
+        user_id INT REFERENCES users(id) ON DELETE CASCADE,
         photo VARCHAR(1000) NOT NULL,
-        condition INT NOT NULL,
         color VARCHAR(1000) NOT NULL,
         pattern VARCHAR(1000) NOT NULL,
         size VARCHAR(1000) NOT NULL,
@@ -48,8 +47,8 @@ steps = [
         """
         CREATE TABLE matches (
         id SERIAL PRIMARY KEY NOT NULL,
-        requesting_user INT REFERENCES users(id) NOT NULL,
-        approving_user INT REFERENCES users(id) NOT NULL,
+        requesting_user INT REFERENCES users(id) ON DELETE CASCADE,
+        approving_user INT REFERENCES users(id) ON DELETE CASCADE,
         gift_sock INT REFERENCES socks(id) NOT NULL,
         receive_sock INT REFERENCES socks(id) NOT NULL,
         match_status BOOLEAN,
@@ -64,7 +63,7 @@ steps = [
         """
         CREATE TABLE verifications (
         id SERIAL PRIMARY KEY NOT NULL,
-        user_id INT REFERENCES users(id) NOT NULL,
+        user_id INT REFERENCES users(id) ON DELETE CASCADE,
         license VARCHAR(1000) NOT NULL,
         verification_status VARCHAR(1000) NOT NULL,
         created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL

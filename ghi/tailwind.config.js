@@ -15,10 +15,7 @@ module.exports = {
       lorange: "#FCD2AB",
     },
   },
-  plugins: [
-    require("daisyui"),
-    require("tailwind-scrollbar")({ nocompatible: true }),
-  ],
+  plugins: [require("daisyui")],
   daisyui: {
     styled: true,
     themes: true,

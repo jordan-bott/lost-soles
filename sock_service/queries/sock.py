@@ -9,7 +9,6 @@ class Error(BaseModel):
 
 class SockIn(BaseModel):
     photo: str
-    condition: int
     color: str
     pattern: str
     size: str
@@ -24,7 +23,6 @@ class SockOut(BaseModel):
     id: int
     user_id: int
     photo: str
-    condition: int
     color: str
     pattern: str
     size: str
@@ -73,25 +71,24 @@ class SockQueries():
                             id=post[0],
                             user_id=post[1],
                             photo=post[2],
-                            condition=post[3],
-                            color=post[4],
-                            pattern=post[5],
-                            size=post[6],
-                            type=post[7],
-                            fabric=post[8],
-                            style=post[9],
-                            brand=post[10],
-                            gift=post[11],
-                            match_status=post[12],
-                            created_on=str(post[13]),
-                            username=post[14],
-                            email=post[15],
-                            profile_pic=post[16],
-                            sockstar_points=post[17],
-                            total_pairings=post[18],
-                            verified=post[19]
+                            color=post[3],
+                            pattern=post[4],
+                            size=post[5],
+                            type=post[6],
+                            fabric=post[7],
+                            style=post[8],
+                            brand=post[9],
+                            gift=post[10],
+                            match_status=post[11],
+                            created_on=str(post[12]),
+                            username=post[13],
+                            email=post[14],
+                            profile_pic=post[15],
+                            sockstar_points=post[16],
+                            total_pairings=post[17],
+                            verified=post[18]
                         )
-                        if post[12] == "available" or post[12] == "pending":
+                        if post[11] == "available" or post[11] == "pending":
                             posts.append(sock_post)
                     return posts
         except Exception as e:
@@ -106,7 +103,6 @@ class SockQueries():
                         (
                             user_id,
                             photo,
-                            condition,
                             color,
                             pattern,
                             size,
@@ -118,13 +114,12 @@ class SockQueries():
                             match_status
                         )
                     VALUES
-                        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     RETURNING *;
                     """,
                     [
                         user_id,
                         info.photo,
-                        info.condition,
                         info.color,
                         info.pattern,
                         info.size,
@@ -141,17 +136,16 @@ class SockQueries():
                             id=sock[0],
                             user_id=sock[1],
                             photo=sock[2],
-                            condition=sock[3],
-                            color=sock[4],
-                            pattern=sock[5],
-                            size=sock[6],
-                            type=sock[7],
-                            fabric=sock[8],
-                            style=sock[9],
-                            brand=sock[10],
-                            gift=sock[11],
-                            match_status=sock[12],
-                            created_on=str(sock[13]),
+                            color=sock[3],
+                            pattern=sock[4],
+                            size=sock[5],
+                            type=sock[6],
+                            fabric=sock[7],
+                            style=sock[8],
+                            brand=sock[9],
+                            gift=sock[10],
+                            match_status=sock[11],
+                            created_on=str(sock[12]),
                         )
 
     def delete(self, sock_id: int, user_id: int,) -> bool:
@@ -188,17 +182,16 @@ class SockQueries():
                             id=s[0],
                             user_id=s[1],
                             photo=s[2],
-                            condition=s[3],
-                            color=s[4],
-                            pattern=s[5],
-                            size=s[6],
-                            type=s[7],
-                            fabric=s[8],
-                            style=s[9],
-                            brand=s[10],
-                            gift=s[11],
-                            match_status=s[12],
-                            created_on=str(s[13])
+                            color=s[3],
+                            pattern=s[4],
+                            size=s[5],
+                            type=s[6],
+                            fabric=s[7],
+                            style=s[8],
+                            brand=s[9],
+                            gift=s[10],
+                            match_status=s[11],
+                            created_on=str(s[12])
                         )
                         socks.append(sock)
                     print(socks)
@@ -232,23 +225,22 @@ class SockQueries():
                         id=sock[0],
                         user_id=sock[1],
                         photo=sock[2],
-                        condition=sock[3],
-                        color=sock[4],
-                        pattern=sock[5],
-                        size=sock[6],
-                        type=sock[7],
-                        fabric=sock[8],
-                        style=sock[9],
-                        brand=sock[10],
-                        gift=sock[11],
-                        match_status=sock[12],
-                        created_on=str(sock[13]),
-                        username=sock[14],
-                        email=sock[15],
-                        profile_pic=sock[16],
-                        sockstar_points=sock[17],
-                        total_pairings=sock[18],
-                        verified=sock[19]
+                        color=sock[3],
+                        pattern=sock[4],
+                        size=sock[5],
+                        type=sock[6],
+                        fabric=sock[7],
+                        style=sock[8],
+                        brand=sock[9],
+                        gift=sock[10],
+                        match_status=sock[11],
+                        created_on=str(sock[12]),
+                        username=sock[13],
+                        email=sock[14],
+                        profile_pic=sock[15],
+                        sockstar_points=sock[16],
+                        total_pairings=sock[17],
+                        verified=sock[18]
                     )
         except Exception as e:
             print("get one sock error", e)
@@ -262,7 +254,6 @@ class SockQueries():
                         """
                         UPDATE socks
                         SET photo = %s,
-                            condition = %s,
                             color = %s,
                             pattern = %s,
                             size = %s,
@@ -276,7 +267,6 @@ class SockQueries():
                         """,
                         [
                             info.photo,
-                            info.condition,
                             info.color,
                             info.pattern,
                             info.size,
@@ -293,17 +283,16 @@ class SockQueries():
                         id=update_fetch[0],
                         user_id=update_fetch[1],
                         photo=update_fetch[2],
-                        condition=update_fetch[3],
-                        color=update_fetch[4],
-                        pattern=update_fetch[5],
-                        size=update_fetch[6],
-                        type=update_fetch[7],
-                        fabric=update_fetch[8],
-                        style=update_fetch[9],
-                        brand=update_fetch[10],
-                        gift=update_fetch[11],
-                        match_status=update_fetch[12],
-                        created_on=str(update_fetch[13])
+                        color=update_fetch[3],
+                        pattern=update_fetch[4],
+                        size=update_fetch[5],
+                        type=update_fetch[6],
+                        fabric=update_fetch[7],
+                        style=update_fetch[8],
+                        brand=update_fetch[9],
+                        gift=update_fetch[10],
+                        match_status=update_fetch[11],
+                        created_on=str(update_fetch[12])
                     )
         except Exception as e:
             print("Update sock error: ", e)
