@@ -10,7 +10,6 @@ class SockIn(BaseModel):
     id: int
     user_id: int
     photo: str
-    condition: int
     color: str
     pattern: str
     size: str
@@ -107,16 +106,15 @@ class MatchQueries():
                             'id': m[7],
                             'user_id': m[8],
                             'photo': m[9],
-                            'condition': m[10],
-                            'color': m[11],
-                            'pattern': m[12],
-                            'size': m[13],
-                            'type': m[14],
-                            'fabric': m[15],
-                            'style': m[16],
-                            'brand': m[17],
-                            'gift': m[18],
-                            'match_status': m[19]
+                            'color': m[10],
+                            'pattern': m[11],
+                            'size': m[12],
+                            'type': m[13],
+                            'fabric': m[14],
+                            'style': m[15],
+                            'brand': m[16],
+                            'gift': m[17],
+                            'match_status': m[18]
                         }
                         db.execute(
                             """
@@ -131,16 +129,15 @@ class MatchQueries():
                             "id": s[0],
                             'user_id': s[1],
                             'photo': s[2],
-                            'condition': s[3],
-                            'color': s[4],
-                            'pattern': s[5],
-                            'size': s[6],
-                            'type': s[7],
-                            'fabric': s[8],
-                            'style': s[9],
-                            'brand': s[10],
-                            'gift': s[11],
-                            'match_status': s[12]
+                            'color': s[3],
+                            'pattern': s[4],
+                            'size': s[5],
+                            'type': s[6],
+                            'fabric': s[7],
+                            'style': s[8],
+                            'brand': s[9],
+                            'gift': s[10],
+                            'match_status': s[11]
                         }
                         user_dict["match_status"] = m[5]
                         user_dict["created_on"] = str(m[6])
@@ -220,16 +217,15 @@ class MatchQueries():
                             'id': m[7],
                             'user_id': m[8],
                             'photo': m[9],
-                            'condition': m[10],
-                            'color': m[11],
-                            'pattern': m[12],
-                            'size': m[13],
-                            'type': m[14],
-                            'fabric': m[15],
-                            'style': m[16],
-                            'brand': m[17],
-                            'gift': m[18],
-                            'match_status': m[19]
+                            'color': m[10],
+                            'pattern': m[11],
+                            'size': m[12],
+                            'type': m[13],
+                            'fabric': m[14],
+                            'style': m[15],
+                            'brand': m[16],
+                            'gift': m[17],
+                            'match_status': m[18]
                         }
                         db.execute(
                             """
@@ -244,16 +240,15 @@ class MatchQueries():
                             "id": s[0],
                             'user_id': s[1],
                             'photo': s[2],
-                            'condition': s[3],
-                            'color': s[4],
-                            'pattern': s[5],
-                            'size': s[6],
-                            'type': s[7],
-                            'fabric': s[8],
-                            'style': s[9],
-                            'brand': s[10],
-                            'gift': s[11],
-                            'match_status': s[12]
+                            'color': s[3],
+                            'pattern': s[4],
+                            'size': s[5],
+                            'type': s[6],
+                            'fabric': s[7],
+                            'style': s[8],
+                            'brand': s[9],
+                            'gift': s[10],
+                            'match_status': s[11]
                         }
                         user_dict["match_status"] = m[5]
                         user_dict["created_on"] = str(m[6])
