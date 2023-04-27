@@ -17,6 +17,7 @@ import VerificationCreate from "./components/verificationCreate.js";
 import CreateSock from "./components/createSocks.js";
 import MatchList from "./components/matchList.js";
 import Footer from "./footer.js";
+import UpdateUser from "./components/updateUser.js";
 import ErrorPage from "./components/errorpage.js";
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
               <Route path="users">
                 <Route path="" element={<ListUsers />} />
                 <Route path="verify" element={<VerificationCreate />} />
+                <Route path=":id" element={<UpdateUser />} />
               </Route>
               <Route path="socks">
                 <Route path="create" element={<CreateSock />} />
