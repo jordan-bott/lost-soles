@@ -51,7 +51,7 @@ export const verificationsApi = createApi({
     }),
     verifyUser: builder.mutation({
       query: (id) => ({
-        url: `/api/update_user_verification/${id}`,
+        url: `/api/users/${id}/verify`,
         method: "put",
         credentials: "include",
       }),
@@ -59,7 +59,7 @@ export const verificationsApi = createApi({
     }),
     unverifyUser: builder.mutation({
       query: (id) => ({
-        url: `/api/update_reverification/${id}`,
+        url: `/api/users/${id}/unverify`,
         method: "put",
         credentials: "include",
       }),

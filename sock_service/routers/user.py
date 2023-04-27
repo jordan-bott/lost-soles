@@ -113,9 +113,9 @@ def delete_user(
     return users.delete(user_id)
 
 
-@router.put("/api/update_user_verification/{user_id}",
+@router.put("/api/users/{user_id}/verify",
             response_model=Union[UserOut, dict])
-async def update_verification(
+async def verify(
     user_id: int,
     response: Response,
     users: UserQueries = Depends(),
@@ -125,12 +125,12 @@ async def update_verification(
         response.status_code = 400
         return {"Error: ": "Must be admin"}
     else:
-        return users.update_positive_verification_status(user_id)
+        return users.verify(user_id)
 
 
-@router.put("/api/update_reverification/{user_id}",
+@router.put("/api/users/{user_id}/unverify",
             response_model=Union[UserOut, dict])
-async def update_reverification(
+async def unverify(
     user_id: int,
     response: Response,
     users: UserQueries = Depends(),
@@ -140,7 +140,7 @@ async def update_reverification(
         response.status_code = 400
         return {"Error: ": "Must be admin"}
     else:
-        return users.update_to_reverification_status(user_id)
+        return users.unverify(user_id)
 
 
 @router.put("/api/users/{user_id}", response_model=UserOut | HttpError)
@@ -193,7 +193,7 @@ def get_one_user(
 
 
 @router.get("/api/users", response_model=Union[List[UserOut], Error])
-def get_users_by_query(
+def get_all(
     users: UserQueries = Depends(),
     account_data: dict = Depends(authenticator.get_current_account_data)
 ):

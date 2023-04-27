@@ -395,14 +395,14 @@ class UserQueries():
             print("get all users error", e)
             return {"Error": "could not get all users"}
 
-    def update_positive_verification_status(self, id: int) -> UserOut:
+    def verify(self, id: int) -> UserOut:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
                     vrfy = db.execute(
                         """
                         UPDATE users
-                        SET verified = 'true'
+                        SET verified = True
                         WHERE id = %s
                         RETURNING *;
                         """,
@@ -427,14 +427,14 @@ class UserQueries():
         except Exception as e:
             return {"Error": e}
 
-    def update_to_reverification_status(self, id: int) -> UserOut:
+    def unverify(self, id: int) -> UserOut:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
                     vrfy = db.execute(
                         """
                         UPDATE users
-                        SET verified = 'false'
+                        SET verified = False
                         WHERE id = %s
                         RETURNING *;
                         """,
@@ -460,7 +460,6 @@ class UserQueries():
             return {"Error": e}
 
     def sockstar(self, user_id: int, points: int) -> UserOut:
-        print(3)
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:

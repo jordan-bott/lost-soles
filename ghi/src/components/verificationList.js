@@ -31,10 +31,6 @@ function VerificationList() {
     verifyUser(id);
   };
 
-  const handleUnverifyUser = (id) => {
-    unverifyUser(id);
-  };
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -101,7 +97,7 @@ function VerificationList() {
                   <button
                     onClick={() => [
                       handleReject(verification.id),
-                      handleUnverifyUser(verification.user_id),
+                      unverifyUser(verification.user_id),
                     ]}
                     className="bg-orange px-8 py-1 rounded-md border-blue border-[2px] hover:scale-105"
                   >
