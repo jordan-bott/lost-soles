@@ -66,9 +66,9 @@ function SockDrawer() {
   const formattedDate = new Date(token.account.created_on).toLocaleDateString();
 
   return (
-    <div className="flex max-w-screen justify-around pt-40">
-      <div className="flex ml-20">
-        <div className="carousel carousel-center max-w-[1269px] p-16 space-x-10 bg-background rounded-box">
+    <div className="flex max-w-screen justify-around">
+      <div className="flex">
+        <div className="carousel carousel-center max-w-[1269px] p-16 space-x-10 bg-background rounded-box mt-12">
           {socks?.map((sock) => (
             <div
               key={sock.id}
@@ -244,13 +244,13 @@ function SockDrawer() {
                   <div className="">
                     <button
                       onClick={() => handleAlert(false)}
-                      className="update-button mt-8 w-[80%] px-1 py-1 text-sm font-bold mb-2 rounded inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
+                      className="update-button mt-8 w-[80%] px-1 py-1 text-sm font-bold mb-2 rounded-lg inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
                     >
                       No, don't delete my account!
                     </button>
                     <button
                       onClick={() => handleDelete()}
-                      className="delete-button w-[80%] px-1 py-1 text-sm font-bold mb-2 my-8 pb-6 rounded inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
+                      className="delete-button w-[80%] px-1 py-1 text-sm font-bold mb-2 my-8 pb-6 rounded-lg inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
                     >
                       Yes, delete my account.
                     </button>

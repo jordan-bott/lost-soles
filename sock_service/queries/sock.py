@@ -194,7 +194,6 @@ class SockQueries():
                             created_on=str(s[12])
                         )
                         socks.append(sock)
-                    print(socks)
                     return socks
         except Exception as e:
             print("get all socks by user error", e)

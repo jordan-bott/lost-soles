@@ -59,7 +59,7 @@ function Footer() {
   }
 
   return (
-    <footer className="bottom-0 left-0 right-0 flex items-center justify-between bg-tan text-white h-10 border-t-2 border-blue max-w-screen py-2">
+    <footer className="z-[20] fixed bottom-0 left-0 right-0 flex items-center justify-between bg-tan text-white h-10 border-t-2 border-blue max-w-screen py-2">
       <div className="text-center pl-4">{randomText}</div>
       <div className="text-right ml-auto pr-4">2023 Lost Soles</div>
     </footer>

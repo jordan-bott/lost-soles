@@ -42,9 +42,10 @@ export const socksApi = createApi({
       invalidatesTags: ["Socks"],
     }),
     updateSock: builder.mutation({
-      query: ({ user_id, sock_id }) => ({
+      query: ({ user_id, sock_id, info }) => ({
         url: `/api/users/${user_id}/socks/${sock_id}`,
         method: "PUT",
+        body: info,
         credentials: "include",
       }),
       invalidatesTags: ["Socks"],
