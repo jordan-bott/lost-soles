@@ -17,6 +17,7 @@ import VerificationCreate from "./components/verificationCreate.js";
 import CreateSock from "./components/createSocks.js";
 import MatchList from "./components/matchList.js";
 import Footer from "./footer.js";
+import ErrorPage from "./components/errorpage.js";
 
 function App() {
   //   const [launch_info, setLaunchInfo] = useState([]);
@@ -65,6 +66,7 @@ function App() {
           <Route path="" element={<MatchList />} />
           <Route path=":id" />
         </Route>
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
       <ToastContainer
         position="bottom-right"

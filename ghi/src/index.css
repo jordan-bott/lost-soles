@@ -117,3 +117,9 @@ label {
 .tag {
   text-align: center;
 }
+
+.error-page {
+  background-image: url("./images/errorPageBackground.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
