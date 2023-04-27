@@ -20,7 +20,7 @@ def fake_acc():
         "https://wallpapers.com/images/featured/s52z1uggme5sj92d.jpg",
         "sockstar_points": 0,
         "total_pairings": 0,
-        "verified": "false",
+        "verified": False,
         "type": "user",
         "created_on": "2023-04-18 22:47:33.447488"
         }
@@ -55,7 +55,6 @@ def test_update_sock():
 
     json = {
         "photo": "bit.ly/40FImnA",
-        "condition": 2,
         "color": "Purple",
         "pattern": "Other",
         "size": "WS",
