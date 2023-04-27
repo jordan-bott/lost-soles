@@ -51,7 +51,6 @@ class GetSockQuery:
 
 
 def test_get_sock():
-    # Arrange
     app.dependency_overrides[SockQueries] = GetSockQuery
     app.dependency_overrides[authenticator.get_current_account_data] = fake_acc
     sock_id = 1
@@ -77,13 +76,9 @@ def test_get_sock():
             "total_pairings": 0,
             "verified": False,
     }
-
-    # Act
     response = client.get(f"/api/socks/{sock_id}")
 
-    # Clean up
     app.dependency_overrides = {}
 
-    # Assert
     assert response.status_code == 200
     assert response.json() == expected

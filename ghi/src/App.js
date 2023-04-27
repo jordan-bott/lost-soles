@@ -14,6 +14,7 @@ import Nav from "./nav.js";
 import ListUsers from "./components/listAllUsers.js";
 import SockDetail from "./components/sockdetail.js";
 import VerificationCreate from "./components/verificationCreate.js";
+import CreateSock from "./components/createSocks.js";
 import MatchList from "./components/matchList.js";
 import Footer from "./footer.js";
 
@@ -56,7 +57,7 @@ function App() {
           <Route path="verify" element={<VerificationCreate />} />
         </Route>
         <Route path="socks">
-          <Route path="create" />
+          <Route path="create" element={<CreateSock />} />
           <Route path="sockdrawer" element={<SockDrawer />} />
           <Route path=":id" element={<SockDetail />} />
         </Route>
