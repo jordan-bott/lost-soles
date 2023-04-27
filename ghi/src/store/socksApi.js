@@ -49,6 +49,15 @@ export const socksApi = createApi({
       }),
       invalidatesTags: ["Socks"],
     }),
+    createSock: builder.mutation({
+      query: ( newSock ) => ({
+        url: '/api/socks',
+        method: "POST",
+        body: newSock,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Socks"],
+    }),
   }),
 });
 
@@ -58,4 +67,5 @@ export const {
   useGetSocksByUserQuery,
   useDeleteSockMutation,
   useUpdateSockMutation,
+  useCreateSockMutation,
 } = socksApi;
