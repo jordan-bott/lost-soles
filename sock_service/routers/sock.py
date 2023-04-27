@@ -89,7 +89,7 @@ async def update_sock(
 ) -> SockOut:
     try:
         if account_data['id'] == user_id:
-            return socks.update(id, info, user_id)
+            return socks.update(id, info)
         else:
             response.status_code = 400
             return {"Error": "sock update id does not match"}

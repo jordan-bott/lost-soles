@@ -254,7 +254,7 @@ class SockQueries():
             print("get one sock error", e)
             return {"Error": "Could not get sock"}
 
-    def update(self, id: int, info: SockIn, user_id: int) -> SockOut:
+    def update(self, id: int, info: SockIn) -> SockOut:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
