@@ -91,7 +91,7 @@ function Signup() {
 
   return (
     <>
-      <div className="flex flex-col place-content-center items-center w-[100%] h-[100%]">
+      <div className="flex flex-col place-content-center items-center w-[100%] h-[100%] pb-32">
         <div>
           <img
             src={logo}

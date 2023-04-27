@@ -46,49 +46,56 @@ function App() {
   const basename = process.env.PUBLIC_URL.replace(domain, "");
 
   return (
-    <BrowserRouter basename={basename}>
-      <Nav />
-      <Routes>
-        <Route path="" element={<SockFeed />} />
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Signup />} />
-        <Route path="verifications" element={<VerificationList />} />
-        <Route path="users">
-          <Route path="" element={<ListUsers />} />
-          <Route path="verify" element={<VerificationCreate />} />
-        </Route>
-        <Route path="socks">
-          <Route path="create" element={<CreateSock />} />
-          <Route path="sockdrawer" element={<SockDrawer />} />
-          <Route path=":id" element={<SockDetail />} />
-        </Route>
-        <Route path="matches">
-          <Route path="" element={<MatchList />} />
-          <Route path=":id" />
-        </Route>
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        toastStyle={{
-          backgroundColor: "#fff5db",
-          color: "#79aadd",
-          fontFamily: "Comfortaa",
-          border: "2px solid #79aadd ",
-          borderRadius: "5px",
-        }}
-      />
-      <Footer />
-    </BrowserRouter>
+    <>
+      <div className="h-screen">
+        <BrowserRouter basename={basename}>
+          <div className="h-[calc(100%-8rem)] scrollbar-thin scrollbar-thumb-orange">
+            <Nav />
+            <Routes>
+              <Route path="" element={<SockFeed />} />
+              <Route path="login" element={<Login />} />
+              <Route path="signup" element={<Signup />} />
+              <Route path="verifications" element={<VerificationList />} />
+              <Route path="users">
+                <Route path="" element={<ListUsers />} />
+                <Route path="verify" element={<VerificationCreate />} />
+              </Route>
+              <Route path="socks">
+                <Route path="create" element={<CreateSock />} />
+                <Route path="sockdrawer" element={<SockDrawer />} />
+                <Route path=":id" element={<SockDetail />} />
+              </Route>
+              <Route path="matches">
+                <Route path="" element={<MatchList />} />
+                <Route path=":id" />
+              </Route>
+              <Route path="*" element={<ErrorPage />} />
+            </Routes>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+              toastStyle={{
+                backgroundColor: "#fff5db",
+                color: "#79aadd",
+                fontFamily: "Comfortaa",
+                border: "2px solid #79aadd ",
+                borderRadius: "5px",
+                marginBottom: "50px",
+              }}
+            />
+          </div>
+          <Footer />
+        </BrowserRouter>
+      </div>
+    </>
   );
 }
 

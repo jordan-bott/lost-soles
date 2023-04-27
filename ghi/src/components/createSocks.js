@@ -1,408 +1,390 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useCreateSockMutation } from '../store/socksApi';
-import { useGetTokenQuery } from '../store/authApi';
-import detailLogo from '../images/detailLogo.png';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useCreateSockMutation } from "../store/socksApi";
+import { useGetTokenQuery } from "../store/authApi";
+import detailLogo from "../images/detailLogo.png";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function CreateSock() {
   const dispatch = useDispatch();
   const { data: user } = useGetTokenQuery();
   const accountId = user?.account?.id;
 
+  const [createSockMutation] = useCreateSockMutation(accountId);
+  const navigate = useNavigate();
 
-  const [ createSockMutation ] = useCreateSockMutation(accountId);
+  const [color, setColor] = useState("");
+  const [colorDropdown, setColorDropdown] = useState(false);
 
-   const colors = [
-    'Black',
-    'Blue',
-    'Brown',
-    'Green',
-    'Grey',
-    'Orange',
-    'Pink',
-    'Purple',
-    'Rainbow',
-    'Red',
-    'Multi',
-    'White',
-    'Yellow',
-    'Other'
-    ];
+  const [pattern, setPattern] = useState("");
+  const [patternDropdown, setPatternDropdown] = useState(false);
 
-    const sizes = [
-    'KS',
-    'KM',
-    'KL',
-    'WS',
-    'WM',
-    'WL',
-    'S',
-    'M',
-    'L',
-    'AM(american med: XXL)'
-    ];
+  const [size, setSize] = useState("");
+  const [sizeDropdown, setSizeDropdown] = useState(false);
 
-    const patterns = [
-    'Artistic',
-    'Checkered',
-    'Plaid',
-    'Polka Dots',
-    'Solid',
-    'Stripped',
-    'Zig Zag',
-    'Other'
-    ];
+  const [type, setType] = useState("");
+  const [typeDropdown, setTypeDropdown] = useState(false);
 
-    const types = [
-    'Ankle',
-    'Anklet',
-    'Crew',
-    'No-Show',
-    'Knee High',
-    'Low Cut',
-    'Thigh High',
-    'Tube',
-    'Toe Cover'
-    ];
+  const [fabric, setFabric] = useState("");
+  const [fabricDropdown, setFabricDropdown] = useState(false);
 
-    const fabrics = [
-    'Bamboo',
-    'Cashmere',
-    'Cotton',
-    'Merino Wool',
-    'Nylon',
-    'Polyester',
-    'Polypropylene',
-    'Spandex',
-    'Wool',
-    'Other'
-    ];
+  const [style, setStyle] = useState("");
+  const [styleDropdown, setStyleDropdown] = useState(false);
 
-    const styles = [
-    'Athletic',
-    'Cute',
-    'Fashion',
-    'Novelty',
-    'Sport',
-    'Toe',
-    'Vintage',
-    'Other'
-    ];
+  const [brand, setBrand] = useState("");
+  const [brandDropdown, setBrandDropdown] = useState(false);
 
-    const brands = [
-    'Adidas',
-    'Awesome Socks Club',
-    'Bombas',
-    'BOSS',
-    'Calvin Klein',
-    'Carhartt',
-    'Darn Tough',
-    'FALKE',
-    'French Connection',
-    'Fruit of the Loom',
-    'GANT',
-    'Hanes',
-    'Happy Socks',
-    'Nike',
-    'Polo Ralph Lauren',
-    'Puma',
-    'Stance',
-    'Tommy Hilfiger',
-    'Other',
-    'Unknown'
-    ];
+  const colors = [
+    "Black",
+    "Blue",
+    "Brown",
+    "Green",
+    "Grey",
+    "Orange",
+    "Pink",
+    "Purple",
+    "Rainbow",
+    "Red",
+    "Multi",
+    "White",
+    "Yellow",
+    "Other",
+  ];
 
+  const sizes = ["KS", "KM", "KL", "WS", "WM", "WL", "S", "M", "L"];
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const newSock = {
-            photo: formData.get('photo'),
-            condition: 1,
-            color: formData.get('color'),
-            pattern: formData.get('pattern'),
-            size: formData.get('size'),
-            type: formData.get('type'),
-            fabric: formData.get('fabric'),
-            style: formData.get('style'),
-            brand: formData.get('brand'),
-            gift: formData.get('gift') === true,
-        };
-        try {
-            await createSockMutation(newSock).unwrap();
-            e.target.reset();
-        } catch (err) {
-            console.log("handleSubmit error", err);
-        }
+  const patterns = [
+    "Artistic",
+    "Checkered",
+    "Plaid",
+    "Polka Dots",
+    "Solid",
+    "Stripped",
+    "Zig Zag",
+    "Other",
+  ];
+
+  const types = [
+    "Ankle",
+    "Anklet",
+    "Crew",
+    "No-Show",
+    "Knee High",
+    "Low Cut",
+    "Thigh High",
+    "Tube",
+    "Toe Cover",
+  ];
+
+  const fabrics = [
+    "Bamboo",
+    "Cashmere",
+    "Cotton",
+    "Merino Wool",
+    "Nylon",
+    "Polyester",
+    "Polypropylene",
+    "Spandex",
+    "Wool",
+    "Other",
+  ];
+
+  const styles = [
+    "Athletic",
+    "Cute",
+    "Fashion",
+    "Novelty",
+    "Sport",
+    "Toe",
+    "Vintage",
+    "Other",
+  ];
+
+  const brands = [
+    "Adidas",
+    "Bombas",
+    "BOSS",
+    "Calvin Klein",
+    "Carhartt",
+    "Darn Tough",
+    "FALKE",
+    "GANT",
+    "Hanes",
+    "Happy Socks",
+    "Nike",
+    "Puma",
+    "Stance",
+    "Tommy Hilfiger",
+    "Other",
+    "Unknown",
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const newSock = {
+      photo: formData.get("photo"),
+      color: color,
+      pattern: pattern,
+      size: size,
+      type: type,
+      fabric: fabric,
+      style: style,
+      brand: brand,
+      gift: formData.get("gift") === true,
     };
+    try {
+      await createSockMutation(newSock).unwrap();
+      e.target.reset();
+      setColor("");
+      setPattern("");
+      setSize("");
+      setType("");
+      setFabric("");
+      setStyle("");
+      setBrand("");
+      toast("Sock posted!");
+      navigate("/");
+    } catch (err) {
+      console.log("handleSubmit error", err);
+    }
+  };
 
-    return (
-        <div className="flex flex-col items-center mt-16">
-            <div className="w-full max-w-screen-lg flex justify-between items-center px-8 mb-8">
-                <img src={detailLogo} className="h-120" alt="Logo" />
-            <div className="w-2/3 max-w-md mx-auto">
-                <form onSubmit={handleSubmit}>
-                    <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="block mb-2 font-bold" htmlFor="color">
-                        Color
-                        </label>
-                        <select
-                        className="block w-full p-2 mb-6 border rounded bg-yellow appearance-none relative"
-                        id="color"
-                        name="color"
-                        required
-                        onChange={(e) =>
-                            dispatch({ type: "UPDATE_COLOR", payload: e.target.value })
-                        }
-                        style={{
-                            backgroundImage:
-                            "url('https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png')",
-                            backgroundPosition: "right 0.5rem center",
-                            backgroundRepeat: "no-repeat",
-                            backgroundSize: "1.5rem",
-                            paddingRight: "1.5rem",
-                        }}
-                        defaultValue=""
-                        >
-                        <option value="" disabled>
-                            Select a color
-                        </option>
-                        {colors.map((color) => (
-                            <option
-                            key={color}
-                            value={color}
-                            style={{ backgroundColor: "yellow", color: "white" }}
-                            >
-                            {color}
-                            </option>
-                        ))}
-                        </select>
-
-                        <label className="block mb-2 font-bold" htmlFor="pattern">
-                        Pattern
-                        </label>
-                        <select
-                        className="block w-full p-2 mb-6 border rounded bg-yellow appearance-none relative"
-                        id="pattern"
-                        name="pattern"
-                        required
-                        onChange={(e) =>
-                            dispatch({ type: "UPDATE_PATTERN", payload: e.target.value })
-                        }
-                        style={{
-                            backgroundImage:
-                            "url('https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png')",
-                            backgroundPosition: "right 0.5rem center",
-                            backgroundRepeat: "no-repeat",
-                            backgroundSize: "1.5rem",
-                            paddingRight: "1.5rem",
-                        }}
-                        defaultValue=""
-                        >
-                        <option value="" disabled>
-                            Select a pattern
-                        </option>
-                        {patterns.map((pattern) => (
-                            <option
-                            key={pattern}
-                            value={pattern}
-                            style={{ backgroundColor: "yellow", color: "white" }}
-                            >
-                            {pattern}
-                            </option>
-                        ))}
-                        </select>
-                                <label className="block mb-2 font-bold" htmlFor="type">
-                        Type
-                        </label>
-                        <select
-                        className="block w-full p-2 mb-6 border rounded bg-yellow appearance-none relative"
-                        id="type"
-                        name="type"
-                        onChange={(e) =>
-                            dispatch({ type: "UPDATE_TYPE", payload: e.target.value })
-                        }
-                        defaultValue=""
-                        style={{
-                            backgroundImage: "url('https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png')",
-                            backgroundPosition: "right 0.5rem center",
-                            backgroundRepeat: "no-repeat",
-                            backgroundSize: "1.5rem",
-                            paddingRight: "1.5rem",
-                        }}
-                        >
-                        <option value="" disabled>
-                            Select a type
-                        </option>
-                        {types.map((type) => (
-                            <option key={type} value={type}>
-                            {type}
-                            </option>
-                        ))}
-                        </select>
-
-                        <label className="block mb-2 font-bold" htmlFor="fabric">
-                        Fabric
-                        </label>
-                        <select
-                        className="block w-full p-2 mb-6 border rounded bg-yellow appearance-none relative"
-                        id="fabric"
-                        name="fabric"
-                        required
-                        onChange={(e) =>
-                            dispatch({ type: "UPDATE_FABRIC", payload: e.target.value })
-                        }
-                        defaultValue=""
-                        style={{
-                            backgroundImage: "url('https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png')",
-                            backgroundPosition: "right 0.5rem center",
-                            backgroundRepeat: "no-repeat",
-                            backgroundSize: "1.5rem",
-                            paddingRight: "1.5rem",
-                        }}
-                        >
-                        <option value="" disabled>
-                            Select a fabric
-                        </option>
-                        {fabrics.map((fabric) => (
-                            <option key={fabric} value={fabric}>
-                            {fabric}
-                            </option>
-                        ))}
-                        </select>
-                        </div>
-
-                        <div>
-                        <label className="block mb-2 font-bold" htmlFor="size">
-                        Size
-                        </label>
-                        <select
-                        className="block w-full p-2 mb-6 border rounded bg-yellow appearance-none relative"
-                        id="size"
-                        name="size"
-                        required
-                        onChange={(e) =>
-                            dispatch({ type: "UPDATE_SIZE", payload: e.target.value })
-                        }
-                        defaultValue=""
-                        style={{
-                            backgroundImage: "url('https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png')",
-                            backgroundPosition: "right 0.5rem center",
-                            backgroundRepeat: "no-repeat",
-                            backgroundSize: "1.5rem",
-                            paddingRight: "1.5rem",
-                        }}
-                        >
-                        <option value="" disabled>
-                            Select a size
-                        </option>
-                        {sizes.map((size) => (
-                            <option key={size} value={size}>
-                            {size}
-                            </option>
-                        ))}
-                        </select>
-                        <label className="block mb-2 font-bold" htmlFor="style">
-                        Style
-                        </label>
-                        <select
-                            className="block w-full p-2 mb-6 border rounded bg-yellow appearance-none relative"
-                            type="text"
-                            id="style"
-                            name="style"
-                            required
-                            onChange={(e) =>
-                                dispatch({ type: "UPDATE_STYLE", payload: e.target.value })
-                            }
-                            style={{
-                                backgroundImage: "url('https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png')",
-                                backgroundPosition: "right 0.5rem center",
-                                backgroundRepeat: "no-repeat",
-                                backgroundSize: "1.5rem",
-                                paddingRight: "1.5rem",
-                            }}
-                            defaultValue=""
-                        >
-                            <option value="" disabled>
-                                Select a style
-                            </option>
-                            {styles.map((style) => (
-                                <option key={style} value={style}>
-                                {style}
-                                </option>
-                            ))}
-                        </select>
-                        <label className="block mb-2 font-bold" htmlFor="brand">
-                            Brand
-                        </label>
-                        <select
-                            className="block w-full p-2 mb-6 border rounded bg-yellow appearance-none relative"
-                            type="text"
-                            id="brand"
-                            name="brand"
-                            required
-                            onChange={(e) =>
-                                dispatch({ type: "UPDATE_BRAND", payload: e.target.value })
-                            }
-                            style={{
-                                backgroundImage: "url('https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png')",
-                                backgroundPosition: "right 0.5rem center",
-                                backgroundRepeat: "no-repeat",
-                                backgroundSize: "1.5rem",
-                                paddingRight: "1.5rem",
-                            }}
-                            defaultValue=""
-                        >
-                            <option value="" disabled>
-                                Select a brand
-                            </option>
-                            {brands.map((brand) => (
-                                <option key={brand} value={brand}>
-                                {brand}
-                                </option>
-                            ))}
-                        </select>
-                        <label className="block mb-2 font-bold" htmlFor="photo">
-                        Picture URL
-                        </label>
-                        <input
-                        className="block w-full p-2 mb-6 border rounded bg-yellow text-blue"
-                        type="text"
-                        id="photo"
-                        name="photo"
-                        // required
-                        placeholder="Enter a picture URL"
-                        onChange={(e) =>
-                            dispatch({
-                            type: "UPDATE_PHOTO",
-                            payload: e.target.value,
-                            })
-                        }
-                        style={{ height: "2.6rem" }}
-                        />
-                        <div className="flex items-center mb-6">
-                        <input
-                            className="w-5 h-5 mr-2 rounded border-2 border-blue bg-red appearance-none checked:bg-green"
-                            type="checkbox"
-                            id="isGift"
-                            name="isGift"
-                            onChange={(e) => dispatch({ type: "UPDATE_IS_GIFT", payload: e.target.checked })}
-                        />
-                        <label className="text-md" htmlFor="isGift">Is this sock a gift?</label>
-                        </div>
-                    </div>
-                    </div>
-                    <button
-                    type="submit"
-                    className="bg-green font-bold py-2 px-4 rounded-lg w-[45%] h-[7%] border-2 mt-1 border-blue float-right"
-                    style={{ lineHeight: "1" }}
-                    >
-                    Create
-                    </button>
-                </form>
-            </div>
+  return (
+    <div className="flex items-center justify-around px-60 mt-16">
+      <img src={detailLogo} className="h-[375px] mb-20" alt="Logo" />
+      <div className="flex pt-24">
+        <div className="flex flex-col relative h-[700px] w-[300px] ">
+          <div className="absolute z-[100] ">
+            <p className="text-xl pb-1 pl-2 pr-44">Color</p>
+            <button onClick={() => setColorDropdown(!colorDropdown)}>
+              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
+                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
+                  <p className="text-lg">{color}</p>
+                  <img
+                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
+                    alt="blue circle with a chevron pointing down"
+                  />
+                </div>
+                {colorDropdown
+                  ? colors.map((c) => {
+                      return (
+                        <button onClick={() => setColor(c)}>
+                          <div className="flex p-2 bg-yellow w-100">
+                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
+                          </div>
+                        </button>
+                      );
+                    })
+                  : null}
+              </div>
+            </button>
+          </div>
+          <div className="absolute top-[15%] z-[90]">
+            <p className="text-xl pb-1 pl-2 pr-44">Pattern</p>
+            <button onClick={() => setPatternDropdown(!patternDropdown)}>
+              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
+                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
+                  <p className="text-lg">{pattern}</p>
+                  <img
+                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
+                    alt="blue circle with a chevron pointing down"
+                  />
+                </div>
+                {patternDropdown
+                  ? patterns.map((c) => {
+                      return (
+                        <button onClick={() => setPattern(c)}>
+                          <div className="flex p-2 bg-yellow w-100">
+                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
+                          </div>
+                        </button>
+                      );
+                    })
+                  : null}
+              </div>
+            </button>
+          </div>
+          <div className="absolute top-[30%] z-[80]">
+            <p className="text-xl pb-1 pl-2 pr-44">Size</p>
+            <button onClick={() => setSizeDropdown(!sizeDropdown)}>
+              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
+                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
+                  <p className="text-lg">{size}</p>
+                  <img
+                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
+                    alt="blue circle with a chevron pointing down"
+                  />
+                </div>
+                {sizeDropdown
+                  ? sizes.map((c) => {
+                      return (
+                        <button onClick={() => setSize(c)} className="z-40">
+                          <div className="flex p-2 bg-yellow w-100">
+                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
+                          </div>
+                        </button>
+                      );
+                    })
+                  : null}
+              </div>
+            </button>
+          </div>
+          <div className="absolute top-[45%] z-[70]">
+            <p className="text-xl pb-1 pl-2 pr-44">Type</p>
+            <button onClick={() => setTypeDropdown(!typeDropdown)}>
+              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
+                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
+                  <p className="text-lg">{type}</p>
+                  <img
+                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
+                    alt="blue circle with a chevron pointing down"
+                  />
+                </div>
+                {typeDropdown
+                  ? types.map((c) => {
+                      return (
+                        <button onClick={() => setType(c)} className="z-40">
+                          <div className="flex p-2 bg-yellow w-100">
+                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
+                          </div>
+                        </button>
+                      );
+                    })
+                  : null}
+              </div>
+            </button>
+          </div>
         </div>
+        <div className="flex flex-col relative h-[700px] w-[300px]">
+          <div className="absolute z-[60]">
+            <p className="text-xl pb-1 pl-2 pr-44">Fabric</p>
+            <button onClick={() => setFabricDropdown(!fabricDropdown)}>
+              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
+                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
+                  <p className="text-lg">{fabric}</p>
+                  <img
+                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
+                    alt="blue circle with a chevron pointing down"
+                  />
+                </div>
+                {fabricDropdown
+                  ? fabrics.map((c) => {
+                      return (
+                        <button onClick={() => setFabric(c)} className="z-40">
+                          <div className="flex p-2 bg-yellow w-100">
+                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
+                          </div>
+                        </button>
+                      );
+                    })
+                  : null}
+              </div>
+            </button>
+          </div>
+          <div className="absolute top-[15%] z-40">
+            <p className="text-xl pb-1 pl-2 pr-44">Style</p>
+            <button onClick={() => setStyleDropdown(!styleDropdown)}>
+              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
+                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
+                  <p className="text-lg">{style}</p>
+                  <img
+                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
+                    alt="blue circle with a chevron pointing down"
+                  />
+                </div>
+                {styleDropdown
+                  ? styles.map((c) => {
+                      return (
+                        <button onClick={() => setStyle(c)} className="z-40">
+                          <div className="flex p-2 bg-yellow w-100">
+                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
+                          </div>
+                        </button>
+                      );
+                    })
+                  : null}
+              </div>
+            </button>
+          </div>
+          <div className="absolute top-[30%] z-30">
+            <p className="text-xl pb-1 pl-2 pr-44">Brand</p>
+            <button onClick={() => setBrandDropdown(!brandDropdown)}>
+              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
+                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
+                  <p className="text-lg">{brand}</p>
+                  <img
+                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
+                    alt="blue circle with a chevron pointing down"
+                  />
+                </div>
+                {brandDropdown
+                  ? brands.map((c) => {
+                      return (
+                        <button onClick={() => setBrand(c)} className="z-40">
+                          <div className="flex p-2 bg-yellow w-100">
+                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
+                          </div>
+                        </button>
+                      );
+                    })
+                  : null}
+              </div>
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <div className="absolute top-[45%]">
+              <p className="block mb-2 text-xl -m-1 pl-2" htmlFor="photo">
+                Picture URL
+              </p>
+              <input
+                className="text-lg px-2 py-[25.5px] border-2 rounded-lg bg-yellow text-blue w-[250px] h-[55px]"
+                type="text"
+                id="photo"
+                name="photo"
+                // required
+                placeholder=""
+                onChange={(e) =>
+                  dispatch({
+                    type: "UPDATE_PHOTO",
+                    payload: e.target.value,
+                  })
+                }
+                style={{ height: "2.6rem" }}
+              />
+            </div>
+            <div className=" absolute top-[60%] flex items-center mb-6">
+              <input
+                className="w-5 h-5 mr-2 rounded border-2 border-blue bg-red appearance-none checked:bg-green"
+                type="checkbox"
+                id="isGift"
+                name="isGift"
+                onChange={(e) =>
+                  dispatch({
+                    type: "UPDATE_IS_GIFT",
+                    payload: e.target.checked,
+                  })
+                }
+              />
+              <label className="text-md" htmlFor="isGift">
+                Is this sock a gift?
+              </label>
+            </div>
+            <div className="absolute top-[70%] right-[10%]">
+              <button
+                type="submit"
+                className="bg-green font-bold py-2 px-4 rounded-lg border-2 mt-1 border-blue float-right text-2xl"
+                style={{ lineHeight: "1" }}
+              >
+                Create
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
