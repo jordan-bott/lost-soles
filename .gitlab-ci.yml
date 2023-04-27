@@ -10,17 +10,20 @@ lint-test-job:
   script:
     - pip install flake8
     - flake8 sock_service
-#
+
 # Run the unit tests
-# api-unit-test-job:
-#   image: python:3-bullseye
-#   stage: test
-#   needs:
-#     - lint-test-job
-#   script:
-#     - cd sample_service
-#     - pip install -r requirements.txt
-#     - python -m pytest
+api-unit-test-job:
+  image: python:3-bullseye
+  stage: test
+  variables:
+    DATABASE_URL: "${DATABASE_URL}"
+    SIGNING_KEY: "${SIGNING_KEY}"
+  needs:
+    - lint-test-job
+  script:
+    - cd sock_service
+    - pip install -r requirements.txt
+    - python -m pytest
 
 build-sock-service:
   image: docker:19.03.1
