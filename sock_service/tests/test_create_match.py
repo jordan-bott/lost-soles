@@ -24,6 +24,7 @@ def fake_acc():
         "created_on": str(now)
         }
 
+
 class CreateMatchQuery:
     def create(self, approving_id, requesting_id, receive_sock, gift_sock):
         result = {
@@ -37,10 +38,11 @@ class CreateMatchQuery:
         }
         return result
 
+
 def test_create_match():
     app.dependency_overrides[MatchQueries] = CreateMatchQuery
     app.dependency_overrides[authenticator.get_current_account_data] = fake_acc
-    expected= {
+    expected = {
         "id": 1,
         "requesting_user": 1,
         "approving_user": 2,
@@ -50,12 +52,13 @@ def test_create_match():
         "created_on": str(now),
     }
 
-    approving_id = 2
-    receive_sock = 2
-    gift_sock = 1
+    a = 2
+    r = 2
+    g = 1
 
-
-    response = client.post(f'/api/matches?receive_sock={receive_sock}&gift_sock={gift_sock}&approving_id={approving_id}')
+    response = client.post(
+        f'/api/matches?receive_sock={r}&gift_sock={g}&approving_id={a}'
+        )
 
     app.dependency_overrides = {}
 
