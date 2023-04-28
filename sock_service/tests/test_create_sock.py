@@ -15,11 +15,11 @@ def fake_acc():
         "last_name": "Branca",
         "username": "junab",
         "email": "juna",
-        "address": "12345 ",
+        "address": "12345 Mountain st, Denver, CO, 80218",
         "profile_pic": "https://bit.ly/3L9hers",
         "sockstar_points": 100,
         "total_pairings": 5,
-        "verified": "false",
+        "verified": False,
         "type": "user",
         "created_on": str(now)
         }
