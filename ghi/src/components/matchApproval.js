@@ -12,6 +12,8 @@ import {
 import { useSendReceiveMutation, useSendGiftMutation } from "../store/emailApi";
 import { toast } from "react-toastify";
 import { useMatchedMutation, useRejectedMutation } from "../store/socksApi";
+import LoginError from "./loginError";
+import ErrorPage from "./errorpage";
 
 function MatchApproval() {
   const { id } = useParams();
@@ -113,6 +115,13 @@ function MatchApproval() {
       toast("Uh oh. Something bad happened.");
     }
   };
+
+  if (!user) {
+    return <LoginError />;
+  }
+  if (user?.account?.id !== match.approving_user) {
+    return <ErrorPage />;
+  }
 
   return (
     <div className="flex justify-between h-[95vh] py-8 px-52">

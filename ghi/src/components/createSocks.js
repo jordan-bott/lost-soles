@@ -6,6 +6,7 @@ import detailLogo from "../images/detailLogo.png";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import LoginError from "./loginError";
 
 function CreateSock() {
   const dispatch = useDispatch();
@@ -151,6 +152,10 @@ function CreateSock() {
       console.log("handleSubmit error", err);
     }
   };
+
+  if (!user) {
+    return <LoginError />;
+  }
 
   return (
     <div className="flex items-center justify-around px-60 mt-16">

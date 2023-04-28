@@ -1,15 +1,20 @@
 import { useGetMatchByUserQuery } from "../store/matchApi";
 import { useGetTokenQuery } from "../store/authApi";
 import { useNavigate } from "react-router-dom";
+import LoginError from "./loginError";
 
 function MatchList() {
   const { data: user, isLoading: userLoading } = useGetTokenQuery();
-  const accountId = user.account.id;
+  const accountId = user?.account?.id;
   const { data, isLoading, error } = useGetMatchByUserQuery(accountId);
   const navigate = useNavigate();
 
   if (isLoading || userLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <LoginError />;
   }
 
   if (error) {

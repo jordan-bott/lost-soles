@@ -7,11 +7,12 @@ import { useDeleteUserMutation } from "../store/usersApi";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../store/authApi";
 import sockstar from "../images/sockstar.png";
+import LoginError from "./loginError";
 
 function SockDrawer() {
   const { data: token, isLoading, error } = useGetTokenQuery();
-  const userId = token.account.id;
-  const verified = token.account.verified;
+  const userId = token?.account?.id;
+  const verified = token?.account?.verified;
   const { data: socks } = useGetSocksByUserQuery(userId);
   const [deleteSock, { isLoading: isDeleting, error: deleteError }] =
     useDeleteSockMutation();
@@ -37,6 +38,10 @@ function SockDrawer() {
 
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (!token) {
+    return <LoginError />;
   }
 
   if (userIsDeleting) {

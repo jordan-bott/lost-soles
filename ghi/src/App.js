@@ -64,6 +64,7 @@ function App() {
                 <Route path=":id" element={<UpdateUser />} />
               </Route>
               <Route path="socks">
+                <Route path="" element={<ErrorPage />} />
                 <Route path="create" element={<CreateSock />} />
                 <Route path="sockdrawer" element={<SockDrawer />} />
                 <Route path=":id" element={<SockDetail />} />
