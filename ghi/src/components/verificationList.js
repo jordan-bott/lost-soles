@@ -6,6 +6,8 @@ import {
   useVerifyUserMutation,
   useUnverifyUserMutation,
 } from "../store/verificationsApi";
+import LoginError from "./loginError";
+import { useGetTokenQuery } from "../store/authApi";
 
 function VerificationList() {
   const { data, isLoading } = useGetVerificationsQuery();
@@ -14,6 +16,7 @@ function VerificationList() {
   const [deleteVerification] = useDeleteVerificationMutation();
   const [verifyUser] = useVerifyUserMutation();
   const [unverifyUser] = useUnverifyUserMutation();
+  const { data: user } = useGetTokenQuery();
 
   const handleApprove = (id) => {
     approveVerification(id);
@@ -33,6 +36,10 @@ function VerificationList() {
 
   if (isLoading) {
     return <p>Loading...</p>;
+  }
+
+  if (!user) {
+    return <LoginError />;
   }
 
   const pendingVerifications = data.filter(

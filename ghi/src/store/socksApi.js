@@ -88,6 +88,7 @@ export const socksApi = createApi({
         url: `/api/socks/users/${id}/unmatched`,
         credentials: "include",
       }),
+      invalidatesTags: ["Socks"],
     }),
   }),
 });

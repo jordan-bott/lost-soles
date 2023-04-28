@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetTokenQuery } from "../store/authApi";
 import { useGetUserQuery } from "../store/usersApi";
+import LoginError from "./loginError";
 
 function UpdateUser() {
   const { id } = useParams();
@@ -113,6 +114,9 @@ function UpdateUser() {
 
   if (userLoading || tokenLoading) {
     return <p>Loading ...</p>;
+  }
+  if (!token) {
+    return <LoginError />;
   }
 
   return (

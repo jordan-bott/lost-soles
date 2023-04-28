@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useCreateVerificationMutation } from "../store/verificationsApi";
 import detailLogo from "../images/detailLogo.png";
+import LoginError from "./loginError";
+import { useGetTokenQuery } from "../store/authApi";
 
 function VerificationCreate() {
   const [createVerification, result] = useCreateVerificationMutation();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [license, setLicense] = useState("");
+  const { data } = useGetTokenQuery;
 
   const handleLicenseChange = (event) => {
     const value = event.target.value;
@@ -25,6 +28,9 @@ function VerificationCreate() {
 
   if (result.isSuccess && !showSuccessMessage) {
     setShowSuccessMessage(true);
+  }
+  if (!data) {
+    return <LoginError />;
   }
 
   return (

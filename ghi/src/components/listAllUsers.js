@@ -1,7 +1,10 @@
 import { useGetUsersQuery, useDeleteUserMutation } from "../store/usersApi";
+import LoginError from "./loginError";
+import { useGetTokenQuery } from "../store/authApi";
 
 function ListUsers() {
-  const { data, error, isLoading } = useGetUsersQuery();
+  const { data: user } = useGetTokenQuery();
+  const { data, isLoading } = useGetUsersQuery();
   const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
   const handleDeleteUser = async (id) => {
@@ -17,8 +20,8 @@ function ListUsers() {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: You are logged out {error.message}</div>;
+  if (!user) {
+    return <LoginError />;
   }
 
   return (
