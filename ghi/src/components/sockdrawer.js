@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../store/authApi";
 import sockstar from "../images/sockstar.png";
 import LoginError from "./loginError";
+import { toast } from "react-toastify";
 
 function SockDrawer() {
   const { data: token, isLoading, error } = useGetTokenQuery();
@@ -26,10 +27,15 @@ function SockDrawer() {
     setAlert(!alert);
   };
 
-  const handleDelete = () => {
-    deleteUser(userId);
-    logoutUser();
-    navigate("/");
+  const handleDelete = async () => {
+    const result = await deleteUser(userId);
+    if (!result.hasOwnProperty("error")) {
+      logoutUser();
+      navigate("/");
+      toast(
+        "We're sad to see you go! Your account has been successfully deleted."
+      );
+    }
   };
 
   if (isDeleting) {
@@ -73,97 +79,103 @@ function SockDrawer() {
   return (
     <div className="flex max-w-screen justify-around">
       <div className="flex">
-        <div className="carousel carousel-center max-w-[1269px] p-16 space-x-10 bg-background rounded-box mt-12">
-          {socks?.map((sock) => (
-            <div
-              key={sock.id}
-              className="flex flex-col items-center hover:scale-105 h-[600px] rounded-xl overflow-hidden card col-auto w-[365px] carousel-item"
-            >
-              <div className="flex justify-between items-center w-[95%]">
-                <div className="flex pt-1.5">
-                  <img
-                    src={token.account.profile_pic}
-                    className="rounded-full w-[67px] h-[67px] object-cover border-blue border-2 mr-2"
-                    alt=""
-                  />
-                  <p className="font-black text-l text-left content-center self-center">
-                    @{token.account.username}
-                  </p>
+        {socks === undefined ? (
+          <div className="p-16 mt-12 text-xl">
+            Uh oh. You haven't posted any socks!
+          </div>
+        ) : (
+          <div className="carousel carousel-center max-w-[1269px] p-16 space-x-10 bg-background rounded-box mt-12">
+            {socks?.map((sock) => (
+              <div
+                key={sock.id}
+                className="flex flex-col items-center hover:scale-105 h-[575px] rounded-xl overflow-hidden card col-auto w-[365px] carousel-item"
+              >
+                <div className="flex justify-between items-center w-[95%]">
+                  <div className="flex pt-1.5">
+                    <img
+                      src={token.account.profile_pic}
+                      className="rounded-full w-[67px] h-[67px] object-cover border-blue border-2 mr-2"
+                      alt=""
+                    />
+                    <p className="font-black text-l text-left content-center self-center">
+                      @{token.account.username}
+                    </p>
+                  </div>
+                  <div className="relative">
+                    <img
+                      src={sockstar}
+                      className="w-[65px] h-[82px] mt-2 object-fill"
+                      alt="orange sock with yellow toe and heel that displays the users sockstar points"
+                    />
+                    <div className="absolute flex w-[100%] top-[40%] font-black text-right place-content-center">
+                      <p className="pl-1.5">{token.account.sockstar_points}</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="relative">
-                  <img
-                    src={sockstar}
-                    className="w-[65px] h-[82px] mt-2 object-fill"
-                    alt="orange sock with yellow toe and heel that displays the users sockstar points"
-                  />
-                  <div className="absolute flex w-[100%] top-[40%] font-black text-right place-content-center">
-                    <p className="pl-1.5">{token.account.sockstar_points}</p>
+                <div className="flex place-content-center">
+                  <button onClick={() => navigate(`/socks/${sock.id}`)}>
+                    <img
+                      className="m-2 flex items-center justify-center h-72 w-72 object-cover rounded-lg border-blue border-2"
+                      src={sock.photo}
+                      alt="Sunset in the mountains"
+                    />
+                  </button>
+                </div>
+                <div className="flex flex-col gap-y-2">
+                  <div className="px-6 pt-4 pb-2"></div>
+                  <div className="flex flex-wrap px-1 pt-1 pb-2 items-start content-center h-[85px] w-72">
+                    <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                      {sock.size}
+                    </span>
+                    {sock.color === "Other" ? null : (
+                      <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                        {sock.color}
+                      </span>
+                    )}
+                    {sock.pattern === "Other" ? null : (
+                      <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                        {sock.pattern}
+                      </span>
+                    )}
+                    {sock.fabric === "Other" ? null : (
+                      <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                        {sock.fabric}
+                      </span>
+                    )}
+                    <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                      {sock.type === "Other" ? null : sock.type}
+                    </span>
+                  </div>
+                  <div className="flex place-content-center gap-x-5">
+                    <button
+                      onClick={() => navigate(`/socks/${sock.id}`)}
+                      type="button"
+                      className="bg-green w-[35%] p-2 text-m font-bold mb-2 rounded-lg border-2 border-blue hover:scale-105"
+                    >
+                      Update
+                    </button>
+                    <button
+                      onClick={() =>
+                        deleteSock({
+                          user_id: sock.user_id,
+                          sock_id: sock.id,
+                        })
+                      }
+                      type="button"
+                      className="bg-red w-[35%] p-2 text-m font-bold mb-2 rounded-lg border-2 border-blue hover:scale-105"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>
-              <div className="flex place-content-center h-72 w-72">
-                <button onClick={() => navigate(`/socks/${sock.id}`)}>
-                  <img
-                    className="m-2 flex items-center justify-center h-72 w-72 object-cover rounded-lg border-blue border-2"
-                    src={sock.photo}
-                    alt="Sunset in the mountains"
-                  />
-                </button>
-              </div>
-              <div className="flex flex-col gap-y-2">
-                <div className="px-6 pt-4 pb-2"></div>
-                <div className="flex flex-wrap px-1 pt-1 pb-2 items-start content-center h-[85px] w-72">
-                  <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
-                    {sock.size}
-                  </span>
-                  {sock.color === "Other" ? null : (
-                    <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
-                      {sock.color}
-                    </span>
-                  )}
-                  {sock.pattern === "Other" ? null : (
-                    <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
-                      {sock.pattern}
-                    </span>
-                  )}
-                  {sock.fabric === "Other" ? null : (
-                    <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
-                      {sock.fabric}
-                    </span>
-                  )}
-                  <span className="bg-lorange border border-blue inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
-                    {sock.type === "Other" ? null : sock.type}
-                  </span>
-                </div>
-                <div className="flex-col pl-10 flex justify-center">
-                  <button
-                    onClick={() =>
-                      deleteSock({
-                        user_id: sock.user_id,
-                        sock_id: sock.id,
-                      })
-                    }
-                    type="button"
-                    className="delete-button w-[80%] px-3 py-1 text-sm font-bold mr-2 mb-2 rounded inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => navigate(`/socks/${sock.id}`)}
-                    type="button"
-                    className="update-button w-[80%] px-3 py-1 text-sm font-bold mr-2 mb-2 rounded inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
-                  >
-                    Update
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="flex content-center mt-16 relative">
         <div key={token.account.id}>
-          <div className="flex flex-col items-center hover:scale-105 rounded-xl overflow-hidden shadow-2xl user-card col-auto w-[365px]">
+          <div className="flex flex-col items-center hover:scale-105 rounded-xl overflow-hidden shadow-2xl user-card col-auto w-[365px] gap-y-2">
             <div className="flex justify-between items-center w-[95%]">
               <p className="font-black text-center pt-5 pb-2 w-full text-xl">
                 <span className="inline-block align-middle">
@@ -172,9 +184,9 @@ function SockDrawer() {
               </p>
               <p></p>
             </div>
-            <div className="flex place-content-center h-72 w-72">
+            <div className="flex place-content-center">
               <img
-                className="m-2 flex items-center justify-center h-60 w-60 object-cover rounded-lg border-yellow border-2"
+                className="m-2 flex items-center justify-center h-60 w-60 object-cover rounded-lg border-orange border-4"
                 src={token.account.profile_pic}
                 alt="sock"
               />
@@ -185,11 +197,11 @@ function SockDrawer() {
                 className="w-[65px] h-[82px] mt-2 object-fill"
                 alt="orange sock with yellow toe and heel that displays the users sockstar points"
               />
-              <div className="absolute flex w-[100%] top-[40%] font-black text-right place-content-center">
+              <div className="absolute flex w-[100%] top-[40%] font-black text-right place-content-center ">
                 <p className="pl-1.5">{token.account.sockstar_points}</p>
               </div>
             </div>
-            <div className="bg-yellow border border-blue inline-block rounded px-2 py-2 text-base font-semibold my-5 mr-3 mb-3">
+            <div className="bg-yellow border-2 border-blue inline-block rounded-lg p-2 text-base font-semibold mt-2 mb-6">
               <p className="font-semibold text-center">
                 User Since {formattedDate}
               </p>
@@ -197,14 +209,12 @@ function SockDrawer() {
                 Total Pairings: {token.account.total_pairings}
               </p>
             </div>
-            <div className="px-6 pt-4 pb-2"></div>
-            <div className="px-6 pt-1 pb-2 justify-center items-start"></div>
           </div>
-          <div className="flex-col flex justify-center items-center">
+          <div className="flex-col flex justify-center items-center pt-8">
             <button
               onClick={() => handleAlert(true)}
               type="button"
-              className="delete-button mt-8 w-[80%] px-1 py-1 text-sm font-bold mb-2 rounded inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
+              className="bg-red w-[60%] p-2 text-m font-bold mb-2 rounded-lg border-2 border-blue hover:scale-105"
             >
               Delete your account
             </button>
@@ -212,7 +222,7 @@ function SockDrawer() {
               <button
                 onClick={() => navigate(`/users/verify`)}
                 type="button"
-                className="update-button w-[80%] px-1 py-1 text-sm font-bold mb-2 rounded inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
+                className="bg-green w-[50%] p-2 text-m font-bold mb-2 rounded-lg border-2 border-blue hover:scale-105"
               >
                 Verify your account
               </button>
@@ -220,7 +230,7 @@ function SockDrawer() {
             <button
               onClick={() => navigate(`/users/${userId}`)}
               type="button"
-              className="update-account-button w-[80%] px-1 py-1 text-sm font-bold mb-2 rounded inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
+              className="bg-yellow w-[68%] p-2 text-m font-bold mb-2 rounded-lg border-2 border-blue hover:scale-105"
             >
               Update your account
             </button>
@@ -246,19 +256,23 @@ function SockDrawer() {
                       permanent, your sock listings will be removed.
                     </span>
                   </div>
-                  <div className="">
-                    <button
-                      onClick={() => handleAlert(false)}
-                      className="update-button mt-8 w-[80%] px-1 py-1 text-sm font-bold mb-2 rounded-lg inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
-                    >
-                      No, don't delete my account!
-                    </button>
-                    <button
-                      onClick={() => handleDelete()}
-                      className="delete-button w-[80%] px-1 py-1 text-sm font-bold mb-2 my-8 pb-6 rounded-lg inline-block transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3)"
-                    >
-                      Yes, delete my account.
-                    </button>
+                  <div className="flex content-center">
+                    <div className="flex place-items-center">
+                      <button
+                        onClick={() => handleAlert(false)}
+                        className="bg-green border-2 border-blue p-1 mt-8 w-[100%] px-1 py-1 text-sm font-bold mb-2 rounded-lg hover:scale-105"
+                      >
+                        No, don't delete my account!
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => handleDelete()}
+                        className="mt-6 content-center bg-red border-2 border-blue p-1 w-[100%] px-1 py-1 text-sm font-bold rounded-lg hover:scale-105"
+                      >
+                        Yes, delete my account.
+                      </button>
+                    </div>
                   </div>
                 </div>
               ) : null}

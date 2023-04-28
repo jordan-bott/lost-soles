@@ -8,7 +8,7 @@ function VerificationCreate() {
   const [createVerification, result] = useCreateVerificationMutation();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [license, setLicense] = useState("");
-  const { data } = useGetTokenQuery;
+  const { data } = useGetTokenQuery();
 
   const handleLicenseChange = (event) => {
     const value = event.target.value;

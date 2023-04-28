@@ -9,9 +9,7 @@ export const authApi = createApi({
   }),
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
-    console.log(token);
 
-    // If we have a token set in state, let's assume that we should be passing it.
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
     }
@@ -66,6 +64,17 @@ export const authApi = createApi({
       },
       invalidatesTags: ["Token"],
     }),
+    createAdmin: builder.mutation({
+      query: (info) => {
+        return {
+          url: "api/users/admin",
+          method: "post",
+          body: info,
+          credentials: "include",
+        };
+      },
+      invalidatesTags: ["Token"],
+    }),
     updateUser: builder.mutation({
       query: ({ id, info }) => ({
         url: `api/users/${id}`,
@@ -96,5 +105,6 @@ export const {
   useGetTokenQuery,
   useLogoutMutation,
   useCreateUserMutation,
+  useCreateAdminMutation,
   useUpdateUserMutation,
 } = authApi;

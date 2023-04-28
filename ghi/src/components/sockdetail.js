@@ -62,8 +62,6 @@ function SockDetail() {
     setSockData();
   }, [sock]);
 
-  console.log(color);
-
   if (sockLoading || userLoading || userSocksLoading) {
     return <p>Loading ...</p>;
   }
@@ -165,7 +163,7 @@ function SockDetail() {
     "Plaid",
     "Polka Dots",
     "Solid",
-    "Stripped",
+    "Striped",
     "Zig Zag",
     "Other",
   ];
@@ -243,11 +241,11 @@ function SockDetail() {
                 {colorDropdown
                   ? colorList.map((c) => {
                       return (
-                        <button onClick={() => setColor(c)}>
+                        <div key={c} onClick={() => setColor(c)}>
                           <div className="flex p-2 bg-yellow w-100">
                             <p className="hover:text-orange mt-1 pr-3">{c}</p>
                           </div>
-                        </button>
+                        </div>
                       );
                     })
                   : null}
@@ -268,11 +266,11 @@ function SockDetail() {
                 {patternDropdown
                   ? patternList.map((c) => {
                       return (
-                        <button onClick={() => setPattern(c)}>
+                        <div key={c} onClick={() => setPattern(c)}>
                           <div className="flex p-2 bg-yellow w-100">
                             <p className="hover:text-orange mt-1 pr-3">{c}</p>
                           </div>
-                        </button>
+                        </div>
                       );
                     })
                   : null}
@@ -293,11 +291,15 @@ function SockDetail() {
                 {sizeDropdown
                   ? sizeList.map((c) => {
                       return (
-                        <button onClick={() => setSize(c)} className="z-40">
+                        <div
+                          key={c}
+                          onClick={() => setSize(c)}
+                          className="z-40"
+                        >
                           <div className="flex p-2 bg-yellow w-100">
                             <p className="hover:text-orange mt-1 pr-3">{c}</p>
                           </div>
-                        </button>
+                        </div>
                       );
                     })
                   : null}
@@ -318,11 +320,15 @@ function SockDetail() {
                 {typeDropdown
                   ? typeList.map((c) => {
                       return (
-                        <button onClick={() => setType(c)} className="z-40">
+                        <div
+                          key={c}
+                          onClick={() => setType(c)}
+                          className="z-40"
+                        >
                           <div className="flex p-2 bg-yellow w-100">
                             <p className="hover:text-orange mt-1 pr-3">{c}</p>
                           </div>
-                        </button>
+                        </div>
                       );
                     })
                   : null}
@@ -343,11 +349,15 @@ function SockDetail() {
                 {fabricDropdown
                   ? fabricList.map((c) => {
                       return (
-                        <button onClick={() => setFabric(c)} className="z-40">
+                        <div
+                          key={c}
+                          onClick={() => setFabric(c)}
+                          className="z-40"
+                        >
                           <div className="flex p-2 bg-yellow w-100">
                             <p className="hover:text-orange mt-1 pr-3">{c}</p>
                           </div>
-                        </button>
+                        </div>
                       );
                     })
                   : null}
@@ -368,11 +378,15 @@ function SockDetail() {
                 {styleDropdown
                   ? styleList.map((c) => {
                       return (
-                        <button onClick={() => setStyle(c)} className="z-40">
+                        <div
+                          key={c}
+                          onClick={() => setStyle(c)}
+                          className="z-40"
+                        >
                           <div className="flex p-2 bg-yellow w-100">
                             <p className="hover:text-orange mt-1 pr-3">{c}</p>
                           </div>
-                        </button>
+                        </div>
                       );
                     })
                   : null}
@@ -393,11 +407,15 @@ function SockDetail() {
                 {brandDropdown
                   ? brandList.map((c) => {
                       return (
-                        <button onClick={() => setBrand(c)} className="z-40">
+                        <div
+                          key={c}
+                          onClick={() => setBrand(c)}
+                          className="z-40"
+                        >
                           <div className="flex p-2 bg-yellow w-100">
                             <p className="hover:text-orange mt-1 pr-3">{c}</p>
                           </div>
-                        </button>
+                        </div>
                       );
                     })
                   : null}

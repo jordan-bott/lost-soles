@@ -2,6 +2,7 @@ import { useGetMatchByUserQuery } from "../store/matchApi";
 import { useGetTokenQuery } from "../store/authApi";
 import { useNavigate } from "react-router-dom";
 import LoginError from "./loginError";
+import MatchListError from "./matchListError";
 
 function MatchList() {
   const { data: user, isLoading: userLoading } = useGetTokenQuery();
@@ -18,8 +19,10 @@ function MatchList() {
   }
 
   if (error) {
-    return <div>Oh no! Something went wrong!</div>;
+    return <MatchListError />;
   }
+
+  console.log(data);
 
   const options = {
     weekday: "long",
