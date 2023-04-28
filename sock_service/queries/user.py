@@ -475,9 +475,7 @@ class UserQueries():
                         """,
                         [points, user_id]
                     )
-                    print(4)
                     ss = db.fetchone()
-                    print(ss)
                     user = UserOut(
                             id=ss[0],
                             first_name=ss[1],
@@ -492,7 +490,38 @@ class UserQueries():
                             type=ss[11],
                             created_on=str(ss[12])
                         )
-                    print(user)
+                return user
+        except Exception as e:
+            return {"error": e}
+
+    def total_matches(self, user_id: int, matches: int) -> UserOut:
+        try:
+            with pool.connection() as conn:
+                with conn.cursor() as db:
+                    db.execute(
+                        """
+                        UPDATE users
+                        SET total_pairings = %s
+                        WHERE id = %s
+                        RETURNING *;
+                        """,
+                        [matches, user_id]
+                    )
+                    tm = db.fetchone()
+                    user = UserOut(
+                            id=tm[0],
+                            first_name=tm[1],
+                            last_name=tm[2],
+                            username=tm[3],
+                            email=tm[5],
+                            address=tm[6],
+                            sockstar_points=tm[7],
+                            total_pairings=tm[8],
+                            profile_pic=tm[9],
+                            verified=tm[10],
+                            type=tm[11],
+                            created_on=str(tm[12])
+                        )
                 return user
         except Exception as e:
             return {"error": e}

@@ -210,9 +210,20 @@ def add_sockstar(
     repo: UserQueries = Depends(),
     account_data: dict = Depends(authenticator.get_current_account_data)
 ) -> UserOut:
-    print(1)
     try:
-        print(2)
         return repo.sockstar(user_id, points)
+    except Error as e:
+        return {"error": e}
+
+
+@router.put("/api/users/{user_id}/matches", response_model=UserOut | Error)
+def add_total_matches(
+    user_id: int,
+    matches: int,
+    repo: UserQueries = Depends(),
+    account_data: dict = Depends(authenticator.get_current_account_data)
+) -> UserOut:
+    try:
+        return repo.total_matches(user_id, matches)
     except Error as e:
         return {"error": e}

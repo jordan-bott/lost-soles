@@ -6,6 +6,7 @@ import titleLogo from "./images/title-logo.png";
 import { useGetTokenQuery } from "./store/authApi";
 import { useLogoutMutation } from "./store/authApi";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Nav() {
   const [dropdown, setDropdown] = useState(false);
@@ -23,6 +24,7 @@ function Nav() {
 
   const handleLogout = () => {
     logoutUser();
+    toast("Logout successful!");
     navigate("/");
   };
 

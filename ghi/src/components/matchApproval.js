@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { useMatchedMutation, useRejectedMutation } from "../store/socksApi";
 import LoginError from "./loginError";
 import ErrorPage from "./errorpage";
+import { useAddTotalMatchesMutation } from "../store/usersApi";
 
 function MatchApproval() {
   const { id } = useParams();
@@ -30,6 +31,7 @@ function MatchApproval() {
   const [addSockstar] = useAddSockstarMutation();
   const [matched] = useMatchedMutation();
   const [rejected] = useRejectedMutation();
+  const [totalMatches] = useAddTotalMatchesMutation();
 
   const navigate = useNavigate();
 
@@ -59,10 +61,20 @@ function MatchApproval() {
     const approveResult = await approveMatch(match.id);
     const sockResult1 = await matched(giftSock.id);
     const sockResult2 = await matched(receiveSock.id);
+    const totalMatches1 = await totalMatches({
+      user_id: giftUser.id,
+      matches: giftUser.total_pairings + 1,
+    });
+    const totalMatches2 = await totalMatches({
+      user_id: receiveUser.id,
+      matches: receiveUser.total_pairings + 1,
+    });
     if (
       !approveResult.hasOwnProperty("error") &&
       !sockResult1.hasOwnProperty("error") &&
-      !sockResult2.hasOwnProperty("error")
+      !sockResult2.hasOwnProperty("error") &&
+      !totalMatches1.hasOwnProperty("error") &&
+      !totalMatches2.hasOwnProperty("error")
     ) {
       const giftEmailResult = await giftEmail({
         user_email: giftUser.email,

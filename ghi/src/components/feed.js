@@ -17,7 +17,7 @@ function SockFeed() {
       <div>
         <SideBar />
       </div>
-      <div className="w-[100%] overflow-scroll max-h-[120vh] scrollbar-none">
+      <div className="w-[100%] overflow-scroll max-h-[calc(100%-8rem)] scrollbar-none">
         <div className="place-items-center align-middle grid grid-cols-3 py-20 gap-y-12">
           {data.map((sock) => {
             return (

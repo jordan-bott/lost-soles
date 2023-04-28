@@ -46,6 +46,14 @@ export const usersApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    addTotalMatches: builder.mutation({
+      query: ({ user_id, matches }) => ({
+        url: `/api/users/${user_id}/matches?matches=${matches}`,
+        method: "put",
+        credentials: "include",
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -55,4 +63,5 @@ export const {
   useGetUsersQuery,
   useDeleteUserMutation,
   useAddSockstarMutation,
+  useAddTotalMatchesMutation,
 } = usersApi;
