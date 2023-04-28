@@ -148,7 +148,7 @@ class SockQueries():
                             created_on=str(sock[12]),
                         )
 
-    def delete(self, sock_id: int, user_id: int,) -> bool:
+    def delete(self, sock_id: int) -> bool:
         try:
             with pool.connection() as conn:
                 with conn.cursor() as db:
@@ -394,7 +394,6 @@ class SockQueries():
                         )
                         if s[11] != "matched":
                             socks.append(sock)
-                    print(socks)
                     return socks
         except Exception as e:
             print("get all socks by user error", e)

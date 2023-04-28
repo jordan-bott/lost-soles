@@ -22,8 +22,6 @@ function MatchList() {
     return <MatchListError />;
   }
 
-  console.log(data);
-
   const options = {
     weekday: "long",
     year: "numeric",

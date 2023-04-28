@@ -25,7 +25,7 @@ def fake_acc():
 
 
 class DeleteSockQuery:
-    def delete(self, sock_id, user_id):
+    def delete(self, sock_id):
         return {"message": "Sock deleted successfully"}
 
 
