@@ -40,7 +40,7 @@ def delete_sock(
     account_data: dict = Depends(authenticator.get_current_account_data),
 ) -> bool:
     if account_data["id"] == user_id:
-        return socks.delete(sock_id, user_id)
+        return socks.delete(sock_id)
     elif account_data["id"] != user_id:
         response.status_code = 400
         return {"Error": "Unable to delete other user's socks"}
@@ -163,7 +163,4 @@ def get_unmatched_socks_by_user(
     elif account_data["id"] != user_id:
         response.status_code = 400
         return {"Error": "Unable to view other user's socks"}
-    # if len(sock_list) == 0:
-    #     response.status_code =
-    #     return {"Error": "No socks yet!"}
     return sock_list

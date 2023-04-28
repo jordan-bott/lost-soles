@@ -49,8 +49,8 @@ steps = [
         id SERIAL PRIMARY KEY NOT NULL,
         requesting_user INT REFERENCES users(id) ON DELETE CASCADE,
         approving_user INT REFERENCES users(id) ON DELETE CASCADE,
-        gift_sock INT REFERENCES socks(id) NOT NULL,
-        receive_sock INT REFERENCES socks(id) NOT NULL,
+        gift_sock INT REFERENCES socks(id) ON DELETE CASCADE,
+        receive_sock INT REFERENCES socks(id) ON DELETE CASCADE,
         match_status BOOLEAN,
         created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
         );

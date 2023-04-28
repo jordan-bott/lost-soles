@@ -1,6 +1,3 @@
-// import { useEffect, useState } from "react";
-// import Construct from "./Construct.js";
-// import ErrorNotification from "./ErrorNotification";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import SockFeed from "./components/feed.js";

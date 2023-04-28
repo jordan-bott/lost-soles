@@ -20,7 +20,7 @@ conf = ConnectionConfig(
 router = APIRouter()
 
 
-@router.post("/email/request")
+@router.post("/api/email/request")
 async def request_send(user_email: str, match_id: str) -> dict:
     html = f"""
     <p>Hello!</p>
@@ -43,7 +43,7 @@ async def request_send(user_email: str, match_id: str) -> dict:
     return {"message": "email has been sent"}
 
 
-@router.post("/email/receive")
+@router.post("/api/email/receive")
 async def receive_send(user_email: str, username: str) -> dict:
     html = f"""
     <p>Hello!</p>
@@ -66,7 +66,7 @@ async def receive_send(user_email: str, username: str) -> dict:
     return {"message": "email has been sent"}
 
 
-@router.post("/email/send")
+@router.post("/api/email/send")
 async def gift_send(user_email: str,
                     username: str,
                     user_address: str) -> dict:

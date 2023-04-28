@@ -52,7 +52,11 @@ function Footer() {
   }, []);
 
   const { pathname } = useLocation();
-  if (pathname === "/login" || pathname === "/signup") {
+  if (
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname === "/admin"
+  ) {
     return null;
   }
 
