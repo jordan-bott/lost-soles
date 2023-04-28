@@ -108,16 +108,27 @@ deployment, but it just consists of these steps:
 You can't find this in GitLab until after you've done a deploy
 but you can figure it out yourself from your GitLab project URL.
 
-If this is your project URL
+Gitlab project URL:
 
-https://gitlab.com/GROUP_NAME/PROJECT_NAME
+https://gitlab.com/lost-soles/module3-project-gamma
 
-then your GitLab pages URL will be
+GitLab deployment URL:
 
-https://GROUP_NAME.gitlab.io/PROJECT_NAME
+https://lost-soles.gitlab.io/module3-project-gamma/
+
+CapRover URL:
+
+https://captain.dec-pt-3.mod3projects.com/#/login
 
 ### Create render.com account and application
 
+- create account on render.com
+- one person create a group and invite all other members
+- create a new "Web Service"
+  - authenticate with GitLab and choose your project
+  - Enter fields:
+    - Name: name of your service
+    - Root Directory: the directory of your service in your git repo.
 - create account on render.com
 - one person create a group and invite all other members
 - create a new "Web Service"
@@ -130,7 +141,12 @@ https://GROUP_NAME.gitlab.io/PROJECT_NAME
     - Plan Type: Free
   - click the "Create Web Service" button to create it
   - the build will succeed and it will look like the server is running,
+    - Environment: Docker
+    - Plan Type: Free
+  - click the "Create Web Service" button to create it
+  - the build will succeed and it will look like the server is running,
     most likely, in 6-10 minutes, it will fail.
+  - click "Manual Deploy" -> "Deploy latest commit" and the service
   - click "Manual Deploy" -> "Deploy latest commit" and the service
     should deploy successfully.
 
@@ -146,42 +162,12 @@ Merge a change into main to kick off the initial deploy. Once the build pipeline
 finishes you should be able to see an "under construction" page on your GitLab
 pages site.
 
-### How to Install
+### Future of the App PB: Kalani Hines
 
-1. Go to the Github repo [here](https://gitlab.com/lost-soles/module3-project-gamma)
-2. Click the `Clone` button and copy the URL.
-3. In your terminal and in your desired location run `git clone *URL HERE*`.
-4. Run `code .` to open the project in VSCode.
-5. Make sure you have Docker installed then in your terminal run `docker volume create sock-data`.
-   - This will create the Docker database.
-6. In your terminal run `docker compose build`.
-   - This will create the Docker containers and images.
-7. In your terminal run `docker compose up`.
-   - This will run the Docker containers
-8. When the Docker containers are running you can open your browser and go to http://localhost:8000/docs/ to view all of the RESTful backend endpoints.
-9. When the Docker containers are running you can open your browser and go to http://localhost:3000/.
-   - This will take you to the project home page and you can navigate via the navbar dropdown menu.
+Lost Soles is an app designed to help you find a match for your single socks. Our app allows users to sign up and easily create a profile where they can post their lone socks for others to browse and search through. Additionally, users can mark their socks as a gift, promoting a culture of giving and helping others who may be missing a sock from their pair.
 
-### Sock Service Overview
+We have implemented a rating system called "Sockstar points" to promote a fun and trustworthy environment. Users can earn points by completing trades, matching socks, and gifting their single socks. These points will be displayed on their profile to show their level of reliability and also as a scoring system to encourage more sock trading and gifting within our community.
 
-In the project files you'll find a microservice folder named sock_service. Inside of sock_service you'll find addtional folders and files.
+As admins, we verify user accounts with their attached ID to ensure their legitimacy and build trust within our community. Once an account is verified, users can see the verified address associated with the profile and feel more confident about initiating a trade.
 
-- migrations
-  - In the migrations folder you'll find a file named 001_create_my_tables.py. This is the file where we determine all of the properties of our objects that will be stored in the database.
-- queries
-  - In the queries folder is all of our pydantic models for our objects. Here we can lay out how we want each object to look and include whatever additional relational properties that we wish to include. You'll find a file dedicated to each of the objects.
-  - We can add an endpoint query for whatever backend endpoint we need to communicate with.
-- routers
-  - The routers folder is where we actually route the paths of the objects we want to create so that the sock_service can communicate with the database effectively.
-  - The router files communicate with the querie files to ensure the correct data is being sent back and forth.
-- tests
-  - The tests folder is where all of the unit tests are located.
-  - The unit tests are tests which communicate with the backend endpoints to ensure they're working properly.
-- authenticator.py
-  - The authenticator.py file contains important pieces of code which help our authentication system so that users can create accounts, log in, and log out.
-- Dockerfile
-  - The Dockerfile is a file that helps the docker system load all the important information and run all of the systems through the appropriate ports.
-- main.py
-  - main.py is a file that helps us connect our routers to the FastAPI system.
-- requirements.txt
-  - requirements.txt is a very important file that tells the Dockerfile what it needs to install when it boots the program.
+Our goal is to make finding a match for your single sock as easy and efficient as possible, while also encouraging a culture of giving and reliability. Join us at Lost Soles and let's reunite those wayward socks with their missing pairs!
