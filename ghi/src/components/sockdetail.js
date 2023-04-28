@@ -485,7 +485,8 @@ function SockDetail() {
           <p className="text-xl pt-2">{sock?.gift ? "Gifting" : "Receiving"}</p>
         </div>
         <div className="flex pt-5 pl-4 gap-x-4">
-          {sock?.user_id === user?.account?.id ? null : dropdown ? (
+          {!user ? null : sock?.user_id ===
+            user?.account?.id ? null : dropdown ? (
             <>
               <div className="z-[200] flex flex-col gap-y-1 divide-y-2 border-2 border-blue px-3 rounded-lg bg-lorange w-[410px] overflow-y-scroll overflow-x-hidden max-h-[235px] scrollbar-thin scrollbar-thumb-yellow scrollbar-thumb-rounded-lg">
                 <button
