@@ -1,10 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import logo from "./images/logo.png";
-import titleLogo from "./images/title-logo.png";
-import { useGetTokenQuery } from "./store/authApi";
-import { useLogoutMutation } from "./store/authApi";
+import logo from "../../images/logo.png";
+import titleLogo from "../../images/title-logo.png";
+import { useGetTokenQuery } from "../../store/authApi";
+import { useLogoutMutation } from "../../store/authApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 

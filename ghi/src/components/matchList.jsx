@@ -1,7 +1,7 @@
 import { useGetMatchByUserQuery } from "../store/matchApi";
 import { useGetTokenQuery } from "../store/authApi";
 import { useNavigate } from "react-router-dom";
-import LoginError from "./loginError";
+import LoginError from "./auth/loginError";
 import MatchListError from "./matchListError";
 
 function MatchList() {

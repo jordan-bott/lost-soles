@@ -6,7 +6,7 @@ import {
   useVerifyUserMutation,
   useUnverifyUserMutation,
 } from "../store/verificationsApi";
-import LoginError from "./loginError";
+import LoginError from "./auth/loginError";
 import { useGetTokenQuery } from "../store/authApi";
 
 function VerificationList() {

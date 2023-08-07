@@ -12,7 +12,7 @@ import {
 import { useSendReceiveMutation, useSendGiftMutation } from "../store/emailApi";
 import { toast } from "react-toastify";
 import { useMatchedMutation, useRejectedMutation } from "../store/socksApi";
-import LoginError from "./loginError";
+import LoginError from "./auth/loginError";
 import ErrorPage from "./errorpage";
 import { useAddTotalMatchesMutation } from "../store/usersApi";
 

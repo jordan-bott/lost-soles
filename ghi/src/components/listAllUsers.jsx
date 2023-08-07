@@ -1,5 +1,5 @@
 import { useGetUsersQuery, useDeleteUserMutation } from "../store/usersApi";
-import LoginError from "./loginError";
+import LoginError from "./auth/loginError";
 import { useGetTokenQuery } from "../store/authApi";
 import { useNavigate } from "react-router-dom";
 

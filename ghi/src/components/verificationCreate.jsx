@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useCreateVerificationMutation } from "../store/verificationsApi";
 import detailLogo from "../images/detailLogo.png";
-import LoginError from "./loginError";
+import LoginError from "./auth/loginError";
 import { useGetTokenQuery } from "../store/authApi";
 
 function VerificationCreate() {

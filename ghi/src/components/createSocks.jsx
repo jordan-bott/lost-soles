@@ -6,7 +6,7 @@ import detailLogo from "../images/detailLogo.png";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import LoginError from "./loginError";
+import LoginError from "./auth/loginError";
 
 function CreateSock() {
   const dispatch = useDispatch();

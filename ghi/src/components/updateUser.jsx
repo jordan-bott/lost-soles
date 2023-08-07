@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetTokenQuery } from "../store/authApi";
 import { useGetUserQuery } from "../store/usersApi";
-import LoginError from "./loginError";
+import LoginError from "./auth/loginError";
 
 function UpdateUser() {
   const { id } = useParams();

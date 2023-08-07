@@ -7,7 +7,7 @@ import { useDeleteUserMutation } from "../store/usersApi";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../store/authApi";
 import sockstar from "../images/sockstar.png";
-import LoginError from "./loginError";
+import LoginError from "./auth/loginError";
 import { toast } from "react-toastify";
 
 function SockDrawer() {
