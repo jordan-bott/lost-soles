@@ -8,60 +8,6 @@
   
   Users can peruse the sock feed while listening to a custom sock playlist, they can check out the loneliest socks that have been on the site the longest, and they can scroll through a carousel of their posted socks. Lost Soles is a sock lover's paradise, not to mention saving the waste of throwing out single socks (or leaving them in the laundry basket indefinitely hoping the other will appear).
 
-## Project URLS
-
-##### Frontend deployment URL:
-
-https://lost-soles.gitlab.io/module3-project-gamma/
-
-##### Gitlab project URL:
-
-https://gitlab.com/lost-soles/module3-project-gamma
-
-##### CapRover URL:
-
-https://captain.dec-pt-3.mod3projects.com/
-
-
-
-## How to Run Lost Soles on your Local Device
-
-1. In your terminal and in your desired directory type the follow command:
-
-```
-git clone https://gitlab.com/lost-soles/module3-project-gamma.git
-```
-
-2. cd into the project directory
-
-```
-cd module3-project-gamma
-```
-
-3. Make sure you have Docker installed then in your terminal type the following commands:
-
-```
-docker volume create sock-data
-```
-
-- This will create the Docker database.
-
-```
-docker compose build
-```
-
-- This will create the Docker containers and images.
-
-```
-docker compose up
-```
-
-- This will run the Docker containers
-
-4. When the Docker containers are running you can open your browser and go to [http://localhost:8000/docs](http://localhost:8000/docs) to view all of the RESTful backend endpoints.
-
-5. When the Docker containers are running you can open your browser and go to [http://localhost:3000](http://localhost:3000).
-   - This will take you to the project home page and you can navigate via the navbar dropdown menu.
 
 ## Design
 
@@ -94,11 +40,6 @@ In the project files you'll find a microservice folder named sock_service. Insid
 - requirements.txt
   - requirements.txt is a very important file that tells the Dockerfile what it needs to install when it boots the program.
 
-## Future of the App
-
-Lost Soles is an app designed to help you find a match for your single socks. Our app allows users to sign up and easily create a profile where they can post their lone socks for others to browse and search through. Additionally, users can mark their socks as a gift, promoting a culture of giving and helping others who may be missing a sock from their pair.
-
-We have implemented a rating system called "Sockstar points" to promote a fun and trustworthy environment. Users can earn points by completing trades, matching socks, and gifting their single socks. These points will be displayed on their profile to show their level of reliability and also as a scoring system to encourage more sock trading and gifting within our community.
 
 As admins, we verify user accounts with their attached ID to ensure their legitimacy and build trust within our community. Once an account is verified, users can see the verified address associated with the profile and feel more confident about initiating a trade.
 
