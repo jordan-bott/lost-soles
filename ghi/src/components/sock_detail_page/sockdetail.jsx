@@ -12,7 +12,16 @@ import { toast } from "react-toastify";
 import sockstar from "../../images/sockstar.png";
 import { useSendRequestMutation } from "../../store/emailApi";
 import { useUpdateSockMutation } from "../../store/socksApi";
-import { colorList, sizeList, patternList, typeList, fabricList, brandList, styleList } from "../../data/dropDownLists"
+import {
+  colorList,
+  sizeList,
+  patternList,
+  typeList,
+  fabricList,
+  brandList,
+  styleList,
+} from "../../data/dropDownLists";
+import Dropdown from "../Dropdown";
 
 function SockDetail() {
   const { id } = useParams();
@@ -139,206 +148,79 @@ function SockDetail() {
   let colorDescription = null;
   let patternDescription = null;
 
-
-
   return (
     <div className="flex gap-x-20 w-[100%] pl-[550px] pt-12">
       {sock?.user_id === accountId ? (
         <div className="flex flex-col gap-y-3 p-2 relative h-[700px] w-[300px]">
           <div className="absolute z-[100] ">
             <p className="text-xl pb-1 pl-2 pr-44">Color</p>
-            <button onClick={() => setColorDropdown(!colorDropdown)}>
-              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
-                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
-                  <p className="text-lg">{color}</p>
-                  <img
-                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
-                    alt="blue circle with a chevron pointing down"
-                  />
-                </div>
-                {colorDropdown
-                  ? colorList.map((c) => {
-                      return (
-                        <div key={c} onClick={() => setColor(c)}>
-                          <div className="flex p-2 bg-yellow w-100">
-                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
-                          </div>
-                        </div>
-                      );
-                    })
-                  : null}
-              </div>
-            </button>
+            <Dropdown
+              setDropdown={setColorDropdown}
+              dropdown={colorDropdown}
+              category={color}
+              setCategory={setColor}
+              list={colorList}
+            />
           </div>
           <div className="absolute top-[15%] z-[90]">
             <p className="text-xl pb-1 pl-2 pr-44">Pattern</p>
-            <button onClick={() => setPatternDropdown(!patternDropdown)}>
-              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
-                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
-                  <p className="text-lg">{pattern}</p>
-                  <img
-                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
-                    alt="blue circle with a chevron pointing down"
-                  />
-                </div>
-                {patternDropdown
-                  ? patternList.map((c) => {
-                      return (
-                        <div key={c} onClick={() => setPattern(c)}>
-                          <div className="flex p-2 bg-yellow w-100">
-                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
-                          </div>
-                        </div>
-                      );
-                    })
-                  : null}
-              </div>
-            </button>
+            <Dropdown
+              setDropdown={setPatternDropdown}
+              dropdown={patternDropdown}
+              category={pattern}
+              setCategory={setPattern}
+              list={patternList}
+            />
           </div>
           <div className="absolute top-[30%] z-[80]">
             <p className="text-xl pb-1 pl-2 pr-44">Size</p>
-            <button onClick={() => setSizeDropdown(!sizeDropdown)}>
-              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
-                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
-                  <p className="text-lg">{size}</p>
-                  <img
-                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
-                    alt="blue circle with a chevron pointing down"
-                  />
-                </div>
-                {sizeDropdown
-                  ? sizeList.map((c) => {
-                      return (
-                        <div
-                          key={c}
-                          onClick={() => setSize(c)}
-                          className="z-40"
-                        >
-                          <div className="flex p-2 bg-yellow w-100">
-                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
-                          </div>
-                        </div>
-                      );
-                    })
-                  : null}
-              </div>
-            </button>
+            <Dropdown
+              setDropdown={setSizeDropdown}
+              dropdown={sizeDropdown}
+              category={size}
+              setCategory={setSize}
+              list={sizeList}
+            />
           </div>
           <div className="absolute top-[45%] z-[70]">
             <p className="text-xl pb-1 pl-2 pr-44">Type</p>
-            <button onClick={() => setTypeDropdown(!typeDropdown)}>
-              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
-                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
-                  <p className="text-lg">{type}</p>
-                  <img
-                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
-                    alt="blue circle with a chevron pointing down"
-                  />
-                </div>
-                {typeDropdown
-                  ? typeList.map((c) => {
-                      return (
-                        <div
-                          key={c}
-                          onClick={() => setType(c)}
-                          className="z-40"
-                        >
-                          <div className="flex p-2 bg-yellow w-100">
-                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
-                          </div>
-                        </div>
-                      );
-                    })
-                  : null}
-              </div>
-            </button>
+            <Dropdown
+              setDropdown={setTypeDropdown}
+              dropdown={typeDropdown}
+              category={type}
+              setCategory={setType}
+              list={typeList}
+            />
           </div>
           <div className="absolute top-[60%] z-[60]">
             <p className="text-xl pb-1 pl-2 pr-44">Fabric</p>
-            <button onClick={() => setFabricDropdown(!fabricDropdown)}>
-              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
-                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
-                  <p className="text-lg">{fabric}</p>
-                  <img
-                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
-                    alt="blue circle with a chevron pointing down"
-                  />
-                </div>
-                {fabricDropdown
-                  ? fabricList.map((c) => {
-                      return (
-                        <div
-                          key={c}
-                          onClick={() => setFabric(c)}
-                          className="z-40"
-                        >
-                          <div className="flex p-2 bg-yellow w-100">
-                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
-                          </div>
-                        </div>
-                      );
-                    })
-                  : null}
-              </div>
-            </button>
+            <Dropdown
+              setDropdown={setFabricDropdown}
+              dropdown={fabricDropdown}
+              category={fabric}
+              setCategory={setFabric}
+              list={fabricList}
+            />
           </div>
           <div className="absolute top-[75%] z-40">
             <p className="text-xl pb-1 pl-2 pr-44">Style</p>
-            <button onClick={() => setStyleDropdown(!styleDropdown)}>
-              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[190px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
-                <div className="flex justify-between pt-1 px-2 mt-2 mb-0">
-                  <p className="text-lg">{style}</p>
-                  <img
-                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
-                    alt="blue circle with a chevron pointing down"
-                  />
-                </div>
-                {styleDropdown
-                  ? styleList.map((c) => {
-                      return (
-                        <div
-                          key={c}
-                          onClick={() => setStyle(c)}
-                          className="z-40"
-                        >
-                          <div className="flex p-2 bg-yellow w-100">
-                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
-                          </div>
-                        </div>
-                      );
-                    })
-                  : null}
-              </div>
-            </button>
+            <Dropdown
+              setDropdown={setStyleDropdown}
+              dropdown={styleDropdown}
+              category={style}
+              setCategory={setStyle}
+              list={styleList}
+            />
           </div>
           <div className="absolute top-[90%] z-30">
             <p className="text-xl pb-1 pl-2 pr-44">Brand</p>
-            <button onClick={() => setBrandDropdown(!brandDropdown)}>
-              <div className="flex flex-col divide-y-2 px-2 bg-yellow border-blue border-2 rounded-lg w-[250px] max-h-[140px] overflow-scroll scrollbar-thin scrollbar-thumb-orange scrollbar-thumb-rounded-lg">
-                <div className="flex justify-between pt-1 px-2 mt-2 mb-0 z-[200]">
-                  <p className="text-lg">{brand}</p>
-                  <img
-                    src="https://img.icons8.com/sf-regular/30/79aadd/circled-chevron-down.png"
-                    alt="blue circle with a chevron pointing down"
-                  />
-                </div>
-                {brandDropdown
-                  ? brandList.map((c) => {
-                      return (
-                        <div
-                          key={c}
-                          onClick={() => setBrand(c)}
-                          className="z-40"
-                        >
-                          <div className="flex p-2 bg-yellow w-100">
-                            <p className="hover:text-orange mt-1 pr-3">{c}</p>
-                          </div>
-                        </div>
-                      );
-                    })
-                  : null}
-              </div>
-            </button>
+            <Dropdown
+              setDropdown={setBrandDropdown}
+              dropdown={brandDropdown}
+              category={brand}
+              setCategory={setBrand}
+              list={brandList}
+            />
           </div>
           <button
             className="absolute left-[103%] -bottom-[2%] w-[160px] bg-lorange border-2 border-blue rounded-lg py-2 text-xl px-2 hover:scale-105"
