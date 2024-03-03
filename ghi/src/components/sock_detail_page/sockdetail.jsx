@@ -5,23 +5,15 @@ import {
   useUnmatchedByUserQuery,
   useMatchPendingMutation,
 } from "../../store/socksApi";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateMatchMutation } from "../../store/matchApi";
 import { toast } from "react-toastify";
 import sockstar from "../../images/sockstar.png";
 import { useSendRequestMutation } from "../../store/emailApi";
-import { useUpdateSockMutation } from "../../store/socksApi";
-import {
-  colorList,
-  sizeList,
-  patternList,
-  typeList,
-  fabricList,
-  brandList,
-  styleList,
-} from "../../data/dropDownLists";
-import Dropdown from "../Dropdown";
+
+import UpdateSock from "./UpdateSock";
+import UnownedSockInfo from "./UnownedSockInfo";
 
 function SockDetail() {
   const { id } = useParams();
@@ -35,42 +27,7 @@ function SockDetail() {
   const navigate = useNavigate();
   const [matchSock, setMatchSock] = useState(null);
   const [sendRequest] = useSendRequestMutation();
-  const [updateSock] = useUpdateSockMutation();
   const [matchPending] = useMatchPendingMutation();
-
-  const [color, setColor] = useState("");
-  const [colorDropdown, setColorDropdown] = useState(false);
-
-  const [pattern, setPattern] = useState("");
-  const [patternDropdown, setPatternDropdown] = useState(false);
-
-  const [size, setSize] = useState("");
-  const [sizeDropdown, setSizeDropdown] = useState(false);
-
-  const [type, setType] = useState("");
-  const [typeDropdown, setTypeDropdown] = useState(false);
-
-  const [fabric, setFabric] = useState("");
-  const [fabricDropdown, setFabricDropdown] = useState(false);
-
-  const [style, setStyle] = useState("");
-  const [styleDropdown, setStyleDropdown] = useState(false);
-
-  const [brand, setBrand] = useState("");
-  const [brandDropdown, setBrandDropdown] = useState(false);
-
-  useEffect(() => {
-    async function setSockData() {
-      setColor(sock?.color);
-      setPattern(sock?.pattern);
-      setSize(sock?.size);
-      setType(sock?.type);
-      setFabric(sock?.fabric);
-      setStyle(sock?.style);
-      setBrand(sock?.brand);
-    }
-    setSockData();
-  }, [sock]);
 
   if (sockLoading || userLoading || userSocksLoading) {
     return <p>Loading ...</p>;
@@ -109,31 +66,6 @@ function SockDetail() {
     }
   };
 
-  const handleUpdateSock = async () => {
-    let info = {
-      photo: sock?.photo,
-      condition: sock?.condition,
-      color: color,
-      pattern: pattern,
-      size: size,
-      type: type,
-      fabric: fabric,
-      style: style,
-      brand: brand,
-      gift: sock.gift,
-    };
-    const result = await updateSock({
-      user_id: accountId,
-      sock_id: sock?.id,
-      info: info,
-    });
-    if (!result.hasOwnProperty("error")) {
-      toast("Your sock has been updated!");
-    } else {
-      toast("Uh oh, something bad happened. Please try again later.");
-    }
-  };
-
   let gift_sock = null;
   let receive_sock = null;
 
@@ -151,129 +83,9 @@ function SockDetail() {
   return (
     <div className="flex gap-x-20 w-[100%] pl-[550px] pt-12">
       {sock?.user_id === accountId ? (
-        <div className="flex flex-col gap-y-3 p-2 relative h-[700px] w-[300px]">
-          <div className="absolute z-[100] ">
-            <p className="text-xl pb-1 pl-2 pr-44">Color</p>
-            <Dropdown
-              setDropdown={setColorDropdown}
-              dropdown={colorDropdown}
-              category={color}
-              setCategory={setColor}
-              list={colorList}
-            />
-          </div>
-          <div className="absolute top-[15%] z-[90]">
-            <p className="text-xl pb-1 pl-2 pr-44">Pattern</p>
-            <Dropdown
-              setDropdown={setPatternDropdown}
-              dropdown={patternDropdown}
-              category={pattern}
-              setCategory={setPattern}
-              list={patternList}
-            />
-          </div>
-          <div className="absolute top-[30%] z-[80]">
-            <p className="text-xl pb-1 pl-2 pr-44">Size</p>
-            <Dropdown
-              setDropdown={setSizeDropdown}
-              dropdown={sizeDropdown}
-              category={size}
-              setCategory={setSize}
-              list={sizeList}
-            />
-          </div>
-          <div className="absolute top-[45%] z-[70]">
-            <p className="text-xl pb-1 pl-2 pr-44">Type</p>
-            <Dropdown
-              setDropdown={setTypeDropdown}
-              dropdown={typeDropdown}
-              category={type}
-              setCategory={setType}
-              list={typeList}
-            />
-          </div>
-          <div className="absolute top-[60%] z-[60]">
-            <p className="text-xl pb-1 pl-2 pr-44">Fabric</p>
-            <Dropdown
-              setDropdown={setFabricDropdown}
-              dropdown={fabricDropdown}
-              category={fabric}
-              setCategory={setFabric}
-              list={fabricList}
-            />
-          </div>
-          <div className="absolute top-[75%] z-40">
-            <p className="text-xl pb-1 pl-2 pr-44">Style</p>
-            <Dropdown
-              setDropdown={setStyleDropdown}
-              dropdown={styleDropdown}
-              category={style}
-              setCategory={setStyle}
-              list={styleList}
-            />
-          </div>
-          <div className="absolute top-[90%] z-30">
-            <p className="text-xl pb-1 pl-2 pr-44">Brand</p>
-            <Dropdown
-              setDropdown={setBrandDropdown}
-              dropdown={brandDropdown}
-              category={brand}
-              setCategory={setBrand}
-              list={brandList}
-            />
-          </div>
-          <button
-            className="absolute left-[103%] -bottom-[2%] w-[160px] bg-lorange border-2 border-blue rounded-lg py-2 text-xl px-2 hover:scale-105"
-            onClick={() => handleUpdateSock()}
-          >
-            Update Sock
-          </button>
-        </div>
+        <UpdateSock sock={sock} user={user} />
       ) : (
-        <div className="flex flex-col gap-y-3 p-8">
-          <div>
-            <p className="text-xl pl-2 pb-0">Color</p>
-            <div className="bg-yellow border-blue border-2 rounded-lg p-3 w-[250px]">
-              {sock?.color}
-            </div>
-          </div>
-          <div>
-            <p className="text-xl pl-2 pb-0.5">Pattern</p>
-            <div className="bg-yellow border-blue border-2 rounded-lg p-3 w-[250px]">
-              {sock?.pattern}
-            </div>
-          </div>
-          <div>
-            <p className="text-xl pl-2 pb-0">Size</p>
-            <div className="bg-yellow border-blue border-2 rounded-lg p-3 w-[250px]">
-              {sock?.size}
-            </div>
-          </div>
-          <div>
-            <p className="text-xl pl-2 pb-0">Type</p>
-            <div className="bg-yellow border-blue border-2 rounded-lg p-3 w-[250px]">
-              {sock?.type}
-            </div>
-          </div>
-          <div>
-            <p className="text-xl pl-2 pb-0">Fabric</p>
-            <div className="bg-yellow border-blue border-2 rounded-lg p-3 w-[250px]">
-              {sock?.fabric}
-            </div>
-          </div>
-          <div>
-            <p className="text-xl pl-2 pb-0">Style</p>
-            <div className="bg-yellow border-blue border-2 rounded-lg p-3 w-[250px]">
-              {sock?.style}
-            </div>
-          </div>
-          <div>
-            <p className="text-xl pl-2 pb-0">Brand</p>
-            <div className="bg-yellow border-blue border-2 rounded-lg p-3 w-[250px]">
-              {sock?.brand}
-            </div>
-          </div>
-        </div>
+        <UnownedSockInfo sock={sock} />
       )}
       <div className="flex flex-col items-start mt-24">
         <div className="flex flex-col gap-y-3 items-center">
