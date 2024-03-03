@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import LoginError from "./auth/loginError";
+import { colorList, sizeList, patternList, typeList, fabricList, styleList, brandList } from "../data/dropDownLists"
 
 function CreateSock() {
   const dispatch = useDispatch();
@@ -36,91 +37,6 @@ function CreateSock() {
 
   const [brand, setBrand] = useState("");
   const [brandDropdown, setBrandDropdown] = useState(false);
-
-  const colors = [
-    "Black",
-    "Blue",
-    "Brown",
-    "Green",
-    "Grey",
-    "Orange",
-    "Pink",
-    "Purple",
-    "Rainbow",
-    "Red",
-    "Multi",
-    "White",
-    "Yellow",
-    "Other",
-  ];
-
-  const sizes = ["KS", "KM", "KL", "WS", "WM", "WL", "S", "M", "L"];
-
-  const patterns = [
-    "Artistic",
-    "Checkered",
-    "Plaid",
-    "Polka Dots",
-    "Solid",
-    "Striped",
-    "Zig Zag",
-    "Other",
-  ];
-
-  const types = [
-    "Ankle",
-    "Anklet",
-    "Crew",
-    "No-Show",
-    "Knee High",
-    "Low Cut",
-    "Thigh High",
-    "Tube",
-    "Toe Cover",
-  ];
-
-  const fabrics = [
-    "Bamboo",
-    "Cashmere",
-    "Cotton",
-    "Merino Wool",
-    "Nylon",
-    "Polyester",
-    "Polypropylene",
-    "Spandex",
-    "Wool",
-    "Other",
-  ];
-
-  const styles = [
-    "Athletic",
-    "Cute",
-    "Fashion",
-    "Novelty",
-    "Sport",
-    "Toe",
-    "Vintage",
-    "Other",
-  ];
-
-  const brands = [
-    "Adidas",
-    "Bombas",
-    "BOSS",
-    "Calvin Klein",
-    "Carhartt",
-    "Darn Tough",
-    "FALKE",
-    "GANT",
-    "Hanes",
-    "Happy Socks",
-    "Nike",
-    "Puma",
-    "Stance",
-    "Tommy Hilfiger",
-    "Other",
-    "Unknown",
-  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -174,7 +90,7 @@ function CreateSock() {
                   />
                 </div>
                 {colorDropdown
-                  ? colors.map((c) => {
+                  ? colorList.map((c) => {
                       return (
                         <div key={c} onClick={() => setColor(c)}>
                           <div className="flex p-2 bg-yellow w-100">
@@ -199,7 +115,7 @@ function CreateSock() {
                   />
                 </div>
                 {patternDropdown
-                  ? patterns.map((c) => {
+                  ? patternList.map((c) => {
                       return (
                         <div key={c} onClick={() => setPattern(c)}>
                           <div className="flex p-2 bg-yellow w-100">
@@ -224,7 +140,7 @@ function CreateSock() {
                   />
                 </div>
                 {sizeDropdown
-                  ? sizes.map((c) => {
+                  ? sizeList.map((c) => {
                       return (
                         <div
                           key={c}
@@ -253,7 +169,7 @@ function CreateSock() {
                   />
                 </div>
                 {typeDropdown
-                  ? types.map((c) => {
+                  ? typeList.map((c) => {
                       return (
                         <div
                           key={c}
@@ -284,7 +200,7 @@ function CreateSock() {
                   />
                 </div>
                 {fabricDropdown
-                  ? fabrics.map((c) => {
+                  ? fabricList.map((c) => {
                       return (
                         <div
                           key={c}
@@ -313,7 +229,7 @@ function CreateSock() {
                   />
                 </div>
                 {styleDropdown
-                  ? styles.map((c) => {
+                  ? styleList.map((c) => {
                       return (
                         <div
                           key={c}
@@ -342,7 +258,7 @@ function CreateSock() {
                   />
                 </div>
                 {brandDropdown
-                  ? brands.map((c) => {
+                  ? brandList.map((c) => {
                       return (
                         <div
                           key={c}
