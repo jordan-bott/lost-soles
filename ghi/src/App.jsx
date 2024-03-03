@@ -9,7 +9,7 @@ import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import Nav from "./components/skeleton/nav.jsx";
 import ListUsers from "./components/listAllUsers.jsx";
-import SockDetail from "./components/sockdetail.jsx";
+import SockDetail from "./components/sock_detail_page/sockdetail.jsx"
 import VerificationCreate from "./components/verificationCreate.jsx";
 import CreateSock from "./components/createSocks.jsx";
 import MatchList from "./components/matchList.jsx";

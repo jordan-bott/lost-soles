@@ -1,17 +1,17 @@
 import { useParams } from "react-router-dom";
-import { useGetOneSockQuery } from "../store/socksApi";
-import { useGetTokenQuery } from "../store/authApi";
+import { useGetOneSockQuery } from "../../store/socksApi";
+import { useGetTokenQuery } from "../../store/authApi";
 import {
   useUnmatchedByUserQuery,
   useMatchPendingMutation,
-} from "../store/socksApi";
+} from "../../store/socksApi";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCreateMatchMutation } from "../store/matchApi";
+import { useCreateMatchMutation } from "../../store/matchApi";
 import { toast } from "react-toastify";
-import sockstar from "../images/sockstar.png";
-import { useSendRequestMutation } from "../store/emailApi";
-import { useUpdateSockMutation } from "../store/socksApi";
+import sockstar from "../../images/sockstar.png";
+import { useSendRequestMutation } from "../../store/emailApi";
+import { useUpdateSockMutation } from "../../store/socksApi";
 
 function SockDetail() {
   const { id } = useParams();
