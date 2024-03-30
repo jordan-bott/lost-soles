@@ -46,13 +46,12 @@ jobs:
         run: |
           npm run build
           cp build/index.html build/404.html
-          mv ghi/build/ public
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: "public"
+          path: "ghi/build/"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
