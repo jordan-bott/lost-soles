@@ -15,7 +15,6 @@ app.include_router(email.router, tags=["Emails"])
 origins = [
     "http://localhost:3000",
     os.environ.get("CORS_HOST", None),
-    "https://jordan-bott.github.io/lost-soles",
 
 ]
 
