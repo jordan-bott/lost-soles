@@ -49,9 +49,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          # Upload dist repository
           path: "ghi/build/"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
-        run: mv ghi/build/ public
