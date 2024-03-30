@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const emailApi = createApi({
   reducerPath: "emails",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_SAMPLE_SERVICE_API_HOST,
+    baseUrl: process.env.REACT_APP_SOCK_API,
     credentials: "include",
   }),
   prepareHeaders: (headers, { getState }) => {

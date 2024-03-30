@@ -4,7 +4,7 @@ export const matchesApi = createApi({
   reducerPath: "matches",
   tagTypes: ["Matches"],
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_SAMPLE_SERVICE_API_HOST,
+    baseUrl: process.env.REACT_APP_SOCK_API,
     credentials: "include",
   }),
   prepareHeaders: (headers, { getState }) => {

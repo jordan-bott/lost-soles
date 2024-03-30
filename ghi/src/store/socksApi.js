@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const socksApi = createApi({
   reducerPath: "socks",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_SAMPLE_SERVICE_API_HOST,
+    baseUrl: process.env.REACT_APP_SOCK_API,
   }),
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;

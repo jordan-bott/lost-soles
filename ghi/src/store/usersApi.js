@@ -4,7 +4,7 @@ export const usersApi = createApi({
   reducerPath: "users",
   tagTypes: ["User"],
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_SAMPLE_SERVICE_API_HOST,
+    baseUrl: process.env.REACT_APP_SOCK_API,
     credentials: "include",
   }),
   prepareHeaders: (headers, { getState }) => {
