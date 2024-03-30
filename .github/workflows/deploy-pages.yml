@@ -25,19 +25,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    defaults:
-      working-directory: ./ghi
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Node
+        working-directory: ./ghi
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: "npm"
       - name: Install dependencies
+        working-directory: ./ghi
         run: npm install
       - name: Build
+        working-directory: ./ghi
         env:
           REACT_APP_SOCK_API: ${{ vars.REACT_APP_SOCK_API }}
           PUBLIC_URL: https://jordan-bott.github.io/lost-soles/
